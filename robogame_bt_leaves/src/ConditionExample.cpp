@@ -1,8 +1,9 @@
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>//actionlib
-#include <behavior_tree_leaves/BTAction.h>//Definition of action. see /scr/action
+#include <robogame_bt_leaves/BTAction.h>//Definition of action. see /scr/action
 
 enum Status {RUNNING,SUCCESS, FAILURE};
+
 
 class BTAction
 {
@@ -10,11 +11,11 @@ protected:
 
   ros::NodeHandle nh_;
   // NodeHandle instance must be created before this line. Otherwise strange error may occur.
-  actionlib::SimpleActionServer<behavior_tree_leaves::BTAction> as_;
+  actionlib::SimpleActionServer<robogame_bt_leaves::BTAction> as_;
   std::string action_name_;
   // create messages that are used to published feedback/result
-  behavior_tree_leaves::BTFeedback feedback_;
-  behavior_tree_leaves::BTResult result_;
+  robogame_bt_leaves::BTFeedback feedback_;
+  robogame_bt_leaves::BTResult result_;
 
 
 
@@ -35,7 +36,7 @@ public:
   {
 
   }
-  void executeCB(const behavior_tree_leaves::BTGoalConstPtr &goal)
+  void executeCB(const robogame_bt_leaves::BTGoalConstPtr &goal)
   {
     if(true){
     setStatus(SUCCESS);
@@ -43,6 +44,8 @@ public:
     setStatus(FAILURE);
     }
   }
+
+
 
   //returns the status to the client (Behavior Tree)
     void setStatus(int status){
@@ -72,8 +75,8 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "condition");
       ROS_INFO(" Enum: %d",RUNNING);
       ROS_INFO(" condition Ready for Ticks");
-	BTAction bt_action(ros::this_node::getName());
-	ros::spin();
+  BTAction bt_action(ros::this_node::getName());
+  ros::spin();
 
   return 0;
 }

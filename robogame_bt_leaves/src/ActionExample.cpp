@@ -1,8 +1,11 @@
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>// needed for actionlib
-#include <behavior_tree_leaves/BTAction.h>//Definition of action. see /scr/action
+#include <robogame_bt_leaves/BTAction.h>//Definition of action. see /scr/action
+
+
 
 enum Status {RUNNING,SUCCESS, FAILURE};//BT return status
+
 
 class BTAction
 {
@@ -10,11 +13,11 @@ protected:
 
   ros::NodeHandle nh_;
   // NodeHandle instance must be created before this line. Otherwise strange error may occur.
-  actionlib::SimpleActionServer<behavior_tree_leaves::BTAction> as_;
+  actionlib::SimpleActionServer<robogame_bt_leaves::BTAction> as_;
   std::string action_name_;
   // create messages that are used to published feedback/result
-  behavior_tree_leaves::BTFeedback feedback_; //action feedback (SUCCESS, FAILURE)
-  behavior_tree_leaves::BTResult result_;//action feedback  (same as feedback for us)
+  robogame_bt_leaves::BTFeedback feedback_; //action feedback (SUCCESS, FAILURE)
+  robogame_bt_leaves::BTResult result_;//action feedback  (same as feedback for us)
 
 
 public:
@@ -36,7 +39,7 @@ public:
 
   }
 
-  void executeCB(const behavior_tree_leaves::BTGoalConstPtr &goal)
+  void executeCB(const robogame_bt_leaves::BTGoalConstPtr &goal)
   {
 
     // publish info to the console for the user
