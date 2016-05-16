@@ -47,6 +47,7 @@ private:
 
 	//Kinect feature extractor object.
 	KinectFeatures featExtractor;
+	ofstream output;	//Log data for plotting.
 };
 
 

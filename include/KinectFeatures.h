@@ -89,7 +89,8 @@ public:
     float getQom();
     vector<float> getQomHistory();
     vector<float> getQomHistory(int frames);
-    float getCI();
+    
+	float getCI();
     vector<float> getCIHistory();
     vector<float> getCIHistory(int frames);
 //    float getSymmetry();

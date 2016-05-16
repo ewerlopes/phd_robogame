@@ -11,7 +11,8 @@ cv::Point Skeleton::changeCoordinates(Joint joint[JointType::JointType_Count], i
 }
 
 Skeleton::Skeleton() {
-	featExtractor.setup(JointType_Head, JointType_SpineMid);
+	featExtractor.setup(JointType_Head, JointType_SpineMid);	//Necessary for the featExtractor calculations.
+	output.open("LogFile.csv");
 }
 
 void Skeleton::drawSkeleton(cv::Mat canvas, Joint joint[JointType::JointType_Count])
@@ -233,6 +234,7 @@ void Skeleton::skeletonTracking()
 							featExtractor.update(toFeatjoints); //calculating skeleton data.
 							std::cout << "Qnt of motion: " << featExtractor.getQom() << std::endl; //getting data.
 							std::cout << "Contraction index: " << featExtractor.getCI() << std::endl; //getting data.
+							output << featExtractor.getCI() << std::endl; //saving data to the log file.
 							drawSkeleton(colorBufferMat, joint);
 						}
 
@@ -275,4 +277,7 @@ void Skeleton::skeletonTracking()
         pSensor->Close();
     SafeRelease(pSensor);
     cv::destroyAllWindows();
+
+	//Close file.
+	output.close();
 }
