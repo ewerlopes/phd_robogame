@@ -171,11 +171,25 @@ void Skeleton::skeletonTracking()
         IColorFrame* pColorFrame = 0;
         IDepthFrame* pDepthFrame = 0;
         hResult = pDepthReader->AcquireLatestFrame(&pDepthFrame);
-        if (SUCCEEDED(hResult))
-        {
-            hResult = pDepthFrame->AccessUnderlyingBuffer(&depthbufferSize, reinterpret_cast<UINT16**>(&depthBufferMat.data));
-            if (SUCCEEDED(hResult))
-                depthBufferMat.convertTo(depthMat, CV_8U, -255.0f / 8000.0f, 255.0f);
+		if (SUCCEEDED(hResult))
+		{
+			hResult = pDepthFrame->AccessUnderlyingBuffer(&depthbufferSize, reinterpret_cast<UINT16**>(&depthBufferMat.data));
+			if (SUCCEEDED(hResult)) {
+				if (SUCCEEDED(depthHeight) && SUCCEEDED(depthWidth)) {
+					UINT16 *depthBuffer = new UINT16[depthHeight * depthWidth];
+					hResult = pDepthFrame->CopyFrameDataToArray(depthHeight * depthWidth, depthBuffer);
+					if (SUCCEEDED(hResult)) {
+						cv::Mat depthMap = cv::Mat(depthHeight, depthWidth, CV_16U, depthBuffer);
+						cv::Mat img0 = cv::Mat::zeros(depthHeight, depthWidth, CV_8UC1);
+						cv::Mat img1;
+						double scale = 255.0 / (max -
+							min);
+						depthMap.convertTo(img0, CV_8UC1, scale);
+						applyColorMap(img0, img1, cv::COLORMAP_JET);
+						depthMat = img1;
+					}
+				}
+			}
         }
         hResult = pColorReader->AcquireLatestFrame(&pColorFrame);
         if (SUCCEEDED(hResult))
