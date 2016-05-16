@@ -13,10 +13,10 @@
  If you are willing to get a (non FOSS) commercial license, please contact us at mtg@upf.edu
  */
 
-#ifndef ofxMocapElement_h
-#define ofxMocapElement_h
+#ifndef MocapElement_h
+#define MocapElement_h
 
-#include "ofVec3f.h"
+#include "Vec3f.h"
 #include <vector>
 
 typedef ofVec3f ofPoint;

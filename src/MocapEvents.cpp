@@ -6,7 +6,7 @@
 //
 //
 
-#include "ofxMocapEvents.h"
+#include "MocapEvents.h"
 
 ofEvent<MocapMaxEvent> MocapMaxEvent::events;
 ofEvent<MocapMinEvent> MocapMinEvent::events;

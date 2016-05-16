@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "ofVec2f.h"
-#include "ofVec4f.h"
-#include "ofConstants.h"
+#include "Vec2f.h"
+#include "Vec4f.h"
+#include "Constants.h"
 
 #include <cmath>
 #include <iostream>

@@ -2,7 +2,7 @@
 
 class ofVec2f;
 class ofVec3f;
-#include "ofConstants.h"
+#include "Constants.h"
 
 class ofVec4f {
 public:

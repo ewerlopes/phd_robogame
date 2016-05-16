@@ -13,7 +13,7 @@
  If you are willing to get a (non FOSS) commercial license, please contact us at mtg@upf.edu
  */
 
-#include "ofxKinectFeatures.h"
+#include "KinectFeatures.h"
 
 //Real-time filters for MoCap by Skogstad et al ( http://www.uio.no/english/research/groups/fourms/projects/sma/subprojects/mocapfilters/ )
 

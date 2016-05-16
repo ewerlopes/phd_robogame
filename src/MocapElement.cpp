@@ -12,7 +12,7 @@
  
  If you are willing to get a (non FOSS) commercial license, please contact us at mtg@upf.edu
  */
-#include "ofxMocapElement.h"
+#include "MocapElement.h"
 
 ofxMocapElement::ofxMocapElement(){
     ofPoint zeros = ofPoint(0.0,0.0,0.0);

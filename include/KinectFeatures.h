@@ -13,11 +13,11 @@
  If you are willing to get a (non FOSS) commercial license, please contact us at mtg@upf.edu
  */
 
-#ifndef ofxKinectFeatures_h
-#define ofxKinectFeatures_h
+#ifndef KinectFeatures_h
+#define KinectFeatures_h
 
-#include "ofxMocapElement.h"
-#include "ofxMocapEvents.h"
+#include "MocapElement.h"
+#include "MocapEvents.h"
 #include <numeric>
 
 namespace filter

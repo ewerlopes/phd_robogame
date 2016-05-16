@@ -7,8 +7,8 @@
 //
 
 #pragma once
-#include "ofEvent.h"
-#include "ofEventUtils.h"
+#include "Event.h"
+#include "EventUtils.h"
 
 #define MOCAP_X 0
 #define MOCAP_Y 1

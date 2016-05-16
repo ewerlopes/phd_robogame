@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ofConstants.h"
-#include "ofEvent.h"
+#include "Constants.h"
+#include "Event.h"
 
 #include <stdio.h>
 #include <stdlib.h>
