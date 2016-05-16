@@ -204,15 +204,20 @@ void Skeleton::skeletonTracking()
 						hResult = pBody[count]->GetJoints(JointType::JointType_Count, joint);
 						if (SUCCEEDED(hResult) && TrackingConfidence_High)
 						{
+							std::map <int, ofPoint> toFeatjoints;
 							// Joints
 							for (int type = 0; type < JointType::JointType_Count; type++)
 							{
+								Joint j = joint[type];
+								toFeatjoints[type] = ofPoint(j.Position.X, j.Position.Y, j.Position.Z);
 								cv::Point jointPoint = changeCoordinates(joint, type);
 								if ((jointPoint.x >= 0) && (jointPoint.y >= 0) && (jointPoint.x < colorWidth) && (jointPoint.y < colorHeight))
 								{
 									cv::circle(colorBufferMat, jointPoint, 8, static_cast<cv::Scalar>(color[count]), -1, CV_AA);
 								}
 							}
+							featExtractor.update(toFeatjoints);
+							std::cout << "Qnt of motion: " << featExtractor.getQom();
 							drawSkeleton(colorBufferMat, joint);
 						}
 
