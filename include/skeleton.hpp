@@ -46,7 +46,7 @@ private:
 	ICoordinateMapper* pCoordinateMapper;
 
 	//Kinect feature extractor object.
-	ofxKinectFeatures featExtractor;
+	KinectFeatures featExtractor;
 };
 
 

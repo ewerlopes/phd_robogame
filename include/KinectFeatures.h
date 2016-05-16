@@ -1,14 +1,14 @@
 /*
- ofxKinectFeatures
+ KinectFeatures
  Copyright © 2014  Music Technology Group - Universitat Pompeu Fabra / Escola Superior de Música de Catalunya
  
- This file is part of ofxKinectFeatures, created and maintained by Álvaro Sarasúa <http://alvarosarasua.wordpress.com>
+ This file is part of KinectFeatures, created and maintained by Álvaro Sarasúa <http://alvarosarasua.wordpress.com>
  
- ofxKinectFeatures is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License (LGPL v3) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ KinectFeatures is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License (LGPL v3) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  
- ofxKinectFeatures is distributed in the hope that it will be useful, but WITHOUT  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License (LGPL v3).
+ KinectFeatures is distributed in the hope that it will be useful, but WITHOUT  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License (LGPL v3).
  
- You should have received a copy of the GNU Lesser General Public License long within the ofxKinectFeatures SW package.  If not, see <http://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU Lesser General Public License long within the KinectFeatures SW package.  If not, see <http://www.gnu.org/licenses/>.
  
  If you are willing to get a (non FOSS) commercial license, please contact us at mtg@upf.edu
  */
@@ -30,14 +30,14 @@ namespace filter
     };
 } // namespace filter
 
-class ofxKinectFeatures {
+class KinectFeatures {
 public:
-    ofxKinectFeatures();
-    ofxKinectFeatures(int head, int torso);
+    KinectFeatures();
+    KinectFeatures(int head, int torso);
     
     void setup(int head, int torso);
     void update(map<int, ofPoint> joints);
-    ofxMocapElement* getElement(int _id);
+    MocapElement* getElement(int _id);
     
     void setFilterLevel(int filterLevel);
     
@@ -116,7 +116,7 @@ private:
     
     bool newValues_;
     
-    vector<ofxMocapElement> elements_;
+    vector<MocapElement> elements_;
     
     int depth_;
     
@@ -129,7 +129,7 @@ private:
     struct MatchId
     {
         MatchId(const int& j) : j_(j) {}
-        bool operator()(ofxMocapElement& obj) const
+        bool operator()(MocapElement& obj) const
         {
             return obj.getElementId() == j_;
         }

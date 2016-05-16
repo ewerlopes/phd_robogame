@@ -1,14 +1,14 @@
 /*
- ofxKinectFeatures
+ KinectFeatures
  Copyright © 2014  Music Technology Group - Universitat Pompeu Fabra / Escola Superior de Música de Catalunya
  
- This file is part of ofxKinectFeatures, created and maintained by Álvaro Sarasúa <http://alvarosarasua.wordpress.com>
+ This file is part of KinectFeatures, created and maintained by Álvaro Sarasúa <http://alvarosarasua.wordpress.com>
  
- ofxKinectFeatures is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License (LGPL v3) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ KinectFeatures is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License (LGPL v3) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  
- ofxKinectFeatures is distributed in the hope that it will be useful, but WITHOUT  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License (LGPL v3).
+ KinectFeatures is distributed in the hope that it will be useful, but WITHOUT  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License (LGPL v3).
  
- You should have received a copy of the GNU Lesser General Public License long within the ofxKinectFeatures SW package.  If not, see <http://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU Lesser General Public License long within the KinectFeatures SW package.  If not, see <http://www.gnu.org/licenses/>.
  
  If you are willing to get a (non FOSS) commercial license, please contact us at mtg@upf.edu
  */
@@ -40,7 +40,7 @@ float lpd2_hard_b[] = {-0.0738989849,0.1351624829,-0.0512998379,-0.0072918334,-0
 
 //____________________________________________________ofxKinectFeatures
 
-ofxKinectFeatures::ofxKinectFeatures(){
+KinectFeatures::KinectFeatures(){
     newValues_ = false;
     setDepth(30);
     aFilter = lpf_soft_a;
@@ -58,7 +58,7 @@ ofxKinectFeatures::ofxKinectFeatures(){
     
 }
 
-ofxKinectFeatures::ofxKinectFeatures(int head, int torso){
+KinectFeatures::KinectFeatures(int head, int torso){
     newValues_ = false;
     setDepth(30);
     aFilter = lpf_soft_a;
@@ -76,12 +76,12 @@ ofxKinectFeatures::ofxKinectFeatures(int head, int torso){
     }
 }
 
-void ofxKinectFeatures::setup(int head, int torso){
+void KinectFeatures::setup(int head, int torso){
     head_ = head;
     torso_ = torso;
 }
 
-void ofxKinectFeatures::setFilterLevel(int filterLevel){
+void KinectFeatures::setFilterLevel(int filterLevel){
     switch (filterLevel) {
         case filter::HARD:
             aFilter = lpf_hard_a;
@@ -111,19 +111,19 @@ void ofxKinectFeatures::setFilterLevel(int filterLevel){
     }
 }
 
-void ofxKinectFeatures::setDepth(int depth){
+void KinectFeatures::setDepth(int depth){
     depth_ = depth;
 }
 
-int ofxKinectFeatures::getDepth(){
+int KinectFeatures::getDepth(){
     return depth_;
 }
 
-void ofxKinectFeatures::update(map<int, ofPoint> joints){
+void KinectFeatures::update(map<int, ofPoint> joints){
     //Initialize elements
     if (elements_.empty()) {
         for (map<int, ofPoint>::iterator it = joints.begin(); it != joints.end(); it++) {
-            ofxMocapElement newElement(it->first, depth_);
+            MocapElement newElement(it->first, depth_);
             elements_.push_back(newElement);
         }
     }
@@ -224,8 +224,8 @@ void ofxKinectFeatures::update(map<int, ofPoint> joints){
 //    }
 }
 
-void ofxKinectFeatures::computeJointDescriptors(int jointId, ofPoint jointPos, const float &h){
-    ofxMocapElement* mocapElement = getElement(jointId);
+void KinectFeatures::computeJointDescriptors(int jointId, ofPoint jointPos, const float &h){
+    MocapElement* mocapElement = getElement(jointId);
     
     //Position
     mocapElement->setPosition(jointPos);
@@ -266,8 +266,8 @@ void ofxKinectFeatures::computeJointDescriptors(int jointId, ofPoint jointPos, c
     //beatTracker.update(getAccTrVector(JOINT_RIGHT_HAND), get3DFiltPosVector(JOINT_RIGHT_HAND)[coord::Y]);
 }
 
-ofxMocapElement* ofxKinectFeatures::getElement(int _id){
-    vector<ofxMocapElement>::iterator it = find_if(elements_.begin(), elements_.end(), MatchId(_id));
+MocapElement* KinectFeatures::getElement(int _id){
+    vector<MocapElement>::iterator it = find_if(elements_.begin(), elements_.end(), MatchId(_id));
     if (it != elements_.end()){
         return &(*it);
     } else {
@@ -275,12 +275,12 @@ ofxMocapElement* ofxKinectFeatures::getElement(int _id){
     }
 }
 
-ofPoint ofxKinectFeatures::applyFilter(vector<ofPoint> x, vector<ofPoint> y, float *a, float *b){
+ofPoint KinectFeatures::applyFilter(vector<ofPoint> x, vector<ofPoint> y, float *a, float *b){
     return b[0]*x[0] + b[1]*x[1] + b[2]*x[2] + b[3]*x[3] + b[4]*x[4] - (a[1]*y[0] + a[2]*y[1] + a[3]*y[2] + a[4]*y[3]);
 }
 
 
-void ofxKinectFeatures::checkMaxAndMin(vector<ofPoint> descriptorHistory, unsigned int jointId, unsigned int feature){
+void KinectFeatures::checkMaxAndMin(vector<ofPoint> descriptorHistory, unsigned int jointId, unsigned int feature){
     vector<float> x_vec, y_vec, z_vec;
     for (vector<ofPoint>::iterator it = descriptorHistory.begin(); it != descriptorHistory.end(); it++) {
         x_vec.push_back((*it)[0]);
@@ -338,7 +338,7 @@ void ofxKinectFeatures::checkMaxAndMin(vector<ofPoint> descriptorHistory, unsign
     }
 }
 
-void ofxKinectFeatures::checkMaxAndMin(vector<float> descriptorHistory, unsigned int jointId, unsigned int feature){
+void KinectFeatures::checkMaxAndMin(vector<float> descriptorHistory, unsigned int jointId, unsigned int feature){
     if (distance(descriptorHistory.begin(), max_element(descriptorHistory.begin(), descriptorHistory.end())) == 2) {
         static MocapMaxEvent newMaxEvent;
         newMaxEvent.joint = jointId;
@@ -356,7 +356,7 @@ void ofxKinectFeatures::checkMaxAndMin(vector<float> descriptorHistory, unsigned
 
 
 template <typename T>
-vector<T> ofxKinectFeatures::createVector(T element){
+vector<T> KinectFeatures::createVector(T element){
     vector<T> v (depth_);
     fill(v.begin(), v.begin()+depth_, element);
     return v;
@@ -364,7 +364,7 @@ vector<T> ofxKinectFeatures::createVector(T element){
 
 //Descriptors getters
 
-ofPoint ofxKinectFeatures::getPosition(int j){
+ofPoint KinectFeatures::getPosition(int j){
     if (getElement(j)) {
         return getElement(j)->getPosition()[0];
     } else {
@@ -372,7 +372,7 @@ ofPoint ofxKinectFeatures::getPosition(int j){
     }
 }
 
-vector<ofPoint> ofxKinectFeatures::getPositionHistory(int j){
+vector<ofPoint> KinectFeatures::getPositionHistory(int j){
     if (getElement(j)) {
         return getElement(j)->getPosition();
     } else {
@@ -380,7 +380,7 @@ vector<ofPoint> ofxKinectFeatures::getPositionHistory(int j){
     }
 }
 
-vector<ofPoint> ofxKinectFeatures::getPositionHistory(int j, int frames){
+vector<ofPoint> KinectFeatures::getPositionHistory(int j, int frames){
     if (getElement(j)) {
         vector<ofPoint> fullHistory = getElement(j)->getPosition();
         vector<ofPoint> history(fullHistory.begin(), fullHistory.begin() + frames);
@@ -390,7 +390,7 @@ vector<ofPoint> ofxKinectFeatures::getPositionHistory(int j, int frames){
     }
 }
 
-ofPoint ofxKinectFeatures::getPositionFiltered(int j){
+ofPoint KinectFeatures::getPositionFiltered(int j){
     if (getElement(j)) {
         return getElement(j)->getPositionFiltered()[0];
     } else {
@@ -398,7 +398,7 @@ ofPoint ofxKinectFeatures::getPositionFiltered(int j){
     }
 }
 
-vector<ofPoint> ofxKinectFeatures::getPositionFilteredHistory(int j){
+vector<ofPoint> KinectFeatures::getPositionFilteredHistory(int j){
     if (getElement(j)) {
         return getElement(j)->getPositionFiltered();
     } else {
@@ -406,7 +406,7 @@ vector<ofPoint> ofxKinectFeatures::getPositionFilteredHistory(int j){
     }
 }
 
-vector<ofPoint> ofxKinectFeatures::getPositionFilteredHistory(int j, int frames){
+vector<ofPoint> KinectFeatures::getPositionFilteredHistory(int j, int frames){
     if (getElement(j)) {
         vector<ofPoint> fullHistory = getElement(j)->getPositionFiltered();
         vector<ofPoint> history(fullHistory.begin(), fullHistory.begin() + frames);
@@ -416,7 +416,7 @@ vector<ofPoint> ofxKinectFeatures::getPositionFilteredHistory(int j, int frames)
     }
 }
 
-ofPoint ofxKinectFeatures::getVelocity(int j){
+ofPoint KinectFeatures::getVelocity(int j){
     if (getElement(j)) {
         return getElement(j)->getVelocity()[0];
     } else {
@@ -424,7 +424,7 @@ ofPoint ofxKinectFeatures::getVelocity(int j){
     }
 }
 
-vector<ofPoint> ofxKinectFeatures::getVelocityHistory(int j){
+vector<ofPoint> KinectFeatures::getVelocityHistory(int j){
     if (getElement(j)) {
         return getElement(j)->getVelocity();
     } else {
@@ -432,7 +432,7 @@ vector<ofPoint> ofxKinectFeatures::getVelocityHistory(int j){
     }
 }
 
-vector<ofPoint> ofxKinectFeatures::getVelocityHistory(int j, int frames){
+vector<ofPoint> KinectFeatures::getVelocityHistory(int j, int frames){
     if (getElement(j)) {
         vector<ofPoint> fullHistory = getElement(j)->getVelocity();
         vector<ofPoint> history(fullHistory.begin(), fullHistory.begin() + frames);
@@ -442,7 +442,7 @@ vector<ofPoint> ofxKinectFeatures::getVelocityHistory(int j, int frames){
     }
 }
 
-float ofxKinectFeatures::getVelocityMagnitude(int j){
+float KinectFeatures::getVelocityMagnitude(int j){
     if (getElement(j)) {
         return getElement(j)->getVelocity()[0].length();
     } else {
@@ -450,7 +450,7 @@ float ofxKinectFeatures::getVelocityMagnitude(int j){
     }
 }
 
-ofPoint ofxKinectFeatures::getVelocityMean(int j, int frames){
+ofPoint KinectFeatures::getVelocityMean(int j, int frames){
     if (getElement(j)) {
         float sumx = 0, sumy = 0, sumz = 0.0;
         for (int i = 0; i < frames && i < getElement(j)->getVelocity().size(); i++) {
@@ -468,7 +468,7 @@ ofPoint ofxKinectFeatures::getVelocityMean(int j, int frames){
     }
 }
 
-float ofxKinectFeatures::getVelocityMagnitudeMean(int j, int frames){
+float KinectFeatures::getVelocityMagnitudeMean(int j, int frames){
     if (getElement(j)) {
         float sum = 0.0;
         for (int i = 0; i < frames && i < getElement(j)->getVelocity().size(); i++) {
@@ -484,7 +484,7 @@ float ofxKinectFeatures::getVelocityMagnitudeMean(int j, int frames){
     }
 }
 
-ofPoint ofxKinectFeatures::getAcceleration(int j){
+ofPoint KinectFeatures::getAcceleration(int j){
     if (getElement(j)) {
         return getElement(j)->getAcceleration()[0];
     } else {
@@ -492,7 +492,7 @@ ofPoint ofxKinectFeatures::getAcceleration(int j){
     }
 }
 
-vector<ofPoint> ofxKinectFeatures::getAccelerationHistory(int j){
+vector<ofPoint> KinectFeatures::getAccelerationHistory(int j){
     if (getElement(j)) {
         return getElement(j)->getAcceleration();
     } else {
@@ -500,7 +500,7 @@ vector<ofPoint> ofxKinectFeatures::getAccelerationHistory(int j){
     }
 }
 
-vector<ofPoint> ofxKinectFeatures::getAccelerationHistory(int j, int frames){
+vector<ofPoint> KinectFeatures::getAccelerationHistory(int j, int frames){
     if (getElement(j)) {
         vector<ofPoint> fullHistory = getElement(j)->getAcceleration();
         vector<ofPoint> history(fullHistory.begin(), fullHistory.begin() + frames);
@@ -510,7 +510,7 @@ vector<ofPoint> ofxKinectFeatures::getAccelerationHistory(int j, int frames){
     }
 }
 
-float ofxKinectFeatures::getAccelerationMagnitude(int j){
+float KinectFeatures::getAccelerationMagnitude(int j){
     if (getElement(j)) {
         return getElement(j)->getAcceleration()[0].length();
     } else {
@@ -518,7 +518,7 @@ float ofxKinectFeatures::getAccelerationMagnitude(int j){
     }
 }
 
-ofPoint ofxKinectFeatures::getAccelerationMean(int j, int frames){
+ofPoint KinectFeatures::getAccelerationMean(int j, int frames){
     if (getElement(j)) {
         float sumx = 0, sumy = 0, sumz = 0.0;
         for (int i = 0; i < frames && i < getElement(j)->getVelocity().size(); i++) {
@@ -536,7 +536,7 @@ ofPoint ofxKinectFeatures::getAccelerationMean(int j, int frames){
     }
 }
 
-float ofxKinectFeatures::getAccelerationMagnitudeMean(int j, int frames){
+float KinectFeatures::getAccelerationMagnitudeMean(int j, int frames){
     if (getElement(j)) {
         float sum = 0.0;
         for (int i = 0; i < frames && i < getElement(j)->getAcceleration().size(); i++) {
@@ -552,7 +552,7 @@ float ofxKinectFeatures::getAccelerationMagnitudeMean(int j, int frames){
     }
 }
 
-float ofxKinectFeatures::getAccelerationTrajectory(int j){
+float KinectFeatures::getAccelerationTrajectory(int j){
     if (getElement(j)){
         return getElement(j)->getAccelerationTrajectory()[0];
     } else {
@@ -560,7 +560,7 @@ float ofxKinectFeatures::getAccelerationTrajectory(int j){
     }
 }
 
-vector<float> ofxKinectFeatures::getAccelerationTrajectoryHistory(int j){
+vector<float> KinectFeatures::getAccelerationTrajectoryHistory(int j){
     if (getElement(j)) {
         return getElement(j)->getAccelerationTrajectory();
     } else {
@@ -568,7 +568,7 @@ vector<float> ofxKinectFeatures::getAccelerationTrajectoryHistory(int j){
     }
 }
 
-vector<float> ofxKinectFeatures::getAccelerationTrajectoryHistory(int j, int frames){
+vector<float> KinectFeatures::getAccelerationTrajectoryHistory(int j, int frames){
     if (getElement(j)) {
         vector<float> fullHistory = getElement(j)->getAccelerationTrajectory();
         vector<float> history(fullHistory.begin(), fullHistory.begin() + frames);
@@ -578,7 +578,7 @@ vector<float> ofxKinectFeatures::getAccelerationTrajectoryHistory(int j, int fra
     }
 }
 
-float ofxKinectFeatures::getAccelerationTrajectoryMean(int j, int frames){
+float KinectFeatures::getAccelerationTrajectoryMean(int j, int frames){
     if (getElement(j)) {
         float sum = 0.0;
         for (int i = 0; i < frames && i < getElement(j)->getAccelerationTrajectory().size(); i++) {
@@ -594,7 +594,7 @@ float ofxKinectFeatures::getAccelerationTrajectoryMean(int j, int frames){
     }
 }
 
-float ofxKinectFeatures::getDistanceToTorso(int j){
+float KinectFeatures::getDistanceToTorso(int j){
     if (getElement(j)){
         return getElement(j)->getDistanceToTorso()[0];
     } else {
@@ -602,7 +602,7 @@ float ofxKinectFeatures::getDistanceToTorso(int j){
     }
 }
 
-vector<float> ofxKinectFeatures::getDistanceToTorsoHistory(int j){
+vector<float> KinectFeatures::getDistanceToTorsoHistory(int j){
     if (getElement(j)) {
         return getElement(j)->getDistanceToTorso();
     } else {
@@ -610,7 +610,7 @@ vector<float> ofxKinectFeatures::getDistanceToTorsoHistory(int j){
     }
 }
 
-vector<float> ofxKinectFeatures::getDistanceToTorsoHistory(int j, int frames){
+vector<float> KinectFeatures::getDistanceToTorsoHistory(int j, int frames){
     if (getElement(j)) {
         vector<float> fullHistory = getElement(j)->getDistanceToTorso();
         vector<float> history(fullHistory.begin(), fullHistory.begin() + frames);
@@ -620,7 +620,7 @@ vector<float> ofxKinectFeatures::getDistanceToTorsoHistory(int j, int frames){
     }
 }
 
-ofPoint ofxKinectFeatures::getRelativePositionToTorso(int j){
+ofPoint KinectFeatures::getRelativePositionToTorso(int j){
     if (getElement(j)) {
         return getElement(j)->getRelativePositionToTorso()[0];
     } else {
@@ -628,7 +628,7 @@ ofPoint ofxKinectFeatures::getRelativePositionToTorso(int j){
     }
 }
 
-vector<ofPoint> ofxKinectFeatures::getRelativePositionToTorsoHistory(int j){
+vector<ofPoint> KinectFeatures::getRelativePositionToTorsoHistory(int j){
     if (getElement(j)) {
         return getElement(j)->getRelativePositionToTorso();
     } else {
@@ -636,7 +636,7 @@ vector<ofPoint> ofxKinectFeatures::getRelativePositionToTorsoHistory(int j){
     }
 }
 
-vector<ofPoint> ofxKinectFeatures::getRelativePositionToTorsoHistory(int j, int frames){
+vector<ofPoint> KinectFeatures::getRelativePositionToTorsoHistory(int j, int frames){
     if (getElement(j)) {
         vector<ofPoint> fullHistory = getElement(j)->getRelativePositionToTorso();
         vector<ofPoint> history(fullHistory.begin(), fullHistory.begin() + frames);
@@ -646,47 +646,47 @@ vector<ofPoint> ofxKinectFeatures::getRelativePositionToTorsoHistory(int j, int 
     }
 }
 
-float ofxKinectFeatures::getAngle(int j1, int j2, int j3){
+float KinectFeatures::getAngle(int j1, int j2, int j3){
     float d12 = getPositionFiltered(j1).distance(getPositionFiltered(j2));
     float d13 = getPositionFiltered(j1).distance(getPositionFiltered(j3));
     float d23 = getPositionFiltered(j2).distance(getPositionFiltered(j3));
     return RAD_TO_DEG * acos(( -(d13*d13) + d23*d23 + d12*d12 ) / (2*d23*d12 ) ); //cos rule
 }
 
-float ofxKinectFeatures::getQom(){
+float KinectFeatures::getQom(){
     return qom_[0];
 }
 
-vector<float> ofxKinectFeatures::getQomHistory(){
+vector<float> KinectFeatures::getQomHistory(){
     return qom_;
 }
 
-vector<float> ofxKinectFeatures::getQomHistory(int frames){
+vector<float> KinectFeatures::getQomHistory(int frames){
     vector<float> history(qom_.begin(), qom_.begin() + frames);
     return history;
 }
 
-float ofxKinectFeatures::getCI(){
+float KinectFeatures::getCI(){
     return ci_[0];
 }
 
-vector<float> ofxKinectFeatures::getCIHistory(){
+vector<float> KinectFeatures::getCIHistory(){
     return ci_;
 }
 
-vector<float> ofxKinectFeatures::getCIHistory(int frames){
+vector<float> KinectFeatures::getCIHistory(int frames){
     vector<float> history(ci_.begin(), ci_.begin() + frames);
     return history;
 }
 
-/*float ofxKinectFeatures::getSymmetry(){
+/*float KinectFeatures::getSymmetry(){
     return symmetry_;
 }
 
-float ofxKinectFeatures::getYMaxHands(){
+float KinectFeatures::getYMaxHands(){
     return yMaxHands_;
 }*/
 
-bool ofxKinectFeatures::isNewDataAvailable(){
+bool KinectFeatures::isNewDataAvailable(){
     return newValues_;
 }

@@ -19,7 +19,7 @@
 // event arguments, this are used in oF to pass
 // the data when notifying events
 
-class ofEventArgs {};
+class EventArgs {};
 
 
 enum
@@ -38,7 +38,7 @@ enum
     FEAT_CI
 };
 
-class MocapMaxEvent : public ofEventArgs {
+class MocapMaxEvent : public EventArgs {
     
 public:
     
@@ -50,7 +50,7 @@ public:
     static ofEvent <MocapMaxEvent> events;
 };
 
-class MocapMinEvent : public ofEventArgs {
+class MocapMinEvent : public EventArgs {
     
 public:
     
