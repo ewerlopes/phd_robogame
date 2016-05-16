@@ -204,20 +204,21 @@ void Skeleton::skeletonTracking()
 						hResult = pBody[count]->GetJoints(JointType::JointType_Count, joint);
 						if (SUCCEEDED(hResult) && TrackingConfidence_High)
 						{
-							std::map <int, ofPoint> toFeatjoints;
+							std::map <int, ofPoint> toFeatjoints; //this is the map of joints need for the KinectFeatures extractor 
 							// Joints
 							for (int type = 0; type < JointType::JointType_Count; type++)
 							{
 								Joint j = joint[type];
-								toFeatjoints[type] = ofPoint(j.Position.X, j.Position.Y, j.Position.Z);
+								toFeatjoints[type] = ofPoint(j.Position.X, j.Position.Y, j.Position.Z); // storing the joints.
 								cv::Point jointPoint = changeCoordinates(joint, type);
 								if ((jointPoint.x >= 0) && (jointPoint.y >= 0) && (jointPoint.x < colorWidth) && (jointPoint.y < colorHeight))
 								{
 									cv::circle(colorBufferMat, jointPoint, 8, static_cast<cv::Scalar>(color[count]), -1, CV_AA);
 								}
 							}
-							featExtractor.update(toFeatjoints);
-							std::cout << "Qnt of motion: " << featExtractor.getQom();
+							featExtractor.update(toFeatjoints); //calculating skeleton data.
+							std::cout << "Qnt of motion: " << featExtractor.getQom() << std::endl; //getting data.
+							std::cout << "Contraction index: " << featExtractor.getCI() << std::endl; //getting data.
 							drawSkeleton(colorBufferMat, joint);
 						}
 
