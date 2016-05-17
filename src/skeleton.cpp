@@ -13,6 +13,7 @@ cv::Point Skeleton::changeCoordinates(Joint joint[JointType::JointType_Count], i
 Skeleton::Skeleton() {
 	featExtractor.setup(JointType_Head, JointType_SpineMid);	//Necessary for the featExtractor calculations.
 	output.open("LogFile.csv");
+	output2.open("LogFile2.csv");
 }
 
 void Skeleton::drawSkeleton(cv::Mat canvas, Joint joint[JointType::JointType_Count])
@@ -241,8 +242,10 @@ void Skeleton::skeletonTracking()
 						// Lean
 						PointF amount;
 						hResult = pBody[count]->get_Lean(&amount);
-						if (SUCCEEDED(hResult))
+						if (SUCCEEDED(hResult)) {
 							std::cout << "Lean amount: " << amount.X << ", " << amount.Y << std::endl;
+							output2 << amount.Y << std::endl;
+						}
 					}
 				}
 				cv::resize(colorBufferMat, bodyMat, cv::Size(), 0.5, 0.5);

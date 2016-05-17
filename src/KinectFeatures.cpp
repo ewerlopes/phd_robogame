@@ -152,12 +152,14 @@ void KinectFeatures::update(map<int, ofPoint> joints){
 	float zMin = numeric_limits<float>::max();
     
 	// Loop through joints
-    for (map<int, ofPoint>::iterator it = joints.begin(); it != joints.end(); it++) {
-        int j = it->first;
-        computeJointDescriptors(it->first, it->second, h);
-        
-        //qom
+	for (map<int, ofPoint>::iterator it = joints.begin(); it != joints.end(); it++) {
+		int j = it->first;
+		computeJointDescriptors(it->first, it->second, h);
+
+		//qom
 		meanVel += getVelocityMagnitude(j);
+		//meanVel += getAccelerationMagnitude(j);
+
         // trying median;
 		// meanVel.push_back(getVelocityMagnitude(j));
 
@@ -184,7 +186,7 @@ void KinectFeatures::update(map<int, ofPoint> joints){
     
     // Add position to history
     if (meanVels_.size() <= depth_) {
-        meanVels_.insert(meanVels_.begin(), meanVel/joints.size());
+        meanVels_.insert(meanVels_.begin(), remapRange(meanVel/joints.size(),0,0.1,0,1));
 		//Trying median
 		/*sort(meanVel.begin(), meanVel.end());
 		double median = *(meanVel.begin() + meanVel.size() / 2);
@@ -699,4 +701,16 @@ float KinectFeatures::getYMaxHands(){
 
 bool KinectFeatures::isNewDataAvailable(){
     return newValues_;
+}
+
+float KinectFeatures::remapRange(float value, float fromMin, float fromMax, float toMin, float toMax) {
+	// Figure out how 'wide' each range is
+	float fromSpan = fromMax - fromMin;
+	float toSpan = toMax - toMin;
+
+	// Convert the 'from' range  into a 0-1 range (float)
+	float valueScaled = (value - fromMin) / fromSpan;
+
+	// Convert the 0-1 range into a value in the 'to' range;
+	return toMin + (valueScaled * toSpan);
 }

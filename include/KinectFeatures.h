@@ -44,6 +44,10 @@ public:
     
     void setDepth(int depth);
     int getDepth();
+
+	//auxilian function
+	// re-maps a number from one range to another.
+	float remapRange(float value, float fromMin, float fromMax, float toMin, float toMax); 
     
     //DESCIPTOR GETTERS
     //JOINT DESCRIPTORS
