@@ -13,7 +13,6 @@ cv::Point Skeleton::changeCoordinates(Joint joint[JointType::JointType_Count], i
 Skeleton::Skeleton() {
 	featExtractor.setup(JointType_Head, JointType_SpineMid);	//Necessary for the featExtractor calculations.
 	output.open("LogFile.csv");
-	output2.open("LogFile2.csv");
 }
 
 void Skeleton::drawSkeleton(cv::Mat canvas, Joint joint[JointType::JointType_Count])
@@ -234,8 +233,10 @@ void Skeleton::skeletonTracking()
 							}
 							featExtractor.update(toFeatjoints); //calculating skeleton data.
 							std::cout << "Qnt of motion: " << featExtractor.getQom() << std::endl; //getting data.
-							output << featExtractor.getQom() << std::endl; //saving data to the log file.
+							output << featExtractor.getQom() << ", "; //saving data to the log file.
 							std::cout << "Contraction index: " << featExtractor.getCI() << std::endl; //getting data.
+							float fCI = featExtractor.getCI();
+							output << (fCI > 1 ? 1 : fCI) << ", "; //saving data to the log file. Trims the fCI for being <=1.
 							drawSkeleton(colorBufferMat, joint);
 						}
 
@@ -244,7 +245,7 @@ void Skeleton::skeletonTracking()
 						hResult = pBody[count]->get_Lean(&amount);
 						if (SUCCEEDED(hResult)) {
 							std::cout << "Lean amount: " << amount.X << ", " << amount.Y << std::endl;
-							output2 << amount.Y << std::endl;
+							output << (amount.Y < 0 ? 0 : amount.Y) << std::endl; //saving data to the log file. Trims the fCI for being greather than 0.
 						}
 					}
 				}

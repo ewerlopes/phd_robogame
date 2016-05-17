@@ -157,7 +157,7 @@ void KinectFeatures::update(map<int, ofPoint> joints){
 		computeJointDescriptors(it->first, it->second, h);
 
 		//qom
-		meanVel += getVelocityMagnitude(j);
+		meanVel += getVelocityMagnitude(j) * 30;
 		//meanVel += getAccelerationMagnitude(j);
 
         // trying median;
@@ -186,7 +186,8 @@ void KinectFeatures::update(map<int, ofPoint> joints){
     
     // Add position to history
     if (meanVels_.size() <= depth_) {
-        meanVels_.insert(meanVels_.begin(), remapRange(meanVel/joints.size(),0,0.1,0,1));
+		meanVel = meanVel / joints.size();
+		meanVels_.insert(meanVels_.begin(), (meanVel > 1 ? 1 : meanVel));//remapRange(meanVel/joints.size(),0,0.1,0,1));
 		//Trying median
 		/*sort(meanVel.begin(), meanVel.end());
 		double median = *(meanVel.begin() + meanVel.size() / 2);
