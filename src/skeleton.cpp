@@ -233,8 +233,8 @@ void Skeleton::skeletonTracking()
 							}
 							featExtractor.update(toFeatjoints); //calculating skeleton data.
 							std::cout << "Qnt of motion: " << featExtractor.getQom() << std::endl; //getting data.
+							output << featExtractor.getQom() << std::endl; //saving data to the log file.
 							std::cout << "Contraction index: " << featExtractor.getCI() << std::endl; //getting data.
-							output << featExtractor.getCI() << std::endl; //saving data to the log file.
 							drawSkeleton(colorBufferMat, joint);
 						}
 

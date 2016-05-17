@@ -139,7 +139,10 @@ void KinectFeatures::update(map<int, ofPoint> joints){
     ofPoint torsoPos = joints[torso_];
     
     float h = headPos.distance(torsoPos);
-    float meanVel = 0.0; //for qom
+
+	float meanVel = 0.0; //for qom
+	//vector<double> meanVel;//trying median for QoM 
+	
     //for CI
     float xMax = numeric_limits<float>::min();
 	float yMax = numeric_limits<float>::min();
@@ -148,13 +151,16 @@ void KinectFeatures::update(map<int, ofPoint> joints){
 	float yMin = numeric_limits<float>::max();
 	float zMin = numeric_limits<float>::max();
     
+	// Loop through joints
     for (map<int, ofPoint>::iterator it = joints.begin(); it != joints.end(); it++) {
         int j = it->first;
         computeJointDescriptors(it->first, it->second, h);
         
         //qom
-        meanVel += getVelocityMagnitude(j);
-        
+		meanVel += getVelocityMagnitude(j);
+        // trying median;
+		// meanVel.push_back(getVelocityMagnitude(j));
+
         //ci
         if (getPositionFiltered(j).x > xMax) {
             xMax = getPositionFiltered(j).x;
@@ -179,6 +185,10 @@ void KinectFeatures::update(map<int, ofPoint> joints){
     // Add position to history
     if (meanVels_.size() <= depth_) {
         meanVels_.insert(meanVels_.begin(), meanVel/joints.size());
+		//Trying median
+		/*sort(meanVel.begin(), meanVel.end());
+		double median = *(meanVel.begin() + meanVel.size() / 2);
+		meanVels_.insert(meanVels_.begin(), median);*/
     }
     
     // remove positions from history

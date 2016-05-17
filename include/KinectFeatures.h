@@ -18,6 +18,7 @@
 
 #include "MocapElement.h"
 #include "MocapEvents.h"
+#include <algorithm>
 #include <numeric>
 
 namespace filter
