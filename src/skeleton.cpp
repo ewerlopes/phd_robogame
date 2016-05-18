@@ -13,6 +13,7 @@ cv::Point Skeleton::changeCoordinates(Joint joint[JointType::JointType_Count], i
 Skeleton::Skeleton() {
 	featExtractor.setup(JointType_Head, JointType_SpineMid);	//Necessary for the featExtractor calculations.
 	output.open("LogFile.csv");
+	output2.open("LogFileHead.csv");
 }
 
 void Skeleton::drawSkeleton(cv::Mat canvas, Joint joint[JointType::JointType_Count])
@@ -220,7 +221,8 @@ void Skeleton::skeletonTracking()
 						if (SUCCEEDED(hResult) && TrackingConfidence_High)
 						{
 							std::map <int, ofPoint> toFeatjoints; //this is the map of joints need for the KinectFeatures extractor 
-							// Joints
+							
+							// Joints -- This for loop puts circle on the joints and fills the map object for the feat. extractor.
 							for (int type = 0; type < JointType::JointType_Count; type++)
 							{
 								Joint j = joint[type];
@@ -231,26 +233,36 @@ void Skeleton::skeletonTracking()
 									cv::circle(colorBufferMat, jointPoint, 8, static_cast<cv::Scalar>(color[count]), -1, CV_AA);
 								}
 							}
+
 							featExtractor.update(toFeatjoints); //calculating skeleton data.
+
+							//getting spine for distance measure TODO put this inside the for loop above 
+							Joint j = joint[JointType_SpineMid];
+							//vector<float> headAngle = featExtractor.getHeadXYAngle(j.Position.X, j.Position.Y, j.Position.Z);	
+							//output2 << featExtractor.remapRange(j.Position.Z,0,4.5,0,1) << std::endl;
+							output2 << j.Position.Z << std::endl;
+							// -------------------------------
+
 							std::cout << "Qnt of motion: " << featExtractor.getQom() << std::endl; //getting data.
 							output << featExtractor.getQom() << ", "; //saving data to the log file.
 							std::cout << "Contraction index: " << featExtractor.getCI() << std::endl; //getting data.
 							float fCI = featExtractor.getCI();
 							output << (fCI > 1 ? 1 : fCI) << ", "; //saving data to the log file. Trims the fCI for being <=1.
-							drawSkeleton(colorBufferMat, joint);
+							drawSkeleton(colorBufferMat, joint);	// Draws the whole skeleton.
 						}
 
 						// Lean
 						PointF amount;
 						hResult = pBody[count]->get_Lean(&amount);
 						if (SUCCEEDED(hResult)) {
-							std::cout << "Lean amount: " << amount.X << ", " << amount.Y << std::endl;
+							std::cout << "Lean amount (Yaxis): " << amount.Y << std::endl;
 							output << (amount.Y < 0 ? 0 : amount.Y) << std::endl; //saving data to the log file. Trims the fCI for being greather than 0.
 						}
 					}
 				}
 				cv::resize(colorBufferMat, bodyMat, cv::Size(), 0.5, 0.5);
 			}
+
 			for (int count=0; count<BODY_COUNT; count++)
 			{
 				SafeRelease(pBody[count]);

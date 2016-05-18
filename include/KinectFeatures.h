@@ -19,6 +19,7 @@
 #include "MocapElement.h"
 #include "MocapEvents.h"
 #include <algorithm>
+#include <math.h>
 #include <numeric>
 
 namespace filter
@@ -89,6 +90,7 @@ public:
     
     //SPECIAL DESCRIPTORS
     float getAngle(int j1, int j2, int j3);
+	vector<float> getHeadXYAngle(float headPosX, float headPosY, float headPosZ);
     
     //OVERALL DESCRIPTORS
     float getQom();

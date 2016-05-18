@@ -659,6 +659,15 @@ vector<ofPoint> KinectFeatures::getRelativePositionToTorsoHistory(int j, int fra
     }
 }
 
+
+vector<float> KinectFeatures::getHeadXYAngle(float headPosX, float headPosY, float headPosZ) {
+	// returns xAngle, yAngle
+	vector<float> result;
+	result.push_back(atan2(headPosX, headPosZ));
+	result.push_back(atan2(headPosY, headPosZ));
+	return result;
+}
+
 float KinectFeatures::getAngle(int j1, int j2, int j3){
     float d12 = getPositionFiltered(j1).distance(getPositionFiltered(j2));
     float d13 = getPositionFiltered(j1).distance(getPositionFiltered(j3));
