@@ -1,17 +1,18 @@
 /*
- KinectFeatures
- Copyright © 2014  Music Technology Group - Universitat Pompeu Fabra / Escola Superior de Música de Catalunya
- 
- This file is part of KinectFeatures, created and maintained by Álvaro Sarasúa <http://alvarosarasua.wordpress.com>
- 
- KinectFeatures is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License (LGPL v3) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- 
- KinectFeatures is distributed in the hope that it will be useful, but WITHOUT  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License (LGPL v3).
- 
- You should have received a copy of the GNU Lesser General Public License long within the KinectFeatures SW package.  If not, see <http://www.gnu.org/licenses/>.
- 
- If you are willing to get a (non FOSS) commercial license, please contact us at mtg@upf.edu
- */
+*** KinectFeatures
+
+Originally desined by the Music Technology Group - Universitat Pompeu Fabra / Escola Superior de Música de Catalunya.
+Specifically, it was created and maintained by Álvaro Sarasúa in the github repository:  <https://github.com/asarasua/ofxKinectFeatures>,
+being an application strongly dependent on OpenFrameworks. Here, the code has been modified to fit the research developed
+at the Artificial Intelligence and Robotics Laboratory at Politecnico di Milano, Milano, Italy.
+
+LICENSE INFORMATION: KinectFeatures is free software: you can redistribute it and/or modify it under the terms
+of the GNU Lesser General Public License (LGPL v3) as published by the Free Software Foundation, either version
+3 of the License, or (at your option) any later version.
+KinectFeatures is distributed in the hope that it will be useful, but WITHOUT  ANY WARRANTY; without even the
+implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+License (LGPL v3). See <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef KinectFeatures_h
 #define KinectFeatures_h

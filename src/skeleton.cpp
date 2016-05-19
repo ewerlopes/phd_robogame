@@ -226,6 +226,13 @@ void Skeleton::skeletonTracking()
 							for (int type = 0; type < JointType::JointType_Count; type++)
 							{
 								Joint j = joint[type];
+								if (type == JointType_SpineBase) {
+									// get distance to SpineMid in meters (Z axis)
+									//output2 << featExtractor.remapRange(j.Position.Z,0,4.5,0,1) << std::endl; //for [0,1] data
+									//output2 << j.Position.Z << std::endl;
+									output << featExtractor.remapRange(j.Position.Z, 0, 4.5, 0, 1) << ", ";
+								}
+
 								toFeatjoints[type] = ofPoint(j.Position.X, j.Position.Y, j.Position.Z); // storing the joints.
 								cv::Point jointPoint = changeCoordinates(joint, type);
 								if ((jointPoint.x >= 0) && (jointPoint.y >= 0) && (jointPoint.x < colorWidth) && (jointPoint.y < colorHeight))
@@ -235,14 +242,7 @@ void Skeleton::skeletonTracking()
 							}
 
 							featExtractor.update(toFeatjoints); //calculating skeleton data.
-
-							//getting spine for distance measure TODO put this inside the for loop above 
-							Joint j = joint[JointType_SpineMid];
-							//vector<float> headAngle = featExtractor.getHeadXYAngle(j.Position.X, j.Position.Y, j.Position.Z);	
-							//output2 << featExtractor.remapRange(j.Position.Z,0,4.5,0,1) << std::endl;
-							output2 << j.Position.Z << std::endl;
-							// -------------------------------
-
+							std::cout << std::endl << "*******" << std::endl;
 							std::cout << "Qnt of motion: " << featExtractor.getQom() << std::endl; //getting data.
 							output << featExtractor.getQom() << ", "; //saving data to the log file.
 							std::cout << "Contraction index: " << featExtractor.getCI() << std::endl; //getting data.
