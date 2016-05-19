@@ -47,7 +47,7 @@ public:
     void setDepth(int depth);
     int getDepth();
 
-	//auxilian function
+	//auxiliary function
 	// re-maps a number from one range to another.
 	float remapRange(float value, float fromMin, float fromMax, float toMin, float toMax); 
     
@@ -103,6 +103,11 @@ public:
     vector<float> getCIHistory(int frames);
 //    float getSymmetry();
 //    float getYMaxHands();
+
+	float getFluidity();
+	vector<float> getFluidityHistory();
+	vector<float> getFluidityHistory(int frames);
+
     
     bool isNewDataAvailable();
     
@@ -120,8 +125,8 @@ private:
     float *bLpd2;
     
     //overall descriptors
-    vector<float> qom_, ci_;//, symmetry_, yMaxHands_;
-    vector<float> meanVels_;
+    vector<float> qom_, ci_, fluidity_;//, symmetry_, yMaxHands_;
+    vector<float> meanVels_, meanAccs_;
     
     bool newValues_;
     

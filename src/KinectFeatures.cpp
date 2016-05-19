@@ -142,6 +142,7 @@ void KinectFeatures::update(map<int, ofPoint> joints){
     float h = headPos.distance(torsoPos);
 
 	float meanVel = 0.0; //for qom
+	float meanAcc = 0.0; // for fluidity
 	//vector<double> meanVel;//trying median for QoM 
 	
     //for CI
@@ -160,6 +161,7 @@ void KinectFeatures::update(map<int, ofPoint> joints){
 		//qom
 		meanVel += getVelocityMagnitude(j) * 30;
 		//meanVel += getAccelerationMagnitude(j);
+		meanAcc += getAccelerationMagnitude(j) * 50;
 
         // trying median;
 		// meanVel.push_back(getVelocityMagnitude(j));
@@ -188,17 +190,23 @@ void KinectFeatures::update(map<int, ofPoint> joints){
     // Add position to history
     if (meanVels_.size() <= depth_) {
 		meanVel = meanVel / joints.size();
-		meanVels_.insert(meanVels_.begin(), (meanVel > 1 ? 1 : meanVel));//remapRange(meanVel/joints.size(),0,0.1,0,1));
-		//Trying median
-		/*sort(meanVel.begin(), meanVel.end());
-		double median = *(meanVel.begin() + meanVel.size() / 2);
-		meanVels_.insert(meanVels_.begin(), median);*/
+		meanVels_.insert(meanVels_.begin(), (meanVel > 1 ? 1 : meanVel));
     }
     
     // remove positions from history
     if (meanVels_.size() > depth_) {
         meanVels_.pop_back();
     }
+
+	// for fluidity
+	if (meanAccs_.size() <= depth_) {
+		meanAcc = meanAcc / joints.size();
+		meanAccs_.insert(meanAccs_.begin(), (meanAcc > 1 ? 1 : meanAcc));
+	}
+	//for fluidity
+	if (meanAccs_.size() > depth_) {
+		meanAccs_.pop_back();
+	}
     
     //qom_ = accumulate(meanVels_.begin(), meanVels_.end(), 0.0) / (meanVels_.size());
     // QOM insert
@@ -222,6 +230,15 @@ void KinectFeatures::update(map<int, ofPoint> joints){
     }
     
     checkMaxAndMin(getCIHistory(5), NO_JOINT, FEAT_CI);
+
+	if (fluidity_.size() <= depth_) {
+		fluidity_.insert(fluidity_.begin(), accumulate(meanAccs_.begin(), meanAccs_.end(), 0.0) / (meanAccs_.size()));
+	}
+
+	// QOM delete
+	if (fluidity_.size() > depth_) {
+		fluidity_.pop_back();
+	}
     
     //TODO solve this!!
 //    symmetry_ = 1.0 - (0.5 * (abs(sqrt(getDistanceToTorso(JOINT_RIGHT_HAND))-sqrt(getDistanceToTorso(JOINT_LEFT_HAND))) + abs(sqrt(getDistanceToTorso(JOINT_RIGHT_ELBOW))-sqrt(getDistanceToTorso(JOINT_LEFT_ELBOW)))) / h);
@@ -700,6 +717,19 @@ vector<float> KinectFeatures::getCIHistory(){
 vector<float> KinectFeatures::getCIHistory(int frames){
     vector<float> history(ci_.begin(), ci_.begin() + frames);
     return history;
+}
+
+float KinectFeatures::getFluidity() {
+	return fluidity_[0];
+}
+
+vector<float> KinectFeatures::getFluidityHistory() {
+	return fluidity_;
+}
+
+vector<float> KinectFeatures::getFluidityHistory(int frames) {
+	vector<float> history(fluidity_.begin(), fluidity_.begin() + frames);
+	return history;
 }
 
 /*float KinectFeatures::getSymmetry(){
