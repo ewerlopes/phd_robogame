@@ -1,6 +1,6 @@
 # Kinect Motion Features
 
-Software for motion feature extraction from Kinect v2 on Windows. This version only works on windows.
+Software for motion feature extraction from Kinect v2 on Windows. However, the KinectFeatures API has been designed not to depend on a particular library for the skeleton tracking with Kinect. In this way, you can easily use this code on `Linux`, provided that you can extract the skeleton joint position using any available library.
 
 ## Requirements
 
