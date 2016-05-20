@@ -28,7 +28,9 @@ Features can correspond to a specific joint (e.g. velocity of right hand) or gen
 * Fluidity
 
 ## Credits
-This piece of code was originally desined by the Music Technology Group - Universitat Pompeu Fabra / Escola Superior de Música de Catalunya. Specifically, it was created and maintained by Álvaro Sarasúa, in the github repository:  <https://github.com/asarasua/ofxKinectFeatures>, being an application strongly dependent on OpenFrameworks. Here, the code has been modified to fit the research developed  at the Artificial Intelligence and Robotics Laboratory (AIRLab) at Politecnico di Milano (Milano-Italy) under the purpose of my PhD research. **The main difference in this code version is that it doesn't depend on OpenFramework anymore, and fluidity as a new descriptor has been included.**
+This piece of code was originally desined by the Music Technology Group - Universitat Pompeu Fabra / Escola Superior de Música de Catalunya. Specifically, it was created and maintained by Álvaro Sarasúa, in the github repository:  <https://github.com/asarasua/ofxKinectFeatures>, being an application strongly dependent on OpenFrameworks. 
+
+In this repository, the code has been modified to fit the research developed  at the Artificial Intelligence and Robotics Laboratory (AIRLab) at Politecnico di Milano (Milano-Italy) under the purpose of my PhD research. **The main difference in this code version is that it doesn't depend on OpenFramework anymore, and fluidity as a new descriptor has been included.**
 
 ## How to use it
 KinectFeatures code was designed to only compute descriptors from motion capture data. To track the skeleton from a Kinect device, linking to the Microsoft Kinect SDK or any other framework is need. 
