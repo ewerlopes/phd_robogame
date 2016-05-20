@@ -40,50 +40,51 @@ To link properly, using the Kinect SDK using Visual Studio 2012+, do:
 If you are using Kinect One, change the environment variable accordingly.
 
 ##API
-The API has been designed not to depend on a particular library for the skeleton tracking with Kinect. Examples using **ofxOpenNI** and **ofxKinectNui** are included.
+The API has been designed not to depend on a particular library for the skeleton tracking with Kinect. 
 
-The features are accessed through an `ofxKinectFeatures` object, so declare it in ofApp.h:
+The features are accessed through an `KinectFeatures` object, so declare it in your main:
 
 ```cpp
-ofxKinectFeatures featExtractor;
+KinectFeatures featExtractor;
 ```
 
-If you wish to extract features for more than one skeleton, just declare one ofxKinectFeatures object for each (e.g. by creating a `map<int,ofxKinectFeatures>` where keys correspond to an skeleton id).
+If you wish to extract features for more than one skeleton, just declare one KinectFeatures object for each (e.g. by creating a `map<int,KinectFeatures>` where keys correspond to an skeleton id).
 
-In `setup()`, it is necessary to tell ofxKinectFeatures which indices correspond to the **head** and **torso** joints, as some calculations need to know about this. This is easily done depending on the addon or libray being used for skeleton tracking.
+In setup(), it is necessary to tell KinectFeatures which indices correspond to the **head** and **torso** joints, as some calculations need to know about this. This is easily done depending on the libray being used for skeleton tracking.
 
-```cpp
-featExtractor.setup(JOINT_HEAD, JOINT_TORSO); //ofxOpenNI
-featExtractor.setup(NUI_SKELETON_POSITION_HEAD, NUI_SKELETON_POSITION_SPINE); //ofxKinectNui
+```cpp 
+featExtractor.setup(JointType_Head, JointType_SpineMid); //Using Kinect SDK 2.0
 ```
 
-In `update()`, just update skeletons data sending a `map<int, ofPoint>` where keys are integers identifying joints and values are the x, y, z positions of these joints. For example, when using ofxOpenNI, this can be done as follows:
+In `update()`, just update skeletons data sending a `map<int, ofPoint>` where keys are integers identifying joints and values are the x, y, z positions of these joints. Here is the general idea in pseudocode:
 
-```cpp
-//kinect is an ofxOpenNI object
-if (kinect.getNumTrackedUsers()) {
-    ofxOpenNIUser user = kinect.getTrackedUser(0);
-    map<int, ofPoint> joints;
-    for (int j = 0; j < user.getNumJoints(); j++) {
-        joints[j] = user.getJoint((Joint)j).getWorldPosition();
+`
+if tackedUsers {
+    user = getTrackedUser();
+    map<int, ofPoint> joints; // a joint "dictionary"
+    for all joints{
+        joints[j] = user.getJointPosition();
     }
-    featExtractor.update(joints);
+    featExtractor.update(joints); //update the feature measures
 }
-```
+`
 
-From there, features can be accessed calling the appropriate methods.
+*Look inside `Skeleton::skeletonTracking()` in this repository code in order to now more.*
 
-For joint descriptors, joint id's. E.g., to get the x velocity of the right hand (in ofxOpenNI, identified by the `JOINT_RIGHT_HAND`constant):
+With the correct update loop, features can be accessed calling the appropriate methods.
 
+In order to get the x velocity of the right hand, for instance, using the Kinect SDK 2.0:
+
+`
+if skeletonExists {
+    featExtractor.getVelocity(JointType_HandRight).x;
+}
+`
+
+For overall descriptors, just call the corresponding method. E.g.:
 ```cpp
-if (featExtractor.skeletonExists(0)) {
-    featExtractor.getVelocity(JOINT_RIGHT_HAND).x;
-}
-```
-
-For ovearall descriptors, just by calling the method. E.g.:
-
     featExtractor.getQom();
+```
 
 ## Credits
 This piece of code was originally desined by the Music Technology Group - Universitat Pompeu Fabra / Escola Superior de Música de Catalunya. Specifically, it was created and maintained by Álvaro Sarasúa, in the github repository:  <https://github.com/asarasua/ofxKinectFeatures>, being an application strongly dependent on OpenFrameworks. Here, the code has been modified to fit the research developed  at the Artificial Intelligence and Robotics Laboratory (AIRLab) at Politecnico di Milano (Milano-Italy) under the purpose of my PhD research. 
