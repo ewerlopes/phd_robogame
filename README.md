@@ -27,9 +27,9 @@ Features can correspond to a specific joint (e.g. velocity of right hand) or gen
 
 ### Overall descriptors
 
-* Quantity Of Motion
-* Contraction Index
-* Fluidity
+* Quantity Of Motion: Mean of all joint velocity values (scaled by a factor of 30 in order to ease visualization).
+* Contraction Index: Empiracally defined at the [creator's paper](http://nime2014.org/proceedings/papers/464_paper.pdf).
+* Fluidity: Mean of all joint acceleraion values (scaled by a factor of 10 in order to ease visualization).
 
 ## Credits
 This piece of code was originally desined by the Music Technology Group - Universitat Pompeu Fabra / Escola Superior de Música de Catalunya. Specifically, it was created and maintained by Álvaro Sarasúa, in the github repository:  <https://github.com/asarasua/ofxKinectFeatures>, being an application strongly dependent on OpenFrameworks. 
