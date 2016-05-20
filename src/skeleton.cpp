@@ -244,13 +244,13 @@ void Skeleton::skeletonTracking()
 							featExtractor.update(toFeatjoints); //calculating skeleton data.
 							float torsoVel = featExtractor.getVelocityMagnitude(JointType_SpineBase) *10;
 							output2 << (torsoVel > 1 ? 1 : torsoVel) << ", ";
-							output2 << featExtractor.getFluidity() << std::endl;
 							std::cout << std::endl << "*******" << std::endl;
 							std::cout << "Qnt of motion: " << featExtractor.getQom() << std::endl; //getting data.
 							output << featExtractor.getQom() << ", "; //saving data to the log file.
 							std::cout << "Contraction index: " << featExtractor.getCI() << std::endl; //getting data.
 							float fCI = featExtractor.getCI();
 							output << (fCI > 1 ? 1 : fCI) << ", "; //saving data to the log file. Trims the fCI for being <=1.
+							output << featExtractor.getFluidity() << ", "; //saving data to log file.
 							drawSkeleton(colorBufferMat, joint);	// Draws the whole skeleton.
 						}
 
