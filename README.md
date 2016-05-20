@@ -58,7 +58,7 @@ featExtractor.setup(JointType_Head, JointType_SpineMid); //Using Kinect SDK 2.0
 
 In `update()`, just update skeletons data sending a `map<int, ofPoint>` where keys are integers identifying joints and values are the x, y, z positions of these joints. Here is the general idea in pseudocode:
 
-`
+```cpp
 if tackedUsers {
     user = getTrackedUser();
     map<int, ofPoint> joints; // a joint "dictionary"
@@ -67,7 +67,7 @@ if tackedUsers {
     }
     featExtractor.update(joints); //update the feature measures
 }
-`
+```
 
 *Look inside `Skeleton::skeletonTracking()` in this repository code in order to now more.*
 
@@ -75,11 +75,11 @@ With the correct update loop, features can be accessed calling the appropriate m
 
 In order to get the x velocity of the right hand, for instance, using the Kinect SDK 2.0:
 
-`
+```cpp
 if skeletonExists {
     featExtractor.getVelocity(JointType_HandRight).x;
 }
-`
+```
 
 For overall descriptors, just call the corresponding method. E.g.:
 ```cpp
