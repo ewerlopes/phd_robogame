@@ -2,6 +2,10 @@
 
 Software for motion feature extraction from Kinect v2 on Windows. This version only works on windows.
 
+## Requirements
+
+* A system to perform skeleton tracking (Microsoft Kinect SDK 1.8+).
+
 ## Features
 
 Features can correspond to a specific joint (e.g. velocity of right hand) or general body movement
@@ -30,7 +34,7 @@ Features can correspond to a specific joint (e.g. velocity of right hand) or gen
 ## Credits
 This piece of code was originally desined by the Music Technology Group - Universitat Pompeu Fabra / Escola Superior de Música de Catalunya. Specifically, it was created and maintained by Álvaro Sarasúa, in the github repository:  <https://github.com/asarasua/ofxKinectFeatures>, being an application strongly dependent on OpenFrameworks. 
 
-In this repository, the code has been modified to fit the research developed  at the Artificial Intelligence and Robotics Laboratory (AIRLab) at Politecnico di Milano (Milano-Italy) under the purpose of my PhD research. **The main difference in this code version is that it doesn't depend on OpenFramework anymore, and fluidity as a new descriptor has been included.**
+In this repository, the code has been modified to fit the research developed  at the Artificial Intelligence and Robotics Laboratory (AIRLab) at Politecnico di Milano (Milano-Italy) under the purpose of my PhD research. **The main difference in this code version is that it doesn't depend on OpenFramework anymore and it includes `fluidity` as a new descriptor.**
 
 ## How to use it
 KinectFeatures code was designed to only compute descriptors from motion capture data. To track the skeleton from a Kinect device, linking to the Microsoft Kinect SDK or any other framework is need. 
@@ -42,7 +46,9 @@ To link properly, using the Kinect SDK using Visual Studio 2012+, do:
 3. Add "$(KINECTSDK20_DIR)\lib\x64" (or x86, depending on your system) value to Project Property -> Configuration Properties -> Linker -> Additional Library Directories.
 4. Add "Kinect20.lib" value to Project Property -> Configuration Properties -> Linker -> Input -> Additional Dependencies.
 
-If you are using Kinect One, change the environment variable accordingly.
+**If you are using Kinect One, change the environment variable accordingly.**
+
+`IN THE PRESENT CODE I USE OPENCV FOR DRAWING THE SKELETON OVER THE RGB DATA, AS WELL AS VISUALIZE THE DEPTH DATA. THE SKELETON.CPP CLASS IS THE MAIN OBJECT FROM WHICH THE KINECTFEATURE OBJECT IS CREATED AND CALLED. YOU CAN DEFINE YOUR OWN MAIN CLASS AND REMOVE THE DEPENDENCE ON OPENCV, IF YOU WILL.` 
 
 ##API
 The API has been designed not to depend on a particular library for the skeleton tracking with Kinect. 
