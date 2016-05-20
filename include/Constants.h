@@ -124,13 +124,8 @@ enum ofTargetPlatform {
 #ifdef TARGET_WIN32
 #define GLEW_STATIC
 #define GLEW_NO_GLU
-<<<<<<< HEAD
 //#include "GL/glew.h"
 //#include "GL/wglew.h"
-=======
-#include "GL/glew.h"
-#include "GL/wglew.h"
->>>>>>> d2d4151e9e80ac3ee5f11afd742d8073b822ff0e
 //#include "glu.h"
 #define __WINDOWS_DS__
 #define __WINDOWS_MM__
