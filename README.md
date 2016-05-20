@@ -27,6 +27,14 @@ Features can correspond to a specific joint (e.g. velocity of right hand) or gen
 * Contraction Index
 * Fluidity
 
+## How to use it
+How to Use
+
+1. Create a new Project Property sheet. 
+2. Add "$(KINECTSDK20_DIR)\inc" value to Project Property -> Configuration Properties -> C/C++ -> Additional Include Directories.
+3. Add "$(KINECTSDK20_DIR)\lib\x64" (or x86, depending on your system) value to Project Property -> Configuration Properties -> Linker -> Additional Library Directories.
+4. Add "Kinect20.lib" value to Project Property -> Configuration Properties -> Linker -> Input -> Additional Dependencies.
+
 ## Credits
 This piece of code was originally desined by the Music Technology Group - Universitat Pompeu Fabra / Escola Superior de Música de Catalunya. Specifically, it was created and maintained by Álvaro Sarasúa, in the github repository:  <https://github.com/asarasua/ofxKinectFeatures>, being an application strongly dependent on OpenFrameworks. Here, the code has been modified to fit the research developed  at the Artificial Intelligence and Robotics Laboratory (AIRLab) at Politecnico di Milano (Milano-Italy) under the purpose of my PhD research. 
 
