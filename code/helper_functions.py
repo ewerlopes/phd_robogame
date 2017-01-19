@@ -132,3 +132,16 @@ def removeMissingData(data, missing_token=""):
     :return:                the data without missing values.
     """
     return map(lambda x: int(x), filter(lambda v: v != missing_token, data))
+
+def remap_interval(value, oldMin, oldMax, newMin, newMax):
+    """Remap from an interval to another"""
+    
+    # Figure out how 'wide' each range is
+    oldSpan = oldMax - oldMin
+    newSpan = newMax - newMin
+
+    # Convert the left range into a 0-1 range (float)
+    valueScaled = float(value - oldMin) / float(oldSpan)
+
+    # Convert the 0-1 range into a value in the right range.
+    return newMin + (valueScaled * newSpan)
