@@ -36,10 +36,9 @@ def mad(data, axis=None):
 
 def sma(data):
     """Computes Signal magnitude area.
-    http://dsp.stackexchange.com/questions/18649/signal-magnitude-area
+    http://uclab.khu.ac.kr/resources/publication/J_99.pdf
     """
-    accumulator = np.sum([np.abs(x) for x in data])
-    return accumulator / float(len(data))
+    return np.sum([np.abs(x) for x in data])
 
 
 def energy(data):

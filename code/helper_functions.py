@@ -89,7 +89,7 @@ def getCSV(filename, reference_column="time", windows_separator=""):
                 result[col].append(accumulator)
 
     number_windows = len(reference_points)
-    return number_windows, result
+    return (number_windows, result)
 
 def getStatistics(data, reference_column="time", compareWith=50):
     """Checks the amount of overlap between windows
