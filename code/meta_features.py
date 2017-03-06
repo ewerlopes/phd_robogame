@@ -100,19 +100,21 @@ def freq_kurtos(data, n_bins=200):
     return kurtosis(np.abs(half_freq_domain))
 
 def fft_energy(data,n_bins=50):
-    mean_sig = np.ones_like(data)*np.mean(data)
+    n_bins = len(data)
+    #mean_sig = np.ones_like(data)*np.mean(data)
     # remove mean of the signal, for better results.
-    sig = data - mean_sig
+    sig = data #- mean_sig
     freqsig = fft.fft(sig,n=n_bins) 
     half_freq_domain = freqsig[:int(n_bins/2)]
-    return np.sum([np.abs(x)**2 for x in half_freq_domain]) / float(len(half_freq_domain))
+    #return np.sum([np.abs(x)**2 for x in half_freq_domain]) / float(len(half_freq_domain))
+    return np.sum([np.abs(x)**2 for x in freqsig]) / float(len(freqsig))
 
 def pse(data, n_bins=200):
     """extraction of power spectral entropy
     http://stackoverflow.com/questions/30418391/what-is-frequency-domain-entropy-in-fft-result-and-how-to-calculate-it"""
-    mean_sig = np.ones_like(data)*np.mean(data)
+    #mean_sig = np.ones_like(data)*np.mean(data)
     # remove mean of the signal, for better results.
-    sig = data - mean_sig
+    sig = data #- mean_sig
     freqsig = fft.fft(sig,n=n_bins) 
     half_freq_domain = freqsig[:int(n_bins/2)]
     norm_const = len(half_freq_domain)
