@@ -106,7 +106,7 @@ def fft_energy(data,n_bins=50):
     sig = data #- mean_sig
     freqsig = fft.fft(sig,n=n_bins) 
     half_freq_domain = freqsig[:int(n_bins/2)]
-    #return np.sum([np.abs(x)**2 for x in half_freq_domain]) / float(len(half_freq_domain))
+    #return [np.abs(x)**2 for x in half_freq_domain]
     return np.sum([np.abs(x)**2 for x in freqsig]) / float(len(freqsig))
 
 def pse(data, n_bins=200):
