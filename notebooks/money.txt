@@ -1,9 +1,0 @@
-Name Money Year
-Paul    57.00    2012
-Susan   67.00    2012
-Gary    54.00    2011
-Paul    77.00    2011
-Andrea  20.00    2011
-Albert  23.00    2011
-Hal     26.00    2010
-Paul    23.00    2010
