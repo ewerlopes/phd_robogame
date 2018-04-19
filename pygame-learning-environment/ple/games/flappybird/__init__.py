@@ -378,8 +378,8 @@ class FlappyBird(base.PyGameWrapper):
         try:
             assert next_next_pipe.x-next_pipe.x == self.settings.group_pipe_separation
         except AssertionError:
-            print 'Diff between the first 2 pipes is {}, when it should have been {}'.format(next_next_pipe.x-next_pipe.x,
-                                                                                             self.settings.group_pipe_separation )
+            print 'Diff between the first 2 pipes is {} instead of {}'.format(next_next_pipe.x-next_pipe.x,
+                                                                              self.settings.group_pipe_separation)
 
         self.st = next_pipe
         return state
