@@ -91,7 +91,7 @@ class PLE(object):
 
     def __init__(self,
                  game, fps=30, frame_skip=1, num_steps=1,
-                 reward_values={}, force_fps=True, display_screen=False,
+                 reward_values={}, force_fps=False, display_screen=False,
                  add_noop_action=True, state_preprocessor=None, rng=24):
 
         self.game = game

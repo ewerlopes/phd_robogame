@@ -121,6 +121,10 @@ class Agent:
                 callback(*args, **kw)
             yield None
 
+    def risk_function(self):
+        state = self.env.getGameState()
+        return abs(state['player_y'] - (state['next_pipe_bottom_y'] - self.settings.pipe_gap / 2))
+
     def get_isaken_AI_action(self):
         """
         Implements the AI where each time the bird drops below a target
@@ -149,26 +153,32 @@ class Agent:
             time_time = time.time
             action_time = time_time()
             a_count = 0
+            risk = 0
+            action = self.get_isaken_AI_action()
+
             while not done:
-                action = None
-                if (time_time() - action_time) > self.period:        # allow only 'actions_per_second' times
+                if (time_time() - action_time) > self.period:  # allow only 'actions_per_second' times
                     action_time = time_time()
-                    a_count +=1
+                    a_count += 1
                     # action = self.get_predicted_action(sequence)
                     action = self.get_isaken_AI_action()
+
                 reward = self.env.act(action)
+                risk += self.risk_function()
+
                 observation = self.get_observation()
                 sequence = sequence[1:]
                 sequence.append(observation)
                 done = self.env.game_over()
 
-                if self.game.getScore() > score:
-                    score = self.game.getScore()
-                    print "score: %d" % score
-
                 if (self.env.getFrameNumber() % 30) == 0:
-                    print "Action_per_sec: {}".format(a_count)
+                    score = self.game.getScore()
+                    print "Score: {} \t | #Actions: {}/sec \t | risk: {} \t | FPS: {}".format(score,
+                                                                                              a_count,
+                                                                                              risk,
+                                                                                              self.game.clock.get_fps())
                     a_count = 0
+                    risk = 0
         print 'Game over! Final score: {}'.format(score)
         self.env.display_screen = False
 
