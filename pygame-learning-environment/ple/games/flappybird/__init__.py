@@ -236,7 +236,7 @@ class FlappyBird(base.PyGameWrapper):
         self._asset_dir = os.path.join(self._dir_, "assets/")
         self._load_images()
 
-        self.pipe_offsets = [0, self.width * 0.5, self.width]
+        self.pipe_offsets = [0, self.settings.group_pipe_separation, 2*self.settings.group_pipe_separation]
 
         self.init_pos = (
             int(self.width * 0.2),
@@ -307,9 +307,9 @@ class FlappyBird(base.PyGameWrapper):
 
         if self.pipe_group is None:
             self.pipe_group = pygame.sprite.Group([
-                self._generatePipes(offset=-75),
-                self._generatePipes(offset=-75 + self.width / 2),
-                self._generatePipes(offset=-75 + self.width * 1.5)
+                self._generatePipes(offset=0),
+                self._generatePipes(offset=self.settings.group_pipe_separation),
+                self._generatePipes(offset=2*self.settings.group_pipe_separation)
             ])
 
         color = self.rng.choice(["day", "night"])
@@ -320,6 +320,7 @@ class FlappyBird(base.PyGameWrapper):
         self.player.init(self.init_pos, color)
 
         self.pipe_color = self.rng.choice(["red", "green"])
+
         for i, p in enumerate(self.pipe_group):
             self._generatePipes(offset=self.pipe_offsets[i], pipe=p)
 
@@ -374,6 +375,12 @@ class FlappyBird(base.PyGameWrapper):
             "next_next_pipe_bottom_y": next_next_pipe.gap_start + self.pipe_gap
         }
 
+        try:
+            assert next_next_pipe.x-next_pipe.x == self.settings.group_pipe_separation
+        except AssertionError:
+            print 'Diff between the first 2 pipes is {}, when it should have been {}'.format(next_next_pipe.x-next_pipe.x,
+                                                                                             self.settings.group_pipe_separation )
+
         self.st = next_pipe
         return state
 
@@ -425,6 +432,16 @@ class FlappyBird(base.PyGameWrapper):
         # handle player movement
         self._handle_player_events()
 
+        # TODO: This loop is a work around to make the separation between tubes changeable by the settings object.
+        # It calculates the position of the last tube. Note I use this extra loop since
+        # the pipe position is allowed to change during the loop itself, which causes some problems. I am not in the
+        # mood to fix it now. :(
+        last_x = -1000
+        for p in self.pipe_group:
+            for p in self.pipe_group:
+                if p.x > last_x:
+                    last_x = p.x
+
         for p in self.pipe_group:
             hit = pygame.sprite.spritecollide(
                 self.player, self.pipe_group, False)
@@ -450,7 +467,8 @@ class FlappyBird(base.PyGameWrapper):
 
             # is out out of the screen? NOTE: the offset changes the distance between groups (3 pipes) of pipes.
             if p.x < -p.width:
-                self._generatePipes(offset=self.width * self.settings.group_pipe_separation, pipe=p)
+                self._generatePipes(offset=-(self.width + p.width) + last_x + self.settings.group_pipe_separation,
+                                    pipe=p)
 
         # fell on the ground
         if self.player.pos_y >= 0.79 * self.height - self.player.height:

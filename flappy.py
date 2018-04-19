@@ -15,8 +15,9 @@ class GameSettings:
 
     Attributes:
         group_pipe_separation : More distance between pipes is easier to play,
-                                giving more time to react to changing gap locations. Change distance
-                                between each group of 3 pipes
+                                giving more time to react to changing gap locations. Make sure that the
+                                distance is such that the pipe is generated at a distance (i.e, outside the
+                                screen width) that is safe for the player (bird) to react to.
 
         pipe_gap        : The distance between the upper pipe and the lower pipe.
                           Narrower gaps are more difficult as the bird has less room to

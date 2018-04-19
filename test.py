@@ -1,7 +1,7 @@
 from flappy import *
 from flappy import GameSettings
 
-diff = GameSettings()
+diff = GameSettings(group_pipe_separation=150)
 
 agent = Agent(diff)
 
