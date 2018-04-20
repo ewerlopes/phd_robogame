@@ -10,61 +10,6 @@ from ple.games.flappybird import FlappyBird
 from model import Model
 
 
-class GameSettings:
-    """ Holds the game setting parameters for the game. Specialy, those related to difficulty
-
-    Attributes:
-        group_pipe_separation : More distance between pipes is easier to play,
-                                giving more time to react to changing gap locations. Make sure that the
-                                distance is such that the pipe is generated at a distance (i.e, outside the
-                                screen width) that is safe for the player (bird) to react to.
-
-        pipe_gap        : The distance between the upper pipe and the lower pipe.
-                          Narrower gaps are more difficult as the bird has less room to
-                          maneuver, requiring better motor skills.
-
-        pipe_width      : Wider pipes increase difficulty as the bird spends more time in the narrow pipe gap.
-
-        pipe_gap_loc_range : The pipe gap locations are uniformly randomly distributed in a range somewhere
-                             between the ceiling and the floor. Larger ranges are harder because there is
-                             more distance to travel between a high gap and a low gap.
-
-        gravity           : Acceleration of the bird in the y direction, subtracted from the bird's y velocity
-                              each frame. Higher gravity causes the bird to drop faster, lowering the margin of
-                              error.
-
-        jump_vel           : When the bird flaps, its vertical velocity is set to jump_vel, making it jump upward.
-                              Higher velocity makes higher jumps.
-
-        bird_vel           : Speed at which the bird travels to the right (alternately, the speed at which pipes
-                                travel to the left).
-
-        world_width        : Screen width. In Flappy Bird, this is defined by the display resolution.
-
-        world_height       : Distance between ceiling and floor. In Flappy Bird, this is defined by the
-                              display resolution.
-
-        bird_width         : width of the bird's hit box. The wider and taller the bird, the harder it
-                            will be to jump through gaps.
-
-        bird_height        : height of the bird's hit box. The wider and taller the bird, the harder it
-                            will be to jump through gaps.
-        """
-    def __init__(self, group_pipe_separation=0.5, pipe_width=0, pipe_gap_loc_range=0, gravity=1.1, jump_vel=6,
-                 bird_vel=4.0, bird_width=0, bird_height=0, pipe_gap=150, world_height=512, world_width=288):
-        self.group_pipe_separation = group_pipe_separation      # OK
-        self.pipe_gap = pipe_gap                                # OK
-        self.pipe_width = pipe_width
-        self.pipe_gap_loc_range = pipe_gap_loc_range
-        self.gravity = gravity                                  # OK
-        self.jump_vel = jump_vel                                # OK
-        self.bird_vel = bird_vel                                # OK
-        self.world_width = world_width                          # OK
-        self.world_height = world_height                        # OK
-        self.bird_width = bird_width
-        self.bird_height = bird_height
-
-
 class Agent:
 
     AGENT_HISTORY_LENGTH = 1
@@ -135,7 +80,7 @@ class Agent:
         state = self.env.getGameState()
         # print json.dumps(state, indent=4)
 
-        if (state['player_y']) > (state['next_pipe_bottom_y'] - self.settings.pipe_gap/2.0):
+        if (state['player_y'] + self.game.player.height/2) > (state['next_pipe_bottom_y'] - self.settings.pipe_gap/2.0):
             return 119
         else:
             return
@@ -149,19 +94,10 @@ class Agent:
             observation = self.get_observation()
             sequence = [observation] * self.AGENT_HISTORY_LENGTH
             done = False
-
-            time_time = time.time
-            action_time = time_time()
-            a_count = 0
             risk = 0
-            action = self.get_isaken_AI_action()
 
             while not done:
-                if (time_time() - action_time) > self.period:  # allow only 'actions_per_second' times
-                    action_time = time_time()
-                    a_count += 1
-                    action = self.get_isaken_AI_action()
-
+                action = self.get_isaken_AI_action()
                 reward = self.env.act(action)
                 risk += self.risk_function()
 
@@ -170,19 +106,16 @@ class Agent:
                 sequence.append(observation)
                 done = self.env.game_over()
 
-                if (self.env.getFrameNumber() % self.game.allowed_fps) == 0:
-                    score = self.game.getScore()
-                    print "#Actions: {}/sec \t | risk: {} \t | FPS: {}".format(a_count,
-                                                                                risk,
-                                                                                self.game.clock.get_fps())
-                    a_count = 0
+                if (self.env.getFrameNumber() % 30) == 0:
+                    print "risk: {} \t | FPS: {}".format(risk, self.game.clock.get_fps())
                     risk = 0
-        print 'Game over! Final score: {}'.format(score)
+
+        print 'Game over! Final score: {}'.format(self.game.getScore())
         self.env.display_screen = False
 
-    def play(self, episodes):
+    def play(self, episodes,force_fps=True):
         """Uses the learned weights"""
-
+        self.env.force_fps = force_fps
         self.env.display_screen = True
         self.model.set_weights(self.es.weights)
         for episode in xrange(episodes):
@@ -190,19 +123,10 @@ class Agent:
             observation = self.get_observation()
             sequence = [observation]*self.AGENT_HISTORY_LENGTH
             done = False
-
-            time_time = time.time
-            action_time = time_time()
-            a_count = 0
             risk = 0
-            action = self.get_predicted_action(sequence)
 
             while not done:
-                if (time_time() - action_time) > self.period:  # allow only 'actions_per_second' times
-                    action_time = time_time()
-                    a_count += 1
-                    action = self.get_predicted_action(sequence)
-
+                action = self.get_predicted_action(sequence)
                 reward = self.env.act(action)
                 risk += self.risk_function()
 
@@ -212,23 +136,22 @@ class Agent:
                 done = self.env.game_over()
 
                 if (self.env.getFrameNumber() % 30) == 0:
-                    score = self.game.getScore()
-                    print "#Actions: {}/sec \t | risk: {} \t | FPS: {}".format(a_count,
-                                                                                risk,
-                                                                                self.game.clock.get_fps())
-                    a_count = 0
+                    print "Score: {} \t | risk: {} \t | FPS: {}".format(self.game.getScore(),
+                                                                        risk, self.game.clock.get_fps())
                     risk = 0
-        print 'Game over! Final score: {}'.format(score)
+        print 'Game over! Final score: {}'.format(self.game.getScore())
         self.env.display_screen = False
 
     def train(self, iterations, force_fps=True):
         self.env.force_fps = force_fps
+        self.training = True
         if not self.env.force_fps:
             self.env.display_screen = True
         self.es.run(iterations, print_step=1)
 
     def get_reward(self, weights):
         total_reward = 0.0
+        risk = 0.0
         self.model.set_weights(weights)
 
         for episode in xrange(self.EPS_AVG):
@@ -236,38 +159,24 @@ class Agent:
             observation = self.get_observation()
             sequence = [observation] * self.AGENT_HISTORY_LENGTH
             done = False
-
-            time_time = time.time
-            action_time = time_time()
-            a_count = 0
-            risk = 0
-            action = self.get_predicted_action(sequence)
-
             while not done:
-                if (time_time() - action_time) > self.period:  # allow only 'actions_per_second' times
-                    action_time = time_time()
-                    a_count += 1
-                    self.exploration = max(self.FINAL_EXPLORATION,
-                                           self.exploration - self.INITIAL_EXPLORATION / self.EXPLORATION_DEC_STEPS)
-                    if random.random() < self.exploration:
-                        action = random.choice([119, None])
-                    else:
-                        action = self.get_predicted_action(sequence)
-
+                self.exploration = max(self.FINAL_EXPLORATION,
+                                       self.exploration - self.INITIAL_EXPLORATION / self.EXPLORATION_DEC_STEPS)
+                if random.random() < self.exploration:
+                    action = random.choice([119, None])
+                else:
+                    action = self.get_predicted_action(sequence)
                 reward = self.env.act(action)
                 reward += random.choice([0.0001, -0.0001])
-                risk += self.risk_function()
                 total_reward += reward
+                risk += self.risk_function()
                 observation = self.get_observation()
                 sequence = sequence[1:]
                 sequence.append(observation)
                 done = self.env.game_over()
 
-                if (self.env.getFrameNumber() % 30) == 0:
-                    print "#Actions: {}/sec \t | risk: {} \t | FPS: {}".format(a_count,
-                                                                                risk,
-                                                                                self.game.clock.get_fps())
-                    a_count = 0
+                if not self.training and (self.env.getFrameNumber() % 30) == 0:
+                    print "risk: {} \t | FPS: {}".format(risk,self.game.clock.get_fps())
                     risk = 0
 
         return total_reward / self.EPS_AVG

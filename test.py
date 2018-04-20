@@ -1,12 +1,11 @@
-from flappy import *
-from flappy import GameSettings
+from flappy import Agent
+from difficulty import DIFFICULTY
 
-diff = GameSettings(group_pipe_separation=150, jump_vel=7)
-
-agent = Agent(diff)
+agent = Agent(DIFFICULTY)
 
 # the pre-trained weights are saved into 'weights.pkl' which you can use.
-agent.load('weights_mytrain.pkl')
+agent.load('model/weights_mytrain.pkl')
 
 # play one episode
-agent.play_reflex(1)
+#agent.play_reflex(1)
+agent.play(1)

@@ -502,5 +502,6 @@ class FlappyBird(base.PyGameWrapper):
         # draw for debug
         pygame.draw.circle(self.screen, (255, 255, 255), (int(self.st.x), int(self.st.gap_start + 10)), 5)
         pygame.draw.circle(self.screen, (255, 0, 255), (int(self.st.x), int(self.st.gap_start + 10)), 3)
-        pygame.draw.circle(self.screen, (255, 0, 255), (int(self.player.pos_x), int(self.player.pos_y)), 3)
+        pygame.draw.circle(self.screen, (255, 0, 255), (int(self.player.pos_x),
+                                                        int(self.player.pos_y)), 3)
 
