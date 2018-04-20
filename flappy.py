@@ -221,8 +221,8 @@ class Agent:
         print 'Game over! Final score: {}'.format(score)
         self.env.display_screen = False
 
-    def train(self, iterations):
-        self.env.force_fps = False  # run as fast as possible.
+    def train(self, iterations, force_fps=True):
+        self.env.force_fps = force_fps
         if not self.env.force_fps:
             self.env.display_screen = True
         self.es.run(iterations, print_step=1)

@@ -17,5 +17,6 @@ def handler(signum, frame):
 signal.signal(signal.SIGINT, handler)
 
 # train for x iterations
-agent.train(100)
+agent.train(100, force_fps=False)
+agent.save()
 
