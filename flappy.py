@@ -77,11 +77,10 @@ class Agent:
     FINAL_EXPLORATION = 0.0
     EXPLORATION_DEC_STEPS = 100000
 
-    def __init__(self, settings, actions_per_second=15):
+    def __init__(self, settings, actions_per_second=7):
         self.model = Model()
-        # self.game = FlappyBird(pipe_gap=150)
         self.game = FlappyBird(settings)
-        self.settings  = settings
+        self.settings = settings
         self.env = PLE(self.game, fps=30, display_screen=False)
         self.env.init()
         self.env.getGameState = self.game.getGameState
@@ -136,20 +135,20 @@ class Agent:
         state = self.env.getGameState()
         # print json.dumps(state, indent=4)
 
-        if (state['player_y']) > (state['next_pipe_bottom_y'] - self.settings.pipe_gap/1.5):
+        if (state['player_y']) > (state['next_pipe_bottom_y'] - self.settings.pipe_gap/2.0):
             return 119
         else:
             return
 
-    def play(self, episodes):
+    def play_reflex(self, episodes):
+        """Uses Isaken et 2015 reflex agent"""
         self.env.display_screen = True
         self.model.set_weights(self.es.weights)
         for episode in xrange(episodes):
             self.env.reset_game()
             observation = self.get_observation()
-            sequence = [observation]*self.AGENT_HISTORY_LENGTH
+            sequence = [observation] * self.AGENT_HISTORY_LENGTH
             done = False
-            score = 0
 
             time_time = time.time
             action_time = time_time()
@@ -161,8 +160,48 @@ class Agent:
                 if (time_time() - action_time) > self.period:  # allow only 'actions_per_second' times
                     action_time = time_time()
                     a_count += 1
-                    # action = self.get_predicted_action(sequence)
                     action = self.get_isaken_AI_action()
+
+                reward = self.env.act(action)
+                risk += self.risk_function()
+
+                observation = self.get_observation()
+                sequence = sequence[1:]
+                sequence.append(observation)
+                done = self.env.game_over()
+
+                if (self.env.getFrameNumber() % self.game.allowed_fps) == 0:
+                    score = self.game.getScore()
+                    print "#Actions: {}/sec \t | risk: {} \t | FPS: {}".format(a_count,
+                                                                                risk,
+                                                                                self.game.clock.get_fps())
+                    a_count = 0
+                    risk = 0
+        print 'Game over! Final score: {}'.format(score)
+        self.env.display_screen = False
+
+    def play(self, episodes):
+        """Uses the learned weights"""
+
+        self.env.display_screen = True
+        self.model.set_weights(self.es.weights)
+        for episode in xrange(episodes):
+            self.env.reset_game()
+            observation = self.get_observation()
+            sequence = [observation]*self.AGENT_HISTORY_LENGTH
+            done = False
+
+            time_time = time.time
+            action_time = time_time()
+            a_count = 0
+            risk = 0
+            action = self.get_predicted_action(sequence)
+
+            while not done:
+                if (time_time() - action_time) > self.period:  # allow only 'actions_per_second' times
+                    action_time = time_time()
+                    a_count += 1
+                    action = self.get_predicted_action(sequence)
 
                 reward = self.env.act(action)
                 risk += self.risk_function()
@@ -174,40 +213,61 @@ class Agent:
 
                 if (self.env.getFrameNumber() % 30) == 0:
                     score = self.game.getScore()
-                    print "Score: {} \t | #Actions: {}/sec \t | risk: {} \t | FPS: {}".format(score,
-                                                                                              a_count,
-                                                                                              risk,
-                                                                                              self.game.clock.get_fps())
+                    print "#Actions: {}/sec \t | risk: {} \t | FPS: {}".format(a_count,
+                                                                                risk,
+                                                                                self.game.clock.get_fps())
                     a_count = 0
                     risk = 0
         print 'Game over! Final score: {}'.format(score)
         self.env.display_screen = False
 
     def train(self, iterations):
+        self.env.force_fps = False  # run as fast as possible.
+        if not self.env.force_fps:
+            self.env.display_screen = True
         self.es.run(iterations, print_step=1)
 
     def get_reward(self, weights):
         total_reward = 0.0
         self.model.set_weights(weights)
 
-        for episode in range(self.EPS_AVG):
+        for episode in xrange(self.EPS_AVG):
             self.env.reset_game()
             observation = self.get_observation()
-            sequence = [observation]*self.AGENT_HISTORY_LENGTH
+            sequence = [observation] * self.AGENT_HISTORY_LENGTH
             done = False
+
+            time_time = time.time
+            action_time = time_time()
+            a_count = 0
+            risk = 0
+            action = self.get_predicted_action(sequence)
+
             while not done:
-                self.exploration = max(self.FINAL_EXPLORATION,
-                                       self.exploration - self.INITIAL_EXPLORATION / self.EXPLORATION_DEC_STEPS)
-                if random.random() < self.exploration:
-                    action = random.choice([119, None])
-                else:
-                    action = self.get_predicted_action(sequence)
+                if (time_time() - action_time) > self.period:  # allow only 'actions_per_second' times
+                    action_time = time_time()
+                    a_count += 1
+                    self.exploration = max(self.FINAL_EXPLORATION,
+                                           self.exploration - self.INITIAL_EXPLORATION / self.EXPLORATION_DEC_STEPS)
+                    if random.random() < self.exploration:
+                        action = random.choice([119, None])
+                    else:
+                        action = self.get_predicted_action(sequence)
+
                 reward = self.env.act(action)
                 reward += random.choice([0.0001, -0.0001])
+                risk += self.risk_function()
                 total_reward += reward
                 observation = self.get_observation()
                 sequence = sequence[1:]
                 sequence.append(observation)
                 done = self.env.game_over()
+
+                if (self.env.getFrameNumber() % 30) == 0:
+                    print "#Actions: {}/sec \t | risk: {} \t | FPS: {}".format(a_count,
+                                                                                risk,
+                                                                                self.game.clock.get_fps())
+                    a_count = 0
+                    risk = 0
 
         return total_reward / self.EPS_AVG

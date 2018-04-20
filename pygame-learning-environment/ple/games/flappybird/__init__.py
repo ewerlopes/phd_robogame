@@ -98,11 +98,13 @@ class Pipe(pygame.sprite.Sprite):
 
     def __init__(self,
                  SCREEN_WIDTH, SCREEN_HEIGHT, gap_start, gap_size, image_assets,
-                 speed, offset=0, color="green"):
+                 speed, rewardable=True, offset=0, color="green"):
 
         self.speed = speed
         self.SCREEN_WIDTH = SCREEN_WIDTH
         self.SCREEN_HEIGHT = SCREEN_HEIGHT
+
+        self.rewardable = rewardable
 
         self.image_assets = image_assets
         # done image stuff
@@ -461,12 +463,16 @@ class FlappyBird(base.PyGameWrapper):
                 if bot_pipe_check:
                     self.lives -= 1
 
-            # is it past the player?
-            if (p.x - p.width / 2) <= self.player.pos_x < (p.x - p.width / 2 + 4):
-                self.score += self.rewards["positive"]
+            # is it past the player and rewardable?
+            if (p.x) <= self.player.pos_x:# < (p.x - p.width / 2 + 4):
+                if p.rewardable:
+                    self.score += self.rewards["positive"]
+                    #print 'Scored: {}'.format(self.score)
+                    p.rewardable = False
 
-            # is out out of the screen? NOTE: the offset changes the distance between groups (3 pipes) of pipes.
+            # is out out of the screen?
             if p.x < -p.width:
+                p.rewardable = True
                 self._generatePipes(offset=-(self.width + p.width) + last_x + self.settings.group_pipe_separation,
                                     pipe=p)
 
@@ -493,4 +499,8 @@ class FlappyBird(base.PyGameWrapper):
         self.target_group.update(self.pipe_group)
         self.target_group.draw(self.screen)
 
+        # draw for debug
         pygame.draw.circle(self.screen, (255, 255, 255), (int(self.st.x), int(self.st.gap_start + 10)), 5)
+        pygame.draw.circle(self.screen, (255, 0, 255), (int(self.st.x), int(self.st.gap_start + 10)), 3)
+        pygame.draw.circle(self.screen, (255, 0, 255), (int(self.player.pos_x), int(self.player.pos_y)), 3)
+

@@ -1,8 +1,10 @@
 import signal
-import sys
 from flappy import *
 
-agent = Agent()
+diff = GameSettings(group_pipe_separation=150, jump_vel=7)
+
+agent = Agent(diff)
+
 
 def handler(signum, frame):
     print "Aborting...."
@@ -11,9 +13,9 @@ def handler(signum, frame):
     agent.save('weights_mytrain.pkl')
     sys.exit(0)
 
+
 signal.signal(signal.SIGINT, handler)
 
-
 # train for x iterations
-agent.train(1000)
+agent.train(100)
 
