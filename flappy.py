@@ -29,7 +29,9 @@ class Agent:
         self.env = PLE(self.game, fps=30, display_screen=False)
         self.env.init()
         self.env.getGameState = self.game.getGameState
-        self.es = EvolutionStrategy(self.model.get_weights(), self.get_reward, self.POPULATION_SIZE, self.SIGMA, self.LEARNING_RATE)
+        self.es = EvolutionStrategy(self.model.get_weights(), self.get_reward,
+                                    self.POPULATION_SIZE, self.SIGMA, self.LEARNING_RATE)
+        self.start_time = None
         self.exploration = self.INITIAL_EXPLORATION
         self.actions_per_second = actions_per_second
         self.period = 1.0 / self.actions_per_second
@@ -149,11 +151,24 @@ class Agent:
             self.env.display_screen = True
         self.es.run(iterations, print_step=1)
 
-    def get_reward(self, weights):
+    def end_by_time_tolerance(self, start, max_time_min_tol):
+        t = time.time() - start
+        hours = t // 3600
+        t = t - 3600 * hours
+        minutes = t // 60
+        seconds = t - 60 * minutes
+
+        if minutes >= max_time_min_tol and seconds > 0:
+            print("Time tolerance of {} minutes achieved.".format(max_time_min_tol))
+            return True
+        else:
+            return False
+
+    def get_reward(self, weights, max_time_min_tol):
         total_reward = 0.0
         risk = 0.0
         self.model.set_weights(weights)
-
+        start = time.time()
         for episode in xrange(self.EPS_AVG):
             self.env.reset_game()
             observation = self.get_observation()
@@ -173,10 +188,9 @@ class Agent:
                 observation = self.get_observation()
                 sequence = sequence[1:]
                 sequence.append(observation)
-                done = self.env.game_over()
+                done = self.env.game_over() or self.end_by_time_tolerance(start, max_time_min_tol)
 
                 if not self.training and (self.env.getFrameNumber() % 30) == 0:
-                    print "risk: {} \t | FPS: {}".format(risk,self.game.clock.get_fps())
+                    print "risk: {} \t | FPS: {}".format(risk, self.game.clock.get_fps())
                     risk = 0
-
         return total_reward / self.EPS_AVG
