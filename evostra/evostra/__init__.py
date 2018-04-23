@@ -40,7 +40,7 @@ class EvolutionStrategy(object):
                                                                                                     seconds))
             return False
 
-    def run(self, iterations, print_step=10,  max_time_min_tol=5):
+    def run(self, iterations, print_step=10, max_pop_time=20, max_time_min_tol=2):
         """
         Run evostra
         :param iterations: number of iterations
@@ -59,6 +59,7 @@ class EvolutionStrategy(object):
 
             start = time.time()
             for i in range(self.POPULATION_SIZE):
+                print('Iteration #{}, member {}'.format(iteration+1, i))
                 weights_try = self._get_weights_try(self.weights, population[i])
                 rewards[i] = self.get_reward(weights_try, max_time_min_tol)
 
@@ -74,6 +75,6 @@ class EvolutionStrategy(object):
             if (iteration+1) % print_step == 0:
                 print('iter %d. max pop member reward: %f' % (iteration+1, max_pop_reward))
 
-            if self.end_by_time_tolerance(max_time_min_tol, start, iteration):
+            if self.end_by_time_tolerance(max_pop_time, start, iteration+1):
                 break
 

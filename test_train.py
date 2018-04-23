@@ -3,7 +3,7 @@ from flappy import Agent
 from difficulty import DIFFICULTY
 
 agent = Agent(DIFFICULTY)
-file_weights = 'model/modelB.pkl'
+file_weights = 'model/modelC.pkl'
 
 def handler(signum, frame):
     print "Aborting...."
@@ -14,6 +14,11 @@ def handler(signum, frame):
 
 
 signal.signal(signal.SIGINT, handler)
+
+try:
+    agent.load(filename=file_weights)
+except:
+    print 'Error when loading'
 
 # train for x iterations
 agent.train(1000, force_fps=True)

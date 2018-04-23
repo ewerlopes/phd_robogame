@@ -57,6 +57,6 @@ class Settings:
 
 DIFFICULTY = Settings(group_pipe_separation=150,        # increments of 50
                       gravity=1.1,                      # increments of 1.1
-                      jump_vel=9,                       # increments of 2
+                      jump_vel=11,                      # increments of 2
                       bird_vel=4,                       # increments of 1
                       pipe_gap=150)                     # increments of 20
