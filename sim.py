@@ -1,4 +1,5 @@
 from agents import Robot
+from playground import Playground
 from math import cos, sin, pi
 import pygame
 import sys
@@ -7,10 +8,11 @@ import random
 
 class Model(object):
     def __init__(self):
-        self.WORLD_SIZE = 700
+        self.WORLD_SIZE = 500
         self.robot = Robot(self.WORLD_SIZE)
         self.player = Robot(self.WORLD_SIZE)
         self.robot.setOpponent(self.player)
+        self.playground = Playground(size=self.WORLD_SIZE)
 
     def move(self):
         self.robot.oppOnSense()
@@ -18,7 +20,7 @@ class Model(object):
         self.player.move(r, random.random()*5.0)
     
     def getRederingBuffer(self):
-        return [self.robot,self.player,self.robot.oppTrackParticles]
+        return [self.playground, self.robot, self.player, self.robot.oppTrackParticles]
 
 
 class View():
@@ -36,8 +38,12 @@ class View():
 
     def display(self,buffer):
         self.screen.fill([255,255,255])
-        
-        for obj in buffer[:-1]:
+
+        for t in range(4):
+            pygame.draw.rect(self.screen, (0,1,0), pygame.Rect(buffer[0].towers[t][0], buffer[0].towers[t][1],
+                                                               buffer[0].tower_size, buffer[0].tower_size, width=2))
+
+        for obj in buffer[1:-1]:
             pygame.draw.circle(self.screen, obj.color, (int(obj.x),int(obj.y)), 20, 1)
             pygame.draw.line(self.screen, obj.color, (int(obj.x),int(obj.y)),
                              (int(obj.x + 19*cos(obj.orientation)),int(obj.y+19*sin(obj.orientation))), 3)

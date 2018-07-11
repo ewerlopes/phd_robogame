@@ -10,7 +10,7 @@ def raiseNotDefined():
     sys.exit(1)
     
 def eval(r, p,world_size):
-    summ = 0.0;
+    summ = 0.0
     for i in range(len(p)): # calculate mean error
         dx = (p[i].x - r.x + (world_size/2.0)) % world_size - (world_size/2.0)
         dy = (p[i].y - r.y + (world_size/2.0)) % world_size - (world_size/2.0)
