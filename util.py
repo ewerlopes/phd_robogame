@@ -1,14 +1,16 @@
 import inspect,sys
 from math import sqrt
 
+
 def raiseNotDefined():
     fileName = inspect.stack()[1][1]
     line = inspect.stack()[1][2]
     method = inspect.stack()[1][3]
 
-    print "*** Method not implemented: %s at line %s of %s" % (method, line, fileName)
+    # print "*** Method not implemented: %s at line %s of %s" % (method, line, fileName)
     sys.exit(1)
-    
+
+
 def eval(r, p,world_size):
     summ = 0.0
     for i in range(len(p)): # calculate mean error

@@ -10,16 +10,16 @@ class Agent:
         self.world_size = world_size
         self.orientation = random.random() * 2.0 * pi
         self.forward_noise = 0.0
-        self.turn_noise    = 0.0
-        self.sense_noise   = 0.0
+        self.turn_noise = 0.0
+        self.sense_noise = 0.0
         
     def set(self, new_x, new_y, new_orientation):
         if new_x < 0 or new_x >= self.world_size:
-            raise ValueError, 'X coordinate out of bound'
+            raise ValueError('X coordinate out of bound')#, 'X coordinate out of bound'
         if new_y < 0 or new_y >= self.world_size:
-            raise ValueError, 'Y coordinate out of bound'
+            raise ValueError('Y coordinate out of bound') #, 'Y coordinate out of bound'
         if new_orientation < 0 or new_orientation >= 2 * pi:
-            raise ValueError, 'Orientation must be in [0..2pi]'
+            raise ValueError('Orientation must be in [0..2pi]')#, 'Orientation must be in [0..2pi]'
         self.x = float(new_x)
         self.y = float(new_y)
         self.orientation = float(new_orientation)
@@ -28,8 +28,8 @@ class Agent:
         # makes it possible to change the noise parameters
         # this is often useful in particle filters
         self.forward_noise = float(new_f_noise)
-        self.turn_noise    = float(new_t_noise)
-        self.sense_noise   = float(new_s_noise)
+        self.turn_noise = float(new_t_noise)
+        self.sense_noise = float(new_s_noise)
 
     def sense(self):
         util.raiseNotDefined()
@@ -103,6 +103,8 @@ class Robot(Agent):
         self.color = color
         self.opponent = None
         self.lastMotion = 0
+        self.outcomeMatixRobotWeigths = []
+        self.outcomeMatixPlayerWeigths = []
     
     def setOpponent(self, opponent, opp_particles=10):
         self.opponent = opponent
@@ -119,7 +121,7 @@ class Robot(Agent):
 
     def move(self, turn, forward):
         if forward < 0:
-            raise ValueError, 'Robot cannot move backwards'         
+            raise ValueError('Robot cannot move backwards')#, 'Robot cannot move backwards'
         
         # turn, and add randomness to the turning command
         orientation = self.orientation + float(turn) + random.gauss(0.0, self.turn_noise)
@@ -161,12 +163,11 @@ class Robot(Agent):
             for i in range(self.NO_OPPON_PARTICLES):    # CALCULATES THE WEIGTH OF THE PARTICLE
                 w.append(particles[i].measurement_prob(Z, self.opponent))
             
-            print w
+            # print w
             s = sum(w)
             w = [w[i]/s for i in range(len(w))]         # THE NORMALIZATION OF WEIGHTS
             self.oppTrackParticles = self.sample(w)
-        
-    
+
     def printOppParticles(self):
         for i in len(self.oppTrackParticles):
             return '[x=%.6s y=%.6s orient=%.6s]' % (str(self.oppTrackParticles[i].x), str(self.oppTrackParticles[i].y), 
