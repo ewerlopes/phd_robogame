@@ -1,0 +1,107 @@
+%=============================================
+% Commands
+%---------------------------------------------
+
+%---------------------------------------------
+% Generic
+%
+\newcommand{\thesistitle}{Learning behaviors to optimize the player's experience in robogames}
+
+\usepackage{xspace}
+\DeclareRobustCommand{\eg}{e.g.,\@\xspace}
+\DeclareRobustCommand{\ie}{i.e.,\@\xspace}
+\DeclareRobustCommand{\wrt}{w.r.t.\@\xspace}
+
+
+\newcommand{\Environment}{\mathcal{E}}
+\newcommand{\Objective}{\mathcal{J}}
+\newcommand{\statespace}{\mathcal{X}}
+\newcommand{\observationspace}{\mathcal{O}}
+\newcommand{\actionspace}{\mathcal{U}}
+\newcommand{\Rmodel}{\mathcal{R}}
+\newcommand{\Pmodel}{\mathcal{P}}
+\newcommand{\Omodel}{\Omega}
+\newcommand{\Imodel}{\mathcal{\iota}}
+\newcommand{\Dataset}{\mathcal{D}}
+\newcommand{\traj}{\tau}
+\newcommand{\trajset}{\mathcal{T}}
+\newcommand{\trajspace}{\mathbb{T}}
+
+\newcommand{\gradient}[1]{\nabla_{#1}}
+\newcommand{\Hessian}{\mathcal{H}}
+
+\newcommand{\genericdist}{\mathcal{D}}
+
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+%---------------------------------------------
+% Algorithms
+%
+
+\newcommand{\algorithmicinput}{\textbf{input}}
+\newcommand{\algorithmicoutput}{\textbf{output}}
+\newcommand{\INPUT}{\item[\algorithmicinput]}
+\newcommand{\OUTPUT}{\item[\algorithmicoutput]}
+
+%---------------------------------------------
+% Math & Theorems
+%
+
+\newtheorem{Property}{Property}
+\newtheorem{theorem}{Theorem}
+\newtheorem{assumption}{Assumption}
+\crefname{Property}{Property}{Properties}
+
+%---------------------------------------------
+% Hierarchical
+%
+
+\newcommand{\Cgraph}{\mathcal{G}}
+\newcommand{\Cblocks}{B}
+\newcommand{\Cblock}{b}
+\newcommand{\CDedges}{D}
+\newcommand{\CDedge}{d}
+\newcommand{\CRedges}{C}
+\newcommand{\CRedge}{c}
+\newcommand{\CAedges}{A}
+\newcommand{\CAedge}{a}
+
+%---------------------------------------------
+% IRL
+%
+
+%\newcommand{\SOMEIRL}{SOME-IRL\xspace}
+%\newcommand{\GIRL}[1][]{GIRL}
+%\newcommand{\PGIRL}[1][]{PGIRL}
+
+\newcommand{\Rparams}{\boldsymbol{\omega}}
+\newcommand{\Hparams}{\boldsymbol{\rho}}
+\newcommand{\Pparams}{\boldsymbol{\theta}}
+\newcommand{\PPspace}{\Theta}
+
+%---------------------------------------------
+% Figures
+%
+\newlength\figureheight 
+\newlength\figurewidth 
+
+%---------------------------------------------
+% Glossary style
+%
+\setglossarystyle{altlist}
+
+% table icons
+%%%%% marks %%%%%
+
+\newcommand{\mysquare}[1][black]{\small\textcolor{#1}{\ensuremath\blacksquare}}
+\newcommand{\mycirc}[1][black]{\small\textcolor{#1}{\ensuremath\bullet}}
+\newcommand{\mylozenge}[1][black]{\small\textcolor{#1}{\ensuremath\blacklozenge}}
+\newcommand{\mytriangle}[1][red]{\small\textcolor{#1}{\ensuremath\blacktriangle}}
+\newcommand{\mydtriangle}[1][black]{\small\textcolor{#1}{\ensuremath\blacktriangledown}}
+\newcommand{\mystar}[1][black]{\Large\textcolor{#1}{\ensuremath\star}} %% or \bigstar
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+

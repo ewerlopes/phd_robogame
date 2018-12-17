@@ -1,0 +1,95 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\babel@toc {english}{}
+\babel@toc {english}{}
+\babel@toc {italian}{}
+\babel@toc {english}{}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Basic work-flow for designing systems able to implement any kind of modeling of co-existing agents for competitive advantage.\relax }}{9}{figure.caption.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.2}{\ignorespaces A flow diagram from~\cite {hunicke2004ai}. The figure shows the relationship between skill and level of challenge derived from the theory of flow~\cite {Csikszentmihalyi91}. The point is to keep those two dimensions in a kind of positive correlation, meaning an increase that roughly approximates the diagonal.\relax }}{18}{figure.caption.8}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.1}{\ignorespaces The circuit for detecting when a tower has fallen. An angle switch detects the inclination and the low-pass filter smooths out noise from vibrations such as those caused by the player touching the tower. The signal wire is attached to a pin on the NodeMCU V3 ESP8266 ESP-12E WiFi Module, which allows communication with the robot's onboard computer.\relax }}{34}{figure.caption.11}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.2}{\ignorespaces The adopted robotic platform named Triskar.\relax }}{35}{figure.caption.12}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Kinect\textsuperscript {\textregistered } for Xbox ONE.\relax }}{35}{figure.caption.14}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.4}{\ignorespaces An Hokuyo URG-04LX laser scanner.\relax }}{36}{figure.caption.17}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Robot motors (3 units)\relax }}{37}{figure.caption.18}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Motor encoders deployed for motion sensing and control.\relax }}{38}{figure.caption.21}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.7}{\ignorespaces The on-board pc, Shuttle XPC Slim DH270: barebone Intel Kaby-Lake. Processor Intel Core i7; RAM memory of 16 GB DDR4.\relax }}{39}{figure.caption.22}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.8}{\ignorespaces a) UDC board (1 per each motor) capable of driving motors up to 70 W, with torque, speed, and position closed loop control. General attributes: 5-28V supply; 3A max (5A peak); current sense; encoder input; limit switch input; 25 x 45 mm in size. b) IO board (1 per each motor): Integrate existing hardware into the real-time Nova Core bus with analog and digital signals. General attributes: 8 digital GPIO; 4 analog inputs; 2 analog outputs; 2 UART; 1 I2C; 1 SPI; 25 x 45 mm in size. c) USB board (used for data collection) Interface the real-time Nova Core bus with a computer and logs data to microSD memory. General attributes: USB connector; UART connector; microSD card slot; rosserial support; 25 x 45 mm in size.\relax }}{39}{figure.caption.23}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Kinematics diagram of the base of an omnidirectional robot. a) omni-directional base wheels displacement angle. b) omni-directional base reference frames and velocities.\relax }}{40}{figure.caption.24}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {4.1}{\ignorespaces \relax }}{49}{figure.caption.26}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {4.2}{\ignorespaces a) the custom accelerometer device used for human motion extraction based on Arduino Uno and a MPU-6050 breakout board. The data is transmitted to a receiver Arduino via Nrf24l01 radio frequency board.\relax }}{49}{figure.caption.27}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Graph of acceleration in x, y and z axis for a game that lasted about 40 seconds.\relax }}{51}{figure.caption.28}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Standard deviation of the acceleration in Figure~\ref {acc_graph}, computed using a sliding window of half a second. The red line portions represent variance values inside the inactivity zone (below a threshold of 0.2). Green areas are referenced as ``motion primitives''.\relax }}{52}{figure.caption.29}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Human player (in magenta) during the game. The playground configuration consisted of 3 target towers.\relax }}{54}{figure.caption.32}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Overview of the activity recognition system.\relax }}{55}{figure.caption.33}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Conversion of time series into a Gramian Angular Summation Field (GASF) image and then back into its original space.\relax }}{67}{figure.caption.37}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Autoencoder general architecture}}{69}{figure.caption.38}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.3}{\ignorespaces (\textbf {a}) Representation of an undercomplete autoencoder, where the representation has a lower dimension with respect to the input. (\textbf {b}) Representation of an overcomplete autoencoder, which uses a larger space to represent the input.\relax }}{70}{figure.caption.39}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Example layers from the trained autoencoder. (\textbf {a}--\textbf {c}) represent the information extracted by the first layer of the autoencoder. It is hard to grasp the meaning of the representation derived. Going deeper, in (\textbf {d}--\textbf {f}), the representation seems to become more clear and with a structure. Indeed going directly to the obtained code, in (\textbf {g}--\textbf {i}), we can see a more accentuate structure composed mainly of horizontal or vertical lines.\relax }}{71}{figure.caption.40}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Three-axis accelerometer signal during game play. (\textbf {a}) A running player. (\textbf {b}) A player standing still. Notice that signal shape and amplitude are very characteristic for the respective activity.\relax }}{73}{figure.caption.41}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Example of the conversion of a time series into GASF images. (\textbf {a}) Three-axis accelerometer data (48.8 Hz) of about 30 seconds of real game play. (\textbf {b}) Thirty five GASF segments of a linear combination of the multidimensional time series. Each window comprises 0.65 seconds with 32 samples.\relax }}{74}{figure.caption.42}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Kinematic representation of a holonomic base.\relax }}{76}{figure.caption.43}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.8}{\ignorespaces An example of the game match configuration. The human player is wearing a purple robe, which allows him to be identified by the robot. Towers are seen in orange (height 110 cm). The particular match in this figure used three towers; however, in normal conditions, the game comprises four different towers positioned on the corners of the playground; the latter being a rectangle marked on the floor.\relax }}{77}{figure.caption.44}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Schematic representation of the game. (\textbf {a}) The player is trying to capture Tower 4. When all four LEDs on the tower are lit, the tower is captured. (\textbf {b}) The robot starts moving in order to attack and tear down Tower 2. The robot cannot try to tear down the tower that is currently being captured by the player or an already captured one. (\textbf {c}) The human player defends Tower 2. The player stops the action of the robot by blocking its trajectory. Notice how the progress on Tower 4 is not lost even if the player stops pressing its button.\relax }}{79}{figure.caption.45}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.10}{\ignorespaces (\textbf {a}) The custom accelerometer board. (\textbf {b}) The on-board receiver circuit.\relax }}{79}{figure.caption.46}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Autoencoder reconstruction for five input segments corresponding to half a second of data (linear combination of the acceleration axis). ({Top line}) Input GASF images. ({Second line}) Original time series for each GASF input. ({Third line}) The autoencoder reconstruction for the input images. ({Forth line}) Time series from the reconstructed GASF images.\relax }}{81}{figure.caption.47}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Schematic representation of the game: each line represents a topic, while each column represents a word that is representative of the specific topic.\relax }}{83}{figure.caption.48}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5.13}{\ignorespaces The figure shows the hyperparameter tuning results. The Mean Squared Error (MSE) is estimated with respect to the similarity expressed in the matrix containing the human judgment. The different lines represent the MSE obtained for different dictionary sizes and number of topics.\relax }}{84}{figure.caption.49}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Example of outcome matrix. The columns represent the robot's payoff in attacking one of the four towers. The rows represent the player's one. Each element is a couple of values, namely the player's payoff and the robot's payoff.\relax }}{94}{figure.caption.50}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {6.2}{\ignorespaces The procedure to select deception\relax }}{96}{figure.caption.53}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Space distribution of the correspondence and interdependence when the robot is placed in (4,5). (a) Interdependence space distribution; darker cells correspond to lower interdependence. (b) Correspondence space distribution; brighter cells indicate lower correspondence.\relax }}{97}{figure.caption.54}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {6.4}{\ignorespaces The two types of deception when using the static trajectory approach.\relax }}{99}{figure.caption.56}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Update in vehicle parameters and target will produce an increment in robot velocity as well as a smooth bend in the real target direction: on the left we're approaching the temporary target; on the center we change the parameters as we reach the temporary target; on the right we move towards the real target with new parameters\relax }}{100}{figure.caption.58}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Distribution of the agreement with the statement "The game was too short" ((a), (b))."The robot aimed at winning" ((c), (d)). "The robot was deceiving" ((e), (f)) 1=Fully disagree 2=Disagree 3=Indifferent 4=Agree 5=Fully agree\relax }}{105}{figure.caption.66}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {6.7}{\ignorespaces "The game was too short" (subfig a)."The robot aimed at winning" (subfig b). "The robot was deceiving" (subfig c) 1=Fully disagree 2=Disagree 3=Indifferent 4=Agree 5=Fully agree. All subjects were children.\relax }}{106}{figure.caption.69}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }

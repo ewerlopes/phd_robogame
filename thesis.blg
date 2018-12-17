@@ -1,0 +1,185 @@
+This is BibTeX, Version 0.99d (TeX Live 2018)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: thesis.aux
+The style file: biblatex.bst
+A level-1 auxiliary file: chapters/00-abstract.aux
+A level-1 auxiliary file: chapters/00-sommario.aux
+A level-1 auxiliary file: chapters/01-introduction.aux
+A level-1 auxiliary file: chapters/02-art.aux
+A level-1 auxiliary file: chapters/03-foundations.aux
+A level-1 auxiliary file: chapters/04-activity.aux
+A level-1 auxiliary file: chapters/05-modeling.aux
+A level-1 auxiliary file: chapters/06-adaptation.aux
+A level-1 auxiliary file: chapters/07-deception.aux
+A level-1 auxiliary file: chapters/08-key-issues.aux
+A level-1 auxiliary file: chapters/09-future-and-conclusions.aux
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=20001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated field_info (elt_size=4) to 25711 items from 5000.
+Database file #1: thesis-blx.bib
+Database file #2: bibliography.bib
+Warning--I'm ignoring ballardini_ira_laser_tools:_2014's extra "annote" field
+--line 1630 of file bibliography.bib
+Warning--I didn't find a database entry for "tagkey2014i"
+Warning--I didn't find a database entry for "OppRobocup"
+Warning--I didn't find a database entry for "hunicke2004ai"
+Warning--I didn't find a database entry for "zyda2005"
+Warning--I didn't find a database entry for "martinoia2013physically"
+Warning--I didn't find a database entry for "Fujita1997"
+Warning--I didn't find a database entry for "Shibata1996"
+Warning--I didn't find a database entry for "weigel2005kiro"
+Warning--I didn't find a database entry for "Bonarini2014"
+Warning--I didn't find a database entry for "Feil-Seifer2009"
+Warning--I didn't find a database entry for "fathzadeh2007opponent"
+Warning--I didn't find a database entry for "Riley&Veloso2000"
+Warning--I didn't find a database entry for "Riley&Veloso2002"
+Warning--I didn't find a database entry for "Riley&Veloso2001a"
+Warning--I didn't find a database entry for "Riley&Veloso2001b"
+Warning--I didn't find a database entry for "Veloso1998"
+Warning--I didn't find a database entry for "Igresias2006"
+Warning--I didn't find a database entry for "burgard2008classifying"
+Warning--I didn't find a database entry for "iglesias2009winning"
+Warning--I didn't find a database entry for "steffens2003feature"
+Warning--I didn't find a database entry for "steffens2005similarity"
+Warning--I didn't find a database entry for "Ahmadi2004"
+Warning--I didn't find a database entry for "kaminka2003learning"
+Warning--I didn't find a database entry for "ledezma2002predicting"
+Warning--I didn't find a database entry for "Ledezma2005"
+Warning--I didn't find a database entry for "ledezma2009ombo"
+Warning--I didn't find a database entry for "stone2000defining"
+Warning--I didn't find a database entry for "RileyCoachin2002"
+Warning--I didn't find a database entry for "Nakashima2010"
+Warning--I didn't find a database entry for "Ramos2008"
+Warning--I didn't find a database entry for "Faria2010"
+Warning--I didn't find a database entry for "Visser2001"
+Warning--I didn't find a database entry for "bakkes2012personalised"
+Warning--I didn't find a database entry for "Herik_opponentmodelling"
+Warning--I didn't find a database entry for "markovitch2005learning"
+Warning--I didn't find a database entry for "missura2008online"
+Warning--I didn't find a database entry for "ha2011goal"
+Warning--I didn't find a database entry for "mott2006probabilistic"
+Warning--I didn't find a database entry for "etheredge2013generic"
+Warning--I didn't find a database entry for "laviersa2014using"
+Warning--I didn't find a database entry for "stone1999task"
+Warning--I didn't find a database entry for "yannakakis2013player"
+Warning--I didn't find a database entry for "teng2010customization"
+Warning--I didn't find a database entry for "wiki:cognition"
+Warning--I didn't find a database entry for "yannakakis2008model"
+Warning--I didn't find a database entry for "Malone:1980"
+Warning--I didn't find a database entry for "lazzaro"
+Warning--I didn't find a database entry for "Koster:2013"
+Warning--I didn't find a database entry for "Csikszentmihalyi91"
+Warning--I didn't find a database entry for "Sweetser2005"
+Warning--I didn't find a database entry for "Cowley2008"
+Warning--I didn't find a database entry for "calleja2007digital"
+Warning--I didn't find a database entry for "biocca"
+Warning--I didn't find a database entry for "funge1999ai"
+Warning--I didn't find a database entry for "yannakakis2006modeling"
+Warning--I didn't find a database entry for "weber2006does"
+Warning--I didn't find a database entry for "baumgartner2006neural"
+Warning--I didn't find a database entry for "bakkes2012player"
+Warning--I didn't find a database entry for "andrade2004online"
+Warning--I didn't find a database entry for "andrade2005extending"
+Warning--I didn't find a database entry for "hagelback2009measuring"
+Warning--I didn't find a database entry for "spronck2004line"
+Warning--I didn't find a database entry for "Yannakakis2008"
+Warning--I didn't find a database entry for "DemasiC02"
+Warning--I didn't find a database entry for "ddaBT"
+Warning--I didn't find a database entry for "scheper2015behavior"
+Warning--I didn't find a database entry for "pereira2015framework"
+Warning--I didn't find a database entry for "marzinotto2014towards"
+Warning--I didn't find a database entry for "lopes2011adaptivity"
+Warning--I didn't find a database entry for "van2009psychologically"
+Warning--I didn't find a database entry for "tognetti2010modeling"
+Warning--I didn't find a database entry for "yannakakis2008entertainment"
+Warning--I didn't find a database entry for "lund2005playware"
+Warning--I didn't find a database entry for "yanakakis2006"
+Warning--I didn't find a database entry for "yannakakis2007entertainment"
+Warning--I didn't find a database entry for "yannakakis2007feature"
+Warning--I didn't find a database entry for "yannakakis2008entertainmentB"
+Warning--I didn't find a database entry for "kivikangas2011review"
+Warning--I didn't find a database entry for "smith2011inclusive"
+Warning--I didn't find a database entry for "machado_pmodeling_2011"
+Warning--I didn't find a database entry for "Karpinskyj2014211"
+Warning--I didn't find a database entry for "aristidou2015emotion"
+Warning--I didn't find a database entry for "shafir2016emotion"
+Warning--I didn't find a database entry for "tsachor2017somatic"
+Warning--I didn't find a database entry for "laban1974language"
+Warning--I didn't find a database entry for "burton2016laban"
+Warning--I didn't find a database entry for "zacharatos2013emotion"
+Warning--I didn't find a database entry for "wang2016time"
+Warning--I didn't find a database entry for "vygotsky1967play"
+Warning--I didn't find a database entry for "bruner1976play"
+Warning--I didn't find a database entry for "piaget2013play"
+Warning--I didn't find a database entry for "shim2013taxonomy"
+Warning--I didn't find a database entry for "de1980interpersonal"
+Warning--I didn't find a database entry for "wagner2008analyzing"
+Warning--I didn't find a database entry for "wagner2009robot"
+Warning--I didn't find a database entry for "wagner2011acting"
+Warning--I didn't find a database entry for "shim2012biologically"
+Warning--I didn't find a database entry for "terada2010can"
+Warning--I didn't find a database entry for "short2010no"
+Warning--I didn't find a database entry for "vazquez2011deceptive"
+Warning--I didn't find a database entry for "dragan2014analysis"
+Warning--I didn't find a database entry for "salter2014designing"
+Warning--I didn't find a database entry for "bonarini2016huggable"
+Warning--I didn't find a database entry for "oliveira_learning_2017"
+Warning--I didn't find a database entry for "reynolds1999steering"
+Warning--I didn't find a database entry for "Baldi_Ittinn"
+Biblatex version: 3.8
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+You've used 43 entries,
+            6268 wiz_defined-function locations,
+            1608 strings with 30384 characters,
+and the built_in function-call counts, 274033 in all, are:
+= -- 18100
+> -- 7132
+< -- 1442
++ -- 8502
+- -- 3825
+* -- 20392
+:= -- 29012
+add.period$ -- 0
+call.type$ -- 43
+change.case$ -- 566
+chr.to.int$ -- 252
+cite$ -- 84
+duplicate$ -- 28940
+empty$ -- 24783
+format.name$ -- 3561
+if$ -- 54042
+int.to.chr$ -- 0
+int.to.str$ -- 109
+missing$ -- 0
+newline$ -- 1586
+num.names$ -- 1915
+pop$ -- 14988
+preamble$ -- 1
+purify$ -- 845
+quote$ -- 0
+skip$ -- 7610
+stack$ -- 0
+substring$ -- 31321
+swap$ -- 7189
+text.length$ -- 1331
+text.prefix$ -- 43
+top$ -- 1
+type$ -- 1445
+warning$ -- 0
+while$ -- 3429
+width$ -- 0
+write$ -- 1544
+(There were 107 warnings)

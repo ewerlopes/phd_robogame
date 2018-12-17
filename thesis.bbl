@@ -1,0 +1,1757 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.9 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{nty/global//global/global}
+  \entry{alshurafa_designing_2014}{article}{}
+    \name{author}{7}{}{%
+      {{hash=AN}{%
+         family={Alshurafa},
+         familyi={A\bibinitperiod},
+         given={Nabil},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=XW}{%
+         family={Xu},
+         familyi={X\bibinitperiod},
+         given={Wenyao},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=LJJ}{%
+         family={Liu},
+         familyi={L\bibinitperiod},
+         given={Jason\bibnamedelima J},
+         giveni={J\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=HMC}{%
+         family={Huang},
+         familyi={H\bibinitperiod},
+         given={Ming-Chun},
+         giveni={M\bibinitperiod-C\bibinitperiod},
+      }}%
+      {{hash=MB}{%
+         family={Mortazavi},
+         familyi={M\bibinitperiod},
+         given={Bobak},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=RCK}{%
+         family={Roberts},
+         familyi={R\bibinitperiod},
+         given={Christian\bibnamedelima K},
+         giveni={C\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Sarrafzadeh},
+         familyi={S\bibinitperiod},
+         given={Majid},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{AN+1}
+    \strng{fullhash}{ANXWLJJHMCMBRCKSM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{number}{5}
+    \field{pages}{1636\bibrangedash 1646}
+    \field{title}{Designing a robust activity recognition framework for health
+  and exergaming using wearable sensors}
+    \field{volume}{18}
+    \field{journaltitle}{IEEE Journal of Biomedical and Health Informatics}
+    \field{year}{2014}
+  \endentry
+
+  \entry{atallah_sensor_2010}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=AL}{%
+         family={Atallah},
+         familyi={A\bibinitperiod},
+         given={Louis},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=LB}{%
+         family={Lo},
+         familyi={L\bibinitperiod},
+         given={Benny},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=KR}{%
+         family={King},
+         familyi={K\bibinitperiod},
+         given={Rachel},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=YGZ}{%
+         family={Yang},
+         familyi={Y\bibinitperiod},
+         given={Guang-Zhong},
+         giveni={G\bibinitperiod-Z\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {IEEE}%
+    }
+    \keyw{accelerometers, Accelerometers, activity classification, activity
+  detection, biomechanics, Biomedical monitoring, biomedical telemetry, body
+  sensor networks, Body sensor networks, Computer networks, Educational
+  institutions, feature extraction, feature selection, Intelligent sensors,
+  medical signal processing, Sensor phenomena and characterization, sensor
+  positioning, signal classification, time-frequency feature extraction,
+  wearable accelerometers, Wearable computers, wearable sensor placement,
+  Wearable sensors, Wrist}
+    \strng{namehash}{AL+1}
+    \strng{fullhash}{ALLBKRYGZ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{booktitle}{Body {Sensor} {Networks} ({BSN}), 2010 {International}
+  {Conference} on}
+    \field{pages}{24\bibrangedash 29}
+    \field{title}{Sensor placement for activity detection using wearable
+  accelerometers}
+    \field{year}{2010}
+  \endentry
+
+  \entry{ballardini_ira_laser_tools:_2014}{article}{}
+    \name{author}{4}{}{%
+      {{hash=BAL}{%
+         family={Ballardini},
+         familyi={B\bibinitperiod},
+         given={Augusto\bibnamedelima Luis},
+         giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=FS}{%
+         family={Fontana},
+         familyi={F\bibinitperiod},
+         given={Simone},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=FA}{%
+         family={Furlan},
+         familyi={F\bibinitperiod},
+         given={Axel},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=SDG}{%
+         family={Sorrenti},
+         familyi={S\bibinitperiod},
+         given={Domenico\bibnamedelima G.},
+         giveni={D\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+    }
+    \keyw{Computer Science - Robotics}
+    \strng{namehash}{BAL+1}
+    \strng{fullhash}{BALFSFASDG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{abstract}{%
+    Laser scanners are sensors of widespread use in robotic applications. Under
+  the Robot Operating System (ROS) the information generated by laser scanners
+  can be conveyed by either LaserScan messages or in the form of PointClouds.
+  Many publicly available algorithms (mapping, localization, navigation, etc.)
+  rely on LaserScan messages, yet a tool for handling multiple lasers, merging
+  their measurements, or to generate generic LaserScan messages from
+  PointClouds, is not available. This report describes two tools, in the form
+  of ROS nodes, which we release as open source under the BSD license, which
+  allow to either merge multiple single-plane laser scans or to generate
+  virtual laser scans from a point cloud. A short tutorial, along with the main
+  advantages and limitations of these tools are presented.%
+    }
+    \field{shorttitle}{ira\_laser\_tools}
+    \field{title}{ira\_laser\_tools: a {ROS} {LaserScan} manipulation toolbox}
+    \verb{url}
+    \verb http://arxiv.org/abs/1411.1086
+    \endverb
+    \field{journaltitle}{arXiv:1411.1086 [cs]}
+    \field{annotation}{%
+    arXiv: 1411.1086%
+    }
+    \field{month}{11}
+    \field{year}{2014}
+    \field{urlday}{30}
+    \field{urlmonth}{10}
+    \field{urlyear}{2017}
+  \endentry
+
+  \entry{bao_activity_2004}{article}{}
+    \name{author}{2}{}{%
+      {{hash=BL}{%
+         family={Bao},
+         familyi={B\bibinitperiod},
+         given={Ling},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=IS}{%
+         family={Intille},
+         familyi={I\bibinitperiod},
+         given={Stephen},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BLIS1}
+    \strng{fullhash}{BLIS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{pages}{1\bibrangedash 17}
+    \field{title}{Activity recognition from user-annotated acceleration data}
+    \field{journaltitle}{Pervasive computing}
+    \field{year}{2004}
+  \endentry
+
+  \entry{bifet_learning_2007}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=BA}{%
+         family={Bifet},
+         familyi={B\bibinitperiod},
+         given={Albert},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=GR}{%
+         family={Gavalda},
+         familyi={G\bibinitperiod},
+         given={Ricard},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {SIAM}%
+    }
+    \strng{namehash}{BAGR1}
+    \strng{fullhash}{BAGR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{booktitle}{Proceedings of the 2007 {SIAM} {International}
+  {Conference} on {Data} {Mining}}
+    \field{pages}{443\bibrangedash 448}
+    \field{title}{Learning from time-changing data with adaptive windowing}
+    \field{year}{2007}
+  \endentry
+
+  \entry{blei_latent_2003}{article}{}
+    \name{author}{3}{}{%
+      {{hash=BDM}{%
+         family={Blei},
+         familyi={B\bibinitperiod},
+         given={David\bibnamedelima M.},
+         giveni={D\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=NAY}{%
+         family={Ng},
+         familyi={N\bibinitperiod},
+         given={Andrew\bibnamedelima Y.},
+         giveni={A\bibinitperiod\bibinitdelim Y\bibinitperiod},
+      }}%
+      {{hash=JMI}{%
+         family={Jordan},
+         familyi={J\bibinitperiod},
+         given={Michael\bibnamedelima I.},
+         giveni={M\bibinitperiod\bibinitdelim I\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BDMNAYJMI1}
+    \strng{fullhash}{BDMNAYJMI1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{issn}{ISSN 1533-7928}
+    \field{number}{Jan}
+    \field{pages}{993\bibrangedash 1022}
+    \field{title}{Latent {Dirichlet} {Allocation}}
+    \verb{url}
+    \verb http://www.jmlr.org/papers/v3/blei03a.html
+    \endverb
+    \field{volume}{3}
+    \field{journaltitle}{Journal of Machine Learning Research}
+    \field{year}{2003}
+    \field{urlday}{26}
+    \field{urlmonth}{10}
+    \field{urlyear}{2017}
+  \endentry
+
+  \entry{bonarini_timing_2014}{inproceedings}{}
+    \name{author}{1}{}{%
+      {{hash=BA}{%
+         family={Bonarini},
+         familyi={B\bibinitperiod},
+         given={Andrea},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BA1}
+    \strng{fullhash}{BA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{booktitle}{Timing in {Human}-{Robot} {Interaction} {Workshop} at 9th
+  {ACM}/{IEEE} {Conference} on {Human}-{Robot} {Interaction}}
+    \field{title}{Timing issues in physically interacting robogames}
+    \field{year}{2014}
+  \endentry
+
+  \entry{brooks_robots_2004}{article}{}
+    \name{author}{6}{}{%
+      {{hash=BAG}{%
+         family={Brooks},
+         familyi={B\bibinitperiod},
+         given={Andrew\bibnamedelima G.},
+         giveni={A\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=GJ}{%
+         family={Gray},
+         familyi={G\bibinitperiod},
+         given={Jesse},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=HG}{%
+         family={Hoffman},
+         familyi={H\bibinitperiod},
+         given={Guy},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=LA}{%
+         family={Lockerd},
+         familyi={L\bibinitperiod},
+         given={Andrea},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=LH}{%
+         family={Lee},
+         familyi={L\bibinitperiod},
+         given={Hans},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=BC}{%
+         family={Breazeal},
+         familyi={B\bibinitperiod},
+         given={Cynthia},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BAG+1}
+    \strng{fullhash}{BAGGJHGLALHBC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{number}{3}
+    \field{pages}{10\bibrangedash 10}
+    \field{title}{Robot's play: interactive games with sociable machines}
+    \field{volume}{2}
+    \field{journaltitle}{Computers in Entertainment (CIE)}
+    \field{year}{2004}
+  \endentry
+
+  \entry{cruickshank_exergames:_2017}{article}{}
+    \name{author}{3}{}{%
+      {{hash=CV}{%
+         family={Cruickshank},
+         familyi={C\bibinitperiod},
+         given={Vaughan},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=CD}{%
+         family={Cooley},
+         familyi={C\bibinitperiod},
+         given={Dean},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=PSJ}{%
+         family={Pedersen},
+         familyi={P\bibinitperiod},
+         given={S.\bibnamedelima J.},
+         giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{CVCDPSJ1}
+    \strng{fullhash}{CVCDPSJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \field{title}{Exergames: good for play time, but should not replace
+  physical education}
+    \field{year}{2017}
+  \endentry
+
+  \entry{di_tore_exergames_2012-1}{article}{}
+    \name{author}{2}{}{%
+      {{hash=DTA}{%
+         family={Di\bibnamedelima Tore},
+         familyi={D\bibinitperiod\bibinitdelim T\bibinitperiod},
+         given={A.},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=RG}{%
+         family={Raiola},
+         familyi={R\bibinitperiod},
+         given={G.},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{DTARG1}
+    \strng{fullhash}{DTARG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{D}
+    \field{sortinithash}{D}
+    \field{number}{2}
+    \field{pages}{221}
+    \field{title}{Exergames e didattica delle attività motorie e sportive}
+    \field{volume}{1}
+    \field{journaltitle}{European Journal of Sustainable Development}
+    \field{year}{2012}
+  \endentry
+
+  \entry{di_tore_exergame-design_2012}{article}{}
+    \name{author}{2}{}{%
+      {{hash=DTPA}{%
+         family={Di\bibnamedelima Tore},
+         familyi={D\bibinitperiod\bibinitdelim T\bibinitperiod},
+         given={Pio\bibnamedelima Alfredo},
+         giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=RG}{%
+         family={Raiola},
+         familyi={R\bibinitperiod},
+         given={Gaetano},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{DTPARG1}
+    \strng{fullhash}{DTPARG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{D}
+    \field{sortinithash}{D}
+    \field{number}{11}
+    \field{pages}{119\bibrangedash 122}
+    \field{title}{Exergame-design and motor activities teaching: {An} overview
+  of scientific paradigms on motor control}
+    \field{volume}{3}
+    \field{journaltitle}{Mediterranean Journal of Social Sciences}
+    \field{year}{2012}
+  \endentry
+
+  \entry{di_tore_exergames_2012}{article}{}
+    \name{author}{2}{}{%
+      {{hash=DTPA}{%
+         family={Di\bibnamedelima Tore},
+         familyi={D\bibinitperiod\bibinitdelim T\bibinitperiod},
+         given={Pio\bibnamedelima Alfredo},
+         giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=RG}{%
+         family={Raiola},
+         familyi={R\bibinitperiod},
+         given={Gaetano},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{DTPARG1}
+    \strng{fullhash}{DTPARG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{D}
+    \field{sortinithash}{D}
+    \field{number}{3}
+    \field{pages}{358}
+    \field{title}{Exergames in motor skill learning}
+    \field{volume}{12}
+    \field{journaltitle}{Journal of Physical Education and Sport}
+    \field{year}{2012}
+  \endentry
+
+  \entry{drachen_player_2009}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=DA}{%
+         family={Drachen},
+         familyi={D\bibinitperiod},
+         given={Anders},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=CA}{%
+         family={Canossa},
+         familyi={C\bibinitperiod},
+         given={Alessandro},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=YGN}{%
+         family={Yannakakis},
+         familyi={Y\bibinitperiod},
+         given={Georgios\bibnamedelima N.},
+         giveni={G\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {IEEE}%
+    }
+    \strng{namehash}{DACAYGN1}
+    \strng{fullhash}{DACAYGN1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{D}
+    \field{sortinithash}{D}
+    \field{booktitle}{Computational {Intelligence} and {Games}, 2009. {CIG}
+  2009. {IEEE} {Symposium} on}
+    \field{isbn}{1-4244-4814-X}
+    \field{pages}{1\bibrangedash 8}
+    \field{title}{Player modeling using self-organization in {Tomb} {Raider}:
+  {Underworld}}
+    \field{year}{2009}
+  \endentry
+
+  \entry{fujita_open_1997}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=FM}{%
+         family={Fujita},
+         familyi={F\bibinitperiod},
+         given={Masahiro},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=KK}{%
+         family={Kageyama},
+         familyi={K\bibinitperiod},
+         given={Koji},
+         giveni={K\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \strng{namehash}{FMKK1}
+    \strng{fullhash}{FMKK1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{F}
+    \field{sortinithash}{F}
+    \field{booktitle}{Proceedings of the {First} {International} {Conference}
+  on {Autonomous} {Agents}}
+    \field{pages}{435\bibrangedash 442}
+    \field{series}{{AGENTS} '97}
+    \field{title}{An {Open} {Architecture} for {Robot} {Entertainment}}
+    \list{location}{1}{%
+      {Marina del Rey, California, USA}%
+    }
+    \field{year}{1997}
+  \endentry
+
+  \entry{gao_evaluation_2014}{article}{}
+    \name{author}{3}{}{%
+      {{hash=GL}{%
+         family={Gao},
+         familyi={G\bibinitperiod},
+         given={Lei},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=BA}{%
+         family={Bourke},
+         familyi={B\bibinitperiod},
+         given={AK},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=NJ}{%
+         family={Nelson},
+         familyi={N\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GLBANJ1}
+    \strng{fullhash}{GLBANJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{number}{6}
+    \field{pages}{779\bibrangedash 785}
+    \field{title}{Evaluation of accelerometer based multi-sensor versus
+  single-sensor activity recognition systems}
+    \field{volume}{36}
+    \field{journaltitle}{Medical engineering \& physics}
+    \field{year}{2014}
+  \endentry
+
+  \entry{goodfellow_deep_2016}{book}{}
+    \name{author}{3}{}{%
+      {{hash=GI}{%
+         family={Goodfellow},
+         familyi={G\bibinitperiod},
+         given={Ian},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=BY}{%
+         family={Bengio},
+         familyi={B\bibinitperiod},
+         given={Yoshua},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=CA}{%
+         family={Courville},
+         familyi={C\bibinitperiod},
+         given={Aaron},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {MIT Press}%
+    }
+    \strng{namehash}{GIBYCA1}
+    \strng{fullhash}{GIBYCA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{isbn}{http://www.deeplearningbook.org}
+    \field{title}{Deep {Learning}}
+    \field{year}{2016}
+  \endentry
+
+  \entry{hu_latent_2012}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=HP}{%
+         family={Hu},
+         familyi={H\bibinitperiod},
+         given={Pengfei},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=LW}{%
+         family={Liu},
+         familyi={L\bibinitperiod},
+         given={Wenju},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=JW}{%
+         family={Jiang},
+         familyi={J\bibinitperiod},
+         given={Wei},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=YZ}{%
+         family={Yang},
+         familyi={Y\bibinitperiod},
+         given={Zhanlei},
+         giveni={Z\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer}%
+    }
+    \strng{namehash}{HP+1}
+    \strng{fullhash}{HPLWJWYZ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{booktitle}{Chinese {Conference} on {Pattern} {Recognition}}
+    \field{pages}{556\bibrangedash 563}
+    \field{title}{Latent topic model based on {Gaussian}-{LDA} for audio
+  retrieval}
+    \field{year}{2012}
+  \endentry
+
+  \entry{huang_can_2017}{article}{}
+    \name{author}{5}{}{%
+      {{hash=HHC}{%
+         family={Huang},
+         familyi={H\bibinitperiod},
+         given={Han-Chung},
+         giveni={H\bibinitperiod-C\bibinitperiod},
+      }}%
+      {{hash=WMK}{%
+         family={Wong},
+         familyi={W\bibinitperiod},
+         given={May-Kuen},
+         giveni={M\bibinitperiod-K\bibinitperiod},
+      }}%
+      {{hash=LJ}{%
+         family={Lu},
+         familyi={L\bibinitperiod},
+         given={Ju},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=HWF}{%
+         family={Huang},
+         familyi={H\bibinitperiod},
+         given={Wei-Fan},
+         giveni={W\bibinitperiod-F\bibinitperiod},
+      }}%
+      {{hash=TCI}{%
+         family={Teng},
+         familyi={T\bibinitperiod},
+         given={Ching-I.},
+         giveni={C\bibinitperiod-I\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HHC+1}
+    \strng{fullhash}{HHCWMKLJHWFTCI1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{pages}{310\bibrangedash 316}
+    \field{title}{Can using exergames improve physical fitness? {A} 12-week
+  randomized controlled trial}
+    \field{volume}{70}
+    \field{journaltitle}{Computers in Human Behavior}
+    \field{year}{2017}
+  \endentry
+
+  \entry{jablonsky_evaluating_2017}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=JN}{%
+         family={Jablonsky},
+         familyi={J\bibinitperiod},
+         given={Natalie},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=MS}{%
+         family={McKenzie},
+         familyi={M\bibinitperiod},
+         given={Sophie},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=BS}{%
+         family={Bangay},
+         familyi={B\bibinitperiod},
+         given={Shaun},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=WT}{%
+         family={Wilkin},
+         familyi={W\bibinitperiod},
+         given={Tim},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \strng{namehash}{JN+1}
+    \strng{fullhash}{JNMSBSWT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{J}
+    \field{sortinithash}{J}
+    \field{booktitle}{Proceedings of the {Australasian} {Computer} {Science}
+  {Week} {Multiconference}}
+    \field{pages}{61}
+    \field{title}{Evaluating sensor placement and modality for activity
+  recognition in active games}
+    \field{year}{2017}
+  \endentry
+
+  \entry{keogh_scaling_2000}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=KEJ}{%
+         family={Keogh},
+         familyi={K\bibinitperiod},
+         given={Eamonn\bibnamedelima J.},
+         giveni={E\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=PMJ}{%
+         family={Pazzani},
+         familyi={P\bibinitperiod},
+         given={Michael\bibnamedelima J.},
+         giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \strng{namehash}{KEJPMJ1}
+    \strng{fullhash}{KEJPMJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \field{booktitle}{Proceedings of the sixth {ACM} {SIGKDD} international
+  conference on {Knowledge} discovery and data mining}
+    \field{isbn}{1-58113-233-6}
+    \field{pages}{285\bibrangedash 289}
+    \field{title}{Scaling up dynamic time warping for datamining applications}
+    \field{year}{2000}
+  \endentry
+
+  \entry{kikhia_analyzing_2014}{article}{}
+    \name{author}{6}{}{%
+      {{hash=KB}{%
+         family={Kikhia},
+         familyi={K\bibinitperiod},
+         given={Basel},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=GM}{%
+         family={Gomez},
+         familyi={G\bibinitperiod},
+         given={Miguel},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=JLL}{%
+         family={Jiménez},
+         familyi={J\bibinitperiod},
+         given={Lara\bibnamedelima Lorna},
+         giveni={L\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=HJ}{%
+         family={Hallberg},
+         familyi={H\bibinitperiod},
+         given={Josef},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=KN}{%
+         family={Karvonen},
+         familyi={K\bibinitperiod},
+         given={Niklas},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=SKa}{%
+         family={Synnes},
+         familyi={S\bibinitperiod},
+         given={K{\textbackslash}a\bibnamedelima are},
+         giveni={K\bibinitperiod\bibinitdelim a\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KB+1}
+    \strng{fullhash}{KBGMJLLHJKNSKa1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \field{number}{3}
+    \field{pages}{5725\bibrangedash 5741}
+    \field{title}{Analyzing body movements within the laban effort framework
+  using a single accelerometer}
+    \field{volume}{14}
+    \field{journaltitle}{Sensors}
+    \field{year}{2014}
+  \endentry
+
+  \entry{lund_playware_2005}{article}{}
+    \name{author}{3}{}{%
+      {{hash=LHH}{%
+         family={Lund},
+         familyi={L\bibinitperiod},
+         given={Henrik\bibnamedelima Hautop},
+         giveni={H\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=KT}{%
+         family={Klitbo},
+         familyi={K\bibinitperiod},
+         given={Thomas},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=JC}{%
+         family={Jessen},
+         familyi={J\bibinitperiod},
+         given={Carsten},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LHHKTJC1}
+    \strng{fullhash}{LHHKTJC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{L}
+    \field{sortinithash}{L}
+    \field{number}{4}
+    \field{pages}{165\bibrangedash 174}
+    \field{title}{Playware technology for physically activating play}
+    \field{volume}{9}
+    \field{journaltitle}{Artificial life and Robotics}
+    \field{year}{2005}
+  \endentry
+
+  \entry{martinoia_physically_2013}{article}{}
+    \name{author}{3}{}{%
+      {{hash=MD}{%
+         family={Martinoia},
+         familyi={M\bibinitperiod},
+         given={Diego},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=CD}{%
+         family={Calandriello},
+         familyi={C\bibinitperiod},
+         given={Daniele},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=BA}{%
+         family={Bonarini},
+         familyi={B\bibinitperiod},
+         given={Andrea},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \keyw{Autonomous robot design, Human–robot interaction, Robogame, Robot
+  entertainment, Robotic game}
+    \strng{namehash}{MDCDBA1}
+    \strng{fullhash}{MDCDBA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{number}{8}
+    \field{pages}{739\bibrangedash 748}
+    \field{title}{Physically interactive robogames: {Definition} and design
+  guidelines}
+    \field{volume}{61}
+    \field{journaltitle}{Robotics and Autonomous Systems}
+    \field{year}{2013}
+  \endentry
+
+  \entry{noor_adaptive_2016}{article}{}
+    \name{author}{4}{}{%
+      {{hash=NMHM}{%
+         family={Noor},
+         familyi={N\bibinitperiod},
+         given={Mohd Halim\bibnamedelima Mohd},
+         giveni={M\bibinitperiod\bibinitdelim H\bibinitperiod\bibinitdelim
+  M\bibinitperiod},
+      }}%
+      {{hash=SZ}{%
+         family={Salcic},
+         familyi={S\bibinitperiod},
+         given={Zoran},
+         giveni={Z\bibinitperiod},
+      }}%
+      {{hash=KI}{%
+         family={Kevin},
+         familyi={K\bibinitperiod},
+         given={I},
+         giveni={I},
+      }}%
+      {{hash=WK}{%
+         family={Wang},
+         familyi={W\bibinitperiod},
+         given={Kai},
+         giveni={K\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{NMHM+1}
+    \strng{fullhash}{NMHMSZKIWK1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{N}
+    \field{sortinithash}{N}
+    \field{title}{Adaptive sliding window segmentation for physical activity
+  recognition using a single tri-axial accelerometer}
+    \field{journaltitle}{Pervasive and Mobile Computing}
+    \field{year}{2016}
+  \endentry
+
+  \entry{noauthor_nova_nodate}{misc}{}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{N}
+    \field{sortinithash}{N}
+    \field{title}{Nova {Labs}}
+    \verb{url}
+    \verb http://www.novalabs.io/
+    \endverb
+    \verb{file}
+    \verb Nova Labs:/Users/ewerlopes/Zotero/storage/2HUXD7C8/www.novalabs.io.ht
+    \verb ml:text/html
+    \endverb
+    \field{urlday}{17}
+    \field{urlmonth}{12}
+    \field{urlyear}{2018}
+  \endentry
+
+  \entry{oliveira_activity_2017}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=OE}{%
+         family={Oliveira},
+         familyi={O\bibinitperiod},
+         given={Ewerton},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=OD}{%
+         family={Orrù},
+         familyi={O\bibinitperiod},
+         given={Davide},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=NT}{%
+         family={Nascimento},
+         familyi={N\bibinitperiod},
+         given={Tiago},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=BA}{%
+         family={Bonarini},
+         familyi={B\bibinitperiod},
+         given={Andrea},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{OE+1}
+    \strng{fullhash}{OEODNTBA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{O}
+    \field{sortinithash}{O}
+    \field{booktitle}{2017 {Joint} \{{IEEE}\} {International} {Conference} on
+  {Development} and {Learning} and {Epigenetic} {Robotics}, {ICDL}-{EpiRob}
+  2017, {Lisbon}, {Portugal}, {September} 18-21, 2017}
+    \field{pages}{1\bibrangedash 6}
+    \field{title}{Activity {Recognition} in a {Physical} {Interactive}
+  {RoboGame}}
+    \list{location}{1}{%
+      {Lisbon}%
+    }
+    \field{year}{2017}
+  \endentry
+
+  \entry{oliveira_modeling_2017}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=OE}{%
+         family={Oliveira},
+         familyi={O\bibinitperiod},
+         given={Ewerton},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=OD}{%
+         family={Orrù},
+         familyi={O\bibinitperiod},
+         given={Davide},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=NT}{%
+         family={Nascimento},
+         familyi={N\bibinitperiod},
+         given={Tiago},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=BA}{%
+         family={Bonarini},
+         familyi={B\bibinitperiod},
+         given={Andrea},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{human-robot interaction, player modeling, robogame, user modeling}
+    \strng{namehash}{OE+1}
+    \strng{fullhash}{OEODNTBA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{O}
+    \field{sortinithash}{O}
+    \field{abstract}{%
+    We propose a quantitative human player model for Physically Interactive
+  RoboGames that can account for the combination of the player activity
+  (physical effort) and interaction level. The model is based on activity
+  recognition and a description of the player interaction (proximity and body
+  contraction index) with the robot co-player. Our approach has been tested on
+  a dataset collected from a real, physical robot game, where activity patterns
+  extracted by a custom 3-axis accelerometer sensor module and by the Microsoft
+  Kinect sensor are used. The proposed model design aims at inspiring
+  approaches that can consider the activity of a human player in lively games
+  against robots and foster the design of robotic adaptive behavior capable of
+  supporting her/his engagement in such type of games.%
+    }
+    \field{booktitle}{Proceedings of the 5th {International} {Conference} on
+  {Human} {Agent} {Interaction}}
+    \verb{doi}
+    \verb 10.1145/3125739.3132608
+    \endverb
+    \field{isbn}{978-1-4503-5113-3}
+    \field{pages}{411\bibrangedash 414}
+    \field{series}{{HAI} '17}
+    \field{title}{Modeling {Player} {Activity} in a {Physical} {Interactive}
+  {Robot} {Game} {Scenario}}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/3125739.3132608
+    \endverb
+    \list{location}{1}{%
+      {New York, NY, USA}%
+    }
+    \field{year}{2017}
+    \field{urlday}{10}
+    \field{urlmonth}{11}
+    \field{urlyear}{2017}
+  \endentry
+
+  \entry{oliveira_learning_2018}{article}{}
+    \name{author}{5}{}{%
+      {{hash=OELS}{%
+         family={Oliveira},
+         familyi={O\bibinitperiod},
+         given={Ewerton L.\bibnamedelima S.},
+         giveni={E\bibinitperiod\bibinitdelim L\bibinitperiod\bibinitdelim
+  S\bibinitperiod},
+      }}%
+      {{hash=OD}{%
+         family={Orrú},
+         familyi={O\bibinitperiod},
+         given={Davide},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=ML}{%
+         family={Morreale},
+         familyi={M\bibinitperiod},
+         given={Luca},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=NTP}{%
+         family={Nascimento},
+         familyi={N\bibinitperiod},
+         given={Tiago\bibnamedelima P.},
+         giveni={T\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+      {{hash=BA}{%
+         family={Bonarini},
+         familyi={B\bibinitperiod},
+         given={Andrea},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{OELS+1}
+    \strng{fullhash}{OELSODMLNTPBA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{O}
+    \field{sortinithash}{O}
+    \field{abstract}{%
+    Physically-Interactive RoboGames (PIRG) are an emerging application whose
+  aim is to develop robotic agents able to interact and engage humans in a game
+  situation. In this framework, learning a model of players’ activity is
+  relevant both to understand their engagement, as well as to understand
+  specific strategies they adopted, which in turn can foster game adaptation.
+  Following such directions and given the lack of quantitative methods for
+  player modeling in PIRG, we propose a methodology for representing players as
+  a mixture of existing player’s types uncovered from data. This is done by
+  dealing both with the intrinsic uncertainty associated with the setting and
+  with the agent necessity to act in real time to support the game interaction.
+  Our methodology first focuses on encoding time series data generated from
+  player-robot interaction into images, in particular Gramian angular field
+  images, to represent continuous data. To these, we apply latent Dirichlet
+  allocation to summarize the player’s motion style as a probabilistic
+  mixture of different styles discovered from data. This approach has been
+  tested in a dataset collected from a real, physical robot game, where
+  activity patterns are extracted by using a custom three-axis accelerometer
+  sensor module. The obtained results suggest that the proposed system is able
+  to provide a robust description for the player interaction.%
+    }
+    \verb{doi}
+    \verb 10.3390/fi10030022
+    \endverb
+    \field{issn}{1999-5903}
+    \field{number}{3}
+    \field{title}{Learning and {Mining} {Player} {Motion} {Profiles} in
+  {Physically} {Interactive} {Robogames}}
+    \verb{url}
+    \verb http://www.mdpi.com/1999-5903/10/3/22
+    \endverb
+    \field{volume}{10}
+    \field{journaltitle}{Future Internet}
+    \field{year}{2018}
+  \endentry
+
+  \entry{prince_computer_2012}{book}{}
+    \name{author}{1}{}{%
+      {{hash=PSJD}{%
+         family={Prince},
+         familyi={P\bibinitperiod},
+         given={Simon J.\bibnamedelima D.},
+         giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod\bibinitdelim
+  D\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Cambridge University Press}%
+    }
+    \strng{namehash}{PSJD1}
+    \strng{fullhash}{PSJD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \field{sortinit}{P}
+    \field{sortinithash}{P}
+    \field{abstract}{%
+    This modern treatment of computer vision focuses on learning and inference
+  in probabilistic models as a unifying theme. It shows how to use training
+  data to learn the relationships between the observed image data and the
+  aspects of the world that we wish to estimate, such as the 3D structure or
+  the object class, and how to exploit these relationships to make new
+  inferences about the world from new image data. With minimal prerequisites,
+  the book starts from the basics of probability and model fitting and works up
+  to real examples that the reader can implement and modify to build useful
+  vision systems. Primarily meant for advanced undergraduate and graduate
+  students, the detailed methodological presentation will also be useful for
+  practitioners of computer vision. - Covers cutting-edge techniques, including
+  graph cuts, machine learning, and multiple view geometry. - A unified
+  approach shows the common basis for solutions of important computer vision
+  problems, such as camera calibration, face recognition, and object tracking.
+  - More than 70 algorithms are described in sufficient detail to implement. -
+  More than 350 full-color illustrations amplify the text. - The treatment is
+  self-contained, including all of the background mathematics. - Additional
+  resources at www.computervisionmodels.com.%
+    }
+    \field{edition}{1st}
+    \field{isbn}{978-1-107-01179-3}
+    \field{shorttitle}{Computer {Vision}}
+    \field{title}{Computer {Vision}: {Models}, {Learning}, and {Inference}}
+    \list{location}{1}{%
+      {New York, NY, USA}%
+    }
+    \field{year}{2012}
+  \endentry
+
+  \entry{ravi_activity_2005}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=RN}{%
+         family={Ravi},
+         familyi={R\bibinitperiod},
+         given={Nishkam},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=DN}{%
+         family={Dandekar},
+         familyi={D\bibinitperiod},
+         given={Nikhil},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=MP}{%
+         family={Mysore},
+         familyi={M\bibinitperiod},
+         given={Preetham},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=LML}{%
+         family={Littman},
+         familyi={L\bibinitperiod},
+         given={Michael\bibnamedelima L},
+         giveni={M\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{RN+1}
+    \strng{fullhash}{RNDNMPLML1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{R}
+    \field{sortinithash}{R}
+    \field{booktitle}{Aaai}
+    \field{pages}{1541\bibrangedash 1546}
+    \field{title}{Activity recognition from accelerometer data}
+    \field{volume}{5}
+    \field{year}{2005}
+  \endentry
+
+  \entry{reed_latent_2012}{report}{}
+    \name{author}{1}{}{%
+      {{hash=RC}{%
+         family={Reed},
+         familyi={R\bibinitperiod},
+         given={Colorado},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{RC1}
+    \strng{fullhash}{RC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \field{sortinit}{R}
+    \field{sortinithash}{R}
+    \field{abstract}{%
+    The aim of this tutorial is to introduce the reader to Latent Dirichlet
+  Allocation (LDA) for topic modeling. This tutorial is not all-inclusive and
+  should be accompanied/crossreferenced with Blei et al. (2003). The unique
+  aspect of this tutorial is that I provide a full pseudo-code implementation
+  of variational expectation-maximization LDA and an R code implementation at%
+    }
+    \field{shorttitle}{Latent {Dirichlet} {Allocation}}
+    \field{title}{Latent {Dirichlet} {Allocation}: {Towards} a {Deeper}
+  {Understanding}}
+    \verb{url}
+    \verb http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.399.2859
+    \endverb
+    \field{type}{Technical report}
+    \field{year}{2012}
+  \endentry
+
+  \entry{smith_mining_2016}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=SBA}{%
+         family={Smith},
+         familyi={S\bibinitperiod},
+         given={Brian\bibnamedelima A.},
+         giveni={B\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=NSK}{%
+         family={Nayar},
+         familyi={N\bibinitperiod},
+         given={Shree\bibnamedelima K.},
+         giveni={S\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {ACM}%
+    }
+    \keyw{game analytics, input mining, topic modeling}
+    \strng{namehash}{SBANSK1}
+    \strng{fullhash}{SBANSK1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{abstract}{%
+    Today's game analytics systems are powered by event logs, which reveal
+  information about what players are doing but offer little insight about the
+  types of gameplay that games foster. Moreover, the concept of gameplay itself
+  is difficult to define and quantify. In this paper, we show that analyzing
+  players' controller inputs using probabilistic topic models allows game
+  developers to describe the types of gameplay – or action – in games in a
+  quantitative way. More specifically, developers can discover the types of
+  action that a game fosters and the extent that each game level fosters each
+  type of action, all in an unsupervised manner. They can use this information
+  to verify that their levels feature the appropriate style of gameplay and to
+  recommend levels with gameplay that is similar to levels that players like.
+  We begin with latent Dirichlet allocation (LDA), the simplest topic model,
+  then develop the player-gameplay action (PGA) model to make the same types of
+  discoveries about gameplay in a way that is independent of each player's play
+  style. We train a player recognition system on the PGA model's output to
+  verify that its discoveries about gameplay are in fact independent of each
+  player's play style. The system recognizes players with over 90\% accuracy in
+  about 20 seconds of playtime.%
+    }
+    \field{booktitle}{Proceedings of the 29th {Annual} {Symposium} on {User}
+  {Interface} {Software} and {Technology}}
+    \verb{doi}
+    \verb 10.1145/2984511.2984543
+    \endverb
+    \field{isbn}{978-1-4503-4189-9}
+    \field{pages}{157\bibrangedash 168}
+    \field{series}{{UIST} '16}
+    \field{title}{Mining {Controller} {Inputs} to {Understand} {Gameplay}}
+    \verb{url}
+    \verb http://doi.acm.org/10.1145/2984511.2984543
+    \endverb
+    \list{location}{1}{%
+      {New York, NY, USA}%
+    }
+    \field{year}{2016}
+    \field{urlday}{26}
+    \field{urlmonth}{10}
+    \field{urlyear}{2017}
+  \endentry
+
+  \entry{stanney_human_1998}{article}{}
+    \name{author}{3}{}{%
+      {{hash=SKM}{%
+         family={Stanney},
+         familyi={S\bibinitperiod},
+         given={Kay\bibnamedelima M.},
+         giveni={K\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=MRR}{%
+         family={Mourant},
+         familyi={M\bibinitperiod},
+         given={Ronald\bibnamedelima R.},
+         giveni={R\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=KRS}{%
+         family={Kennedy},
+         familyi={K\bibinitperiod},
+         given={Robert\bibnamedelima S.},
+         giveni={R\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SKMMRRKRS1}
+    \strng{fullhash}{SKMMRRKRS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{abstract}{%
+    Virtual environments are envisioned as being systems that will enhance the
+  communication between humans and computers. If virtual systems are to be
+  effective and well received by their users, considerable human-factors
+  research needs to be accomplished. This paper provides an overview of many of
+  these human-factors issues, including human performance efficiency in virtual
+  worlds (which is likely influenced by task characteristics, user
+  characteristics, human sensory and motor physiology, multimodal interaction,
+  and the potential need for new design metaphors); health and safety issues
+  (of which cybersickness and deleterious physiological aftereffects may pose
+  the most concern); and the social impact of the technology. The challenges
+  each of these factors present to the effective design of virtual environments
+  and systematic approaches to the resolution of each of these issues are
+  discussed.%
+    }
+    \verb{doi}
+    \verb 10.1162/105474698565767
+    \endverb
+    \field{issn}{1054-7460}
+    \field{number}{4}
+    \field{pages}{327\bibrangedash 351}
+    \field{shorttitle}{Human {Factors} {Issues} in {Virtual} {Environments}}
+    \field{title}{Human {Factors} {Issues} in {Virtual} {Environments}: {A}
+  {Review} of the {Literature}}
+    \verb{url}
+    \verb http://dx.doi.org/10.1162/105474698565767
+    \endverb
+    \field{volume}{7}
+    \field{journaltitle}{Presence: Teleoper. Virtual Environ.}
+    \field{month}{08}
+    \field{year}{1998}
+    \field{urlday}{30}
+    \field{urlmonth}{10}
+    \field{urlyear}{2017}
+  \endentry
+
+  \entry{thrun_probabilistic_2005}{book}{}
+    \name{author}{3}{}{%
+      {{hash=TS}{%
+         family={Thrun},
+         familyi={T\bibinitperiod},
+         given={Sebastian},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=BW}{%
+         family={Burgard},
+         familyi={B\bibinitperiod},
+         given={Wolfram},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=FD}{%
+         family={Fox},
+         familyi={F\bibinitperiod},
+         given={Dieter},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{TSBWFD1}
+    \strng{fullhash}{TSBWFD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{T}
+    \field{sortinithash}{T}
+    \field{isbn}{0-262-30380-9}
+    \field{title}{Probabilistic robotics}
+    \field{year}{2005}
+  \endentry
+
+  \entry{trost_machine_2014}{article}{}
+    \name{author}{3}{}{%
+      {{hash=TSG}{%
+         family={Trost},
+         familyi={T\bibinitperiod},
+         given={Stewart\bibnamedelima G},
+         giveni={S\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=ZY}{%
+         family={Zheng},
+         familyi={Z\bibinitperiod},
+         given={Yonglei},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=WWK}{%
+         family={Wong},
+         familyi={W\bibinitperiod},
+         given={Weng-Keen},
+         giveni={W\bibinitperiod-K\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{TSGZYWWK1}
+    \strng{fullhash}{TSGZYWWK1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{T}
+    \field{sortinithash}{T}
+    \field{number}{11}
+    \field{pages}{2183}
+    \field{title}{Machine learning for activity recognition: hip versus wrist
+  data}
+    \field{volume}{35}
+    \field{journaltitle}{Physiological measurement}
+    \field{year}{2014}
+  \endentry
+
+  \entry{wang_encoding_2015}{inproceedings}{}
+    \name{author}{2}{}{%
+      {{hash=WZ}{%
+         family={Wang},
+         familyi={W\bibinitperiod},
+         given={Zhiguang},
+         giveni={Z\bibinitperiod},
+      }}%
+      {{hash=OT}{%
+         family={Oates},
+         familyi={O\bibinitperiod},
+         given={Tim},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \list{language}{1}{%
+      {en}%
+    }
+    \strng{namehash}{WZOT1}
+    \strng{fullhash}{WZOT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \field{abstract}{%
+    Inspired by recent successes of deep learning in computer vision and speech
+  recognition, we propose a novel framework to encode time series data as
+  different types of images, namely, Gramian Angular Fields (GAF) and Markov
+  Transition Fields (MTF). This enables the use of techniques from computer
+  vision for classification. Using a polar coordinate system, GAF images are
+  represented as a Gramian matrix where each element is the trigonometric sum
+  (i.e., superposition of directions) between different time intervals. MTF
+  images represent the first order Markov transition probability along one
+  dimension and temporal dependency along the other. We used Tiled
+  Convolutional Neural Networks (tiled CNNs) on 12 standard datasets to learn
+  high-level features from individual GAF, MTF, and GAF-MTF images that
+  resulted from combining GAF and MTF representations into a single image. The
+  classification results of our approach are competitive with five
+  stateof-the-art approaches. An analysis of the features and weights learned
+  via tiled CNNs explains why the approach works.%
+    }
+    \field{booktitle}{Workshops at the {Twenty}-{Ninth} {AAAI} {Conference} on
+  {Artificial} {Intelligence}}
+    \field{title}{Encoding {Time} {Series} as {Images} for {Visual}
+  {Inspection} and {Classification} {Using} {Tiled} {Convolutional} {Neural}
+  {Networks}}
+    \verb{url}
+    \verb https://www.aaai.org/ocs/index.php/WS/AAAIW15/paper/view/10179
+    \endverb
+    \field{month}{04}
+    \field{year}{2015}
+    \field{urlday}{26}
+    \field{urlmonth}{10}
+    \field{urlyear}{2017}
+  \endentry
+
+  \entry{wang_imaging_2015}{article}{}
+    \name{author}{2}{}{%
+      {{hash=WZ}{%
+         family={Wang},
+         familyi={W\bibinitperiod},
+         given={Zhiguang},
+         giveni={Z\bibinitperiod},
+      }}%
+      {{hash=OT}{%
+         family={Oates},
+         familyi={O\bibinitperiod},
+         given={Tim},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \keyw{Computer Science - Learning, Computer Science - Neural and
+  Evolutionary Computing, Statistics - Machine Learning}
+    \strng{namehash}{WZOT1}
+    \strng{fullhash}{WZOT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \field{abstract}{%
+    Inspired by recent successes of deep learning in computer vision, we
+  propose a novel framework for encoding time series as different types of
+  images, namely, Gramian Angular Summation/Difference Fields (GASF/GADF) and
+  Markov Transition Fields (MTF). This enables the use of techniques from
+  computer vision for time series classification and imputation. We used Tiled
+  Convolutional Neural Networks (tiled CNNs) on 20 standard datasets to learn
+  high-level features from the individual and compound GASF-GADF-MTF images.
+  Our approaches achieve highly competitive results when compared to nine of
+  the current best time series classification approaches. Inspired by the
+  bijection property of GASF on 0/1 rescaled data, we train Denoised
+  Auto-encoders (DA) on the GASF images of four standard and one synthesized
+  compound dataset. The imputation MSE on test data is reduced by
+  12.18\%-48.02\% when compared to using the raw data. An analysis of the
+  features and weights learned via tiled CNNs and DAs explains why the
+  approaches work.%
+    }
+    \field{pages}{arXiv:1506.00327}
+    \field{title}{Imaging {Time}-{Series} to {Improve} {Classification} and
+  {Imputation}}
+    \verb{url}
+    \verb http://adsabs.harvard.edu/abs/2015arXiv150600327W
+    \endverb
+    \field{volume}{1506}
+    \field{journaltitle}{ArXiv e-prints}
+    \field{month}{05}
+    \field{year}{2015}
+    \field{urlday}{26}
+    \field{urlmonth}{10}
+    \field{urlyear}{2017}
+  \endentry
+
+  \entry{yannakakis_how_2008}{inproceedings}{}
+    \name{author}{1}{}{%
+      {{hash=YGN}{%
+         family={Yannakakis},
+         familyi={Y\bibinitperiod},
+         given={Georgios\bibnamedelima N},
+         giveni={G\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{YGN1}
+    \strng{fullhash}{YGN1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{Y}
+    \field{sortinithash}{Y}
+    \field{booktitle}{{WOCCI}}
+    \field{pages}{21}
+    \field{title}{How to model and augment player satisfaction: a review.}
+    \field{year}{2008}
+  \endentry
+
+  \entry{yannakakis_entertainment_2008}{article}{}
+    \name{author}{2}{}{%
+      {{hash=YGN}{%
+         family={Yannakakis},
+         familyi={Y\bibinitperiod},
+         given={Georgios\bibnamedelima N},
+         giveni={G\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+      {{hash=HJ}{%
+         family={Hallam},
+         familyi={H\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{YGNHJ1}
+    \strng{fullhash}{YGNHJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{Y}
+    \field{sortinithash}{Y}
+    \field{number}{10}
+    \field{pages}{741\bibrangedash 755}
+    \field{title}{Entertainment modeling through physiology in physical play}
+    \field{volume}{66}
+    \field{journaltitle}{International Journal of Human-Computer Studies}
+    \field{year}{2008}
+  \endentry
+
+  \entry{yannakakis_real-time_2009}{article}{}
+    \name{author}{2}{}{%
+      {{hash=YGN}{%
+         family={Yannakakis},
+         familyi={Y\bibinitperiod},
+         given={Georgios\bibnamedelima N.},
+         giveni={G\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+      {{hash=HJ}{%
+         family={Hallam},
+         familyi={H\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{YGNHJ2}
+    \strng{fullhash}{YGNHJ2}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{Y}
+    \field{sortinithash}{Y}
+    \field{number}{2}
+    \field{pages}{121\bibrangedash 133}
+    \field{title}{Real-time game adaptation for optimizing player satisfaction}
+    \field{volume}{1}
+    \field{journaltitle}{IEEE Transactions on Computational Intelligence and AI
+  in Games}
+    \field{year}{2009}
+  \endentry
+
+  \entry{yannakakis_modeling_2006}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=YGN}{%
+         family={Yannakakis},
+         familyi={Y\bibinitperiod},
+         given={Georgios\bibnamedelima N},
+         giveni={G\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+      {{hash=LHH}{%
+         family={Lund},
+         familyi={L\bibinitperiod},
+         given={Henrik\bibnamedelima Hautop},
+         giveni={H\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=HJ}{%
+         family={Hallam},
+         familyi={H\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {IEEE}%
+    }
+    \keyw{artificial intelligence, Artificial intelligence, artificial neural
+  networks, Artificial neural networks, childrens entertainment modeling,
+  computer games, Delay, Entertainment modeling, Game theory, Humans,
+  intelligent interactive playgrounds, interactive playgrounds, interactive
+  systems, Interactive systems, neural nets, neuro-evolution, Optimized
+  production technology, Pediatrics, Playware playground, Production systems,
+  Psychology, qualitative entertainment features, quantitative measurements,
+  quantitative metrics}
+    \strng{namehash}{YGNLHHHJ1}
+    \strng{fullhash}{YGNLHHHJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{Y}
+    \field{sortinithash}{Y}
+    \field{booktitle}{Computational {Intelligence} and {Games}, 2006 {IEEE}
+  {Symposium} on}
+    \field{pages}{134\bibrangedash 141}
+    \field{title}{Modeling children's entertainment in the playware playground}
+    \field{year}{2006}
+  \endentry
+
+  \entry{zyda_visual_2005}{article}{}
+    \name{author}{1}{}{%
+      {{hash=ZM}{%
+         family={Zyda},
+         familyi={Z\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \keyw{3D graphics, America’s Army project, America"s Army project,
+  entertainment computing, serious games, video games, virtual reality}
+    \strng{namehash}{ZM1}
+    \strng{fullhash}{ZM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{Z}
+    \field{sortinithash}{Z}
+    \field{number}{9}
+    \field{pages}{25\bibrangedash 32}
+    \field{title}{From visual simulation to virtual reality to games}
+    \field{volume}{38}
+    \field{journaltitle}{Computer}
+    \field{month}{09}
+    \field{year}{2005}
+  \endentry
+\enddatalist
+\endinput
