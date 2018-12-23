@@ -1,4 +1,4 @@
-\chapter{Foundations}
+\chapter{Foundations}\label{ch:foundation}
 
 \section{Game environment}\label{sec:game_environment}
 During work research we have proposed a new \gls{pirg} where the ``playground'' consisted of a rectangular area of 4m$\times$2m where, on each corner, tubes (henceforth called ``towers'') were placed. Each tower is equipped with a button (which sits on the tower's cap) and four~\gls{led} that can be progressively turned on, one by one.  Each~\gls{led} requires the button to be pressed for 2.5 seconds, meaning that the tower takes about 10 seconds of button push in order to light up all of the four~\gls{led}s.
@@ -59,29 +59,100 @@ During the game, the robot must be able to track the human player movements whil
 %To obtain the data from the human player that are needed to perform the tracking we used the Microsoft Kinect presented in~\ref{kinectsec} and a computer vision algorithm for blob detection previously integrated in the ROS environment using OpenCV libraries.
 
 \section{Towers}\label{sec:towers}
-\footnote{\url{https://einstronic.com/wp-content/uploads/2017/06/NodeMCU-ESP8266-ESP-12E-Catalogue.pdf} accessed on December 17th, 2018.}
+Each tower is powered individually, being capable of transmitting its status to the robot at a constant rate. The circuit uses the NodeMCU V3 ESP8266 ESP-12E WiFi module\footnote{\url{https://einstronic.com/wp-content/uploads/2017/06/NodeMCU-ESP8266-ESP-12E-Catalogue.pdf} accessed on December 17th, 2018.} whose connection is done via a private network. The communication between towers and the robot is support through TCP protocol using the rosserial\_server\footnote{\url{http://wiki.ros.org/rosserial_server} accessed on December 17th, 2018.} package. Figure~\ref{fig:tower_board} presents the board together with its pinout. 
+
+\begin{figure}[thpb]
+  \centering
+  \begin{subfigure}[b]{\textwidth}
+  	\centering
+      \includegraphics[width=5cm]{images/03-foundation/node_mcu}
+	\caption{}
+  \end{subfigure}
+   \qquad 
+  \begin{subfigure}[b]{\textwidth}
+  \centering
+      \includegraphics[width=5cm]{images/03-foundation/node_mcu_pinout}
+	\caption{}
+  \end{subfigure}
+  \caption{a) The NodeMCU V3 ESP8266 ESP-12E WiFi module used for data transmission. b) module pinout.}
+  \label{fig:tower_board}
+\end{figure}
+
+A $7.4$V LiPo battery is used on each tower as can been seen on figure~\ref{fig:tower_caps}. The nominal voltage for the boards is $5$V, which is supplied through a voltage regulator. An angle switch allows the detection of fallen towers. A schematic of such event is provided in figure~\ref{fig:tilt_circuit}.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.33\textwidth}
+  	\centering
+    \includegraphics[width=3cm, height=5cm]{images/03-foundation/cap1}
+	\caption{}
+  \end{subfigure}
+  ~ 
+  \begin{subfigure}[t]{0.33\textwidth}
+  	\centering
+    \includegraphics[width=3cm, height=5cm]{images/03-foundation/cap2}
+	\caption{}
+  \end{subfigure}
+  ~
+   \begin{subfigure}[b]{0.33\textwidth}
+	  \centering
+      \includegraphics[width=3cm,  height=5cm]{images/04-activity/tubes.jpg}
+      \caption{}
+    \end{subfigure}
+  \caption{a) Tower cap containing the button and \gls{led}s; b) Tower cap circuit; c) The four towers used in the game (height 110cm).}
+  \label{fig:tower_caps}
+\end{figure}
+
 
 \begin{figure}[H]
 	\centering
-		\includegraphics[width=0.5\textwidth, height=5cm]{images/03-foundation/tilt_sensor}
+		\includegraphics[width=0.5\textwidth, height=5cm]{images/03-foundation/tilt_sensor_circuit}
 	\caption{The circuit for detecting when a tower has fallen. An angle switch detects the inclination and the low-pass filter smooths out noise from vibrations such as those caused by the player touching the tower. The signal wire is attached to a pin on the NodeMCU V3 ESP8266 ESP-12E WiFi Module, which allows communication with the robot's onboard computer.}
-    \label{roboticplatform} 
+    \label{fig:tilt_circuit} 
 \end{figure}
 
 \section{The robotic platform}\label{sec:roboplat} 
-For the present work we have adopted a holonomic robot (\textit{Triskar}), free to move in any direction at a maximum speed comparable to that of people in indoor environments (1.2 m/sec). Triskar presents simultaneously and independently controlled rotational and translational motion capabilities thanks to three omni-directional wheels actuated by a motor each.
+We have designed an holonomic robot as experimental platform. This robot, called Triskar, is free to move in any direction at a speed comparable to that of people in indoor environments (up to 1.4~m/sec). In all prototypes, the base consisted of a metallic, triangular-shaped base where motors, batteries, computer and necessary electronics were embedded. Triskar has simultaneously and independently controlled rotational and translational motion capabilities all thanks to three omni-directional wheels actuated by a motor each. 
 
-The robot chassis consists of a triangular base 8cm high (diameter 40 cm), where motors, batteries, sensors and electronics are embedded.  The base also supports an aluminum structure hosting the onboard computer. In total, the robot is 85cm high (see figure~\ref{roboticplatform}).
+During the research, we had designed several versions where the first two had versions an overall hight of 85~cm. The first three of which had a kinect sensor on top allowing for player tracking. Given the need to improve robustness, we have redefined the base by making structural changes toward vibration control and stability, which increased the overall high to 1 meter (3rd version). We also added new sensors such as planar laser scans needed to obtain reliable obstacle avoidance (3rd and 4th version). Figure~\ref{fig:evolution} depicts our prototype evolution.
 
 \begin{figure}[H]
-	\centering
-		\includegraphics[width=4cm]{images/03-foundation/triskar}
-	\caption{The adopted robotic platform named Triskar.}
-    \label{roboticplatform} 
+      \centering
+      \begin{subfigure}[b]{0.3\textwidth}
+      	\centering
+	    \framebox{\parbox{3cm}{\includegraphics[width=3cm, height=5.4cm]{images/03-foundation/base1}}}
+	  	\caption{}
+      \end{subfigure}
+	 ~
+	 \begin{subfigure}[b]{0.3\textwidth}
+	 	\centering
+		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=5.4cm]{images/03-foundation/base2}}}  
+		\caption{}   
+      \end{subfigure}
+	 ~
+	  \begin{subfigure}[b]{0.3\textwidth}
+		\centering
+	  	\framebox{\parbox{3cm}{\includegraphics[width=3cm,height=5.4cm]{images/03-foundation/mobilerobot.jpeg}}}
+	  	\caption{}\label{robot}
+      \end{subfigure}
+      ~
+      \begin{subfigure}[b]{0.3\textwidth}
+      	\centering
+      	\framebox{\parbox{3cm}{\includegraphics[width=3cm,height=5.4cm]{images/03-foundation/newmobilerobot.png}}}\label{newrobot}
+      	\caption{}
+      \end{subfigure}
+      ~
+      \begin{subfigure}[b]{0.3\textwidth}
+	      \centering
+	      \framebox{\parbox{3cm}{\includegraphics[width=3cm,height=5.4cm]{images/03-foundation/base4.png}}}\label{newrobot}
+	      \caption{}
+      \end{subfigure}
+      \caption{Prototype evolution. a) first version; b) second version differing on a button placed above the kinect; c) third version improving instability. d) fourth version including lasers on the base; e) current version during the Maker Faire 2018 in Rome (the European edition) from October 12th to 14th of 2018. A better placement of lasers has made the use of the Kinect unnecessary.}
+      \label{fig:evolution}
 \end{figure}
 
 \subsection{Sensors}
-\subsubsection{Microsoft Kinect\textsuperscript{\textregistered} sensor \label{kinectsec}}
+\subsubsection{Microsoft Kinect\textsuperscript{\textregistered}\label{sec:kinectsec}}
 The Microsoft Kinect\textsuperscript{\textregistered} sensor is a peripheral device that functions much like a webcam. However, in addition to providing an RGB image with its 1080p color camera, it also provides a depth map,  meaning that for every pixel of the depth image provided by the sensor, Kinect provides the distance from the sensor. This makes the sensor suitable for a variety of computer vision problems like background removal, blob detection, and people tracking.
 
 \begin{figure}[H]
@@ -113,12 +184,37 @@ The Microsoft Kinect\textsuperscript{\textregistered} sensor is a peripheral dev
 \label{kinectfeatures}
 \end{table}
 
+We have used~\href{https://github.com/OpenKinect/libfreenect2}{libfreenect2}, a library for managing the Kinect device on Linux. We have then created a custom tracking node capable of estimating the player's position in two phases: First, color blob detection. Second, segmentation on the depth frame using~\href{https://en.wikipedia.org/wiki/Region_growing}{\textit{region growing}} algorithm for the purpose of detecting the player's body. Two features can be detected from this procedure: distance (relative to the robot) and contraction index. The first is calculated from the mean value of the depth pixels around the center of the blob. The latter, in turn, is computed based on the subtraction of the occupied area with respect to the dimension of the bounding box that encompasses the segmented silhouette (see Figure~\ref{fig:segmenta}).
+
+\begin{figure}[H]
+  \centering 
+  \begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=3cm]{images/03-foundation/point_cloud}}}
+		\caption{}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=3cm]{images/03-foundation/depth}}}
+		\caption{}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=3cm]{images/03-foundation/segmentation}}}
+		\caption{}
+  \end{subfigure}
+  \caption{Example of Frames processed by our algorithm. a) Point cloud showing the center of the detected (light-purple) color blob. b) Depth frame. The number showed above the user correspond to his estimated distance relative to the robot. c) Segmentation results. The number above is the contraction index defined in the interval [0,1].}\label{fig:segmenta}
+   \label{segmentacao}
+\end{figure}
+
 \subsubsection{Laser scanners}\label{lasershokuyo}
 The robot was equipped with two laser scanners Hokuyo URG-04LX, shown in Figure~\ref{fig:hokuyo}. These laser sensors perceive the range of obstacles on a plan with a field of view of $240^\circ$ and a resolution of $0.36^\circ$, the maximum detectable distance is $5.6m$ and they can be connected to the computer by means of a USB interface, being operated with a nominal voltage of 5V.
 
 The Hokuyo URG-04LX consists of a compact stacked structure with a spindle motor and the actual scanner on top of it. The motor rotates a small transmission mirror that deflects the vertical laser beam coming from the top of the sensor into horizontal direction. This allows the laser beam to scan a planar area around the sensor with an opening angle of $240^\circ$. A second mirror below, the reception mirror, deviates the horizontal laser beam captured by a lens into vertical direction again.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=5cm]{images/03-foundation/hokuyo}
 	\caption{ An Hokuyo URG-04LX laser scanner.}
@@ -202,7 +298,7 @@ The low-level motors actuation and their interface between the ROS system have b
 The provided modules allow to control different type of motors that can be modeled as a second order system, where the input is the voltage applied to the motor armature and output variable is the motor angular speed. Futher details about the deployed boards are presented in figure~\ref{fig:boards}.
 
 
-\begin{figure}[thpb]
+\begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.3\textwidth}
   \centering
@@ -230,7 +326,7 @@ Kinematics is a branch of classical mechanics that describes the motion of point
 The configuration of a rigid mobile robot is commonly described by six variables, its three-dimensional Cartesian coordinates and its three Euler angles (roll, pitch, yaw) relative to an external coordinate frame~\cite{thrun_probabilistic_2005}. If the robot is considered as moving on a planar surface, this reduces to two Cartesian coordinates and an orientation angle.
 The kinematic model of an omni-directional base consists of an equation of motion of the robot in function of wheels velocity without considering the forces acting on the system. In this section, a kinematic model for a 3-wheeled omni-directional robot will be derived, while the 3-wheeled omni-directional robot used for this thesis work will be described in deep in chapter~\ref{chapter3}.
 
-\begin{figure}[thpb]
+\begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.5\textwidth}
      \centering

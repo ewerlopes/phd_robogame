@@ -1,0 +1,70 @@
+\newacronym{ai}{AI}{Artificial Intelligence}
+\newacronym{ml}{ML}{Machine Learning}
+
+\newacronym{em}{EM}{Expectation Maximization}
+\newacronym{pg}{PG}{Policy Gradient}
+
+\newacronym{kl}{KL}{Kullback-Leibler Divergence}
+
+\newacronym{rl}{RL}{Reinforcement Learning}
+\newacronym{hrl}{HRL}{Hierarchical Reinforcement Learning}
+\newacronym{irl}{IRL}{Inverse Reinforcement Learning}
+
+\newacronym{uav}{UAVs}{Unmanned Autonomous Vehicles}
+
+\newacronym{mdp}{MDP}{Markov Decision Process}
+\newacronym{mdpr}{MDP$\setminus \Rmodel$}{Markov Decision Process without Reward}
+\newacronym{pomdp}{POMDP}{Partially Observable Markov Decision Process}
+\newacronym{smdp}{SMDP}{Semi-Markov Decision Process}
+
+\newacronym{ham}{HAM}{Hierarchy of Abstract Machines}
+\newacronym{hcgl}{HCGL}{Hierarchical Control Graph Learning}
+
+\newacronym{someirl}{SOME-IRL}{Single-Objective Multiple-Expert Inverse Reinforcement Learning}
+\newacronym{girl}{GIRL}{Gradient Inverse Reinforcement Learning}
+\newacronym{mlirl}{MLIRL}{Maximum Likelihood Inverse
+Reinforcement Learning}
+\newacronym{csi}{CSI}{Cascaded Supervised Inverse Reinforcement Learning}
+\newacronym{scirl}{SCIRL}{Structured Classification-based Inverse Reinforcement Learning}
+
+\newacronym{reinforce}{REINFORCE}{$\text{REward Increment} = \text{Nonnegative Factor} \times \text{Offset Reinforcement} \times \text{Characteristic Eligibility}$}
+\glsunset{reinforce}
+\newacronym{pgpe}{PGPE}{Policy Gradients with Parameter-Based Exploration}
+\newacronym{nes}{NES}{ Natural Evolution Strategy}
+\newacronym{gpomdp}{GPOMDP}{Gradient of a Partially Observable Markov Decision Process}
+\newacronym{rwr}{RWR}{Reward-Weighted Regression}
+\newacronym{reps}{REPS}{Relative Entropy Policy Search}
+\newacronym{hireps}{Hi-REPS}{Hierarchical REPS}
+\newacronym{power}{PoWER}{Policy learning by Weighting Exploration with Returns}
+\newacronym{enac}{eNAC}{Episodic Natural Actor-Critic}
+
+\newacronym{dqn}{DQN}{Deep Q-Network}
+\newacronym{ddqn}{DDQN}{Double DQN}
+\newacronym{a3c}{A3C}{Asyncronous Advantage Actor-Critic}
+\newacronym{a2c}{A2C}{Advantage Actor-Critic}
+\newacronym{trpo}{TRPO}{Trust Region Policy Optimization}
+\newacronym{ppo}{PPO}{Proximal Policy Optimization}
+\newacronym{her}{HER}{Hindsight Experience Replay}
+
+\newacronym{lqr}{LQR}{Linear Quadratic Regulator}
+\newacronym{nls}{NLS}{Non Linear System}
+
+\newacronym{rbf}{RBFs}{Radial Basis Functions}
+
+\newacronym{pirg}{PIRG}{Physically Interactive Robogame}
+\newacronym{imu}{IMU}{Inertial Measurement Unit}
+\newacronym{met}{MET}{Metabolic Equivalent of Task}
+\newacronym{rpg}{RPG}{Role-Playing Game}
+
+\newacronym{gadf}{GADF}{Gramian Angular Difference Field}
+\newacronym{gaf}{GAF}{Gramian Angular Field}
+\newacronym{gasf}{GASF}{Gramian Angular Summation Field}
+\newacronym{lda}{LDA}{Latent Dirichlet Allocation}
+\newacronym{lma}{LMA}{Laban Movement Analysis}
+\newacronym{mse}{MSE}{Mean Squared Error}
+\newacronym{paa}{PAA}{Piecewise Aggregation Approximation}
+\newacronym{vr}{VR}{Virtual Reality}
+
+\newacronym{fov}{FOV}{Field of View}
+\newacronym{led}{LED}{Light Emitting Diodes}
+\newacronym{roc}{ROC}{Receiver Operating Characteristic}

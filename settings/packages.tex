@@ -58,22 +58,26 @@
 %=============================================
 % Tkiz IMAGE TYPE
 %---------------------------------------------
+%%% THIS IS FOR Tkiz IMAGE TYPE %%%%%%
 \usepackage{tikz}
 \usetikzlibrary{fit,arrows,calc,positioning}
 \usetikzlibrary{bayesnet}
 \usepackage{pgfplots}
 \usetikzlibrary{mindmap,trees}
-% and optionally (as of Pgfplots 1.3): 
 \pgfplotsset{compat=newest} 
-\pgfplotsset{plot coordinates/math parser=false} 
+\pgfplotsset{plot coordinates/math parser=false}
 \usepackage[framemethod=TikZ]{mdframed}
-\newcommand{\myboxedtext}[2][rectangle,draw,fill=orange,rounded corners]{%
-   \tikz[baseline=-0.6ex] \node [#1,rounded corners]{#2};}%
 
 %=============================================
 % Bibliography
 %---------------------------------------------
 \usepackage[style=numeric-comp,useprefix,hyperref,backend=bibtex]{biblatex}
+
+%=============================================
+% Figure box
+%---------------------------------------------
+\usepackage{framed}
+\usepackage[most]{tcolorbox}
 
 %=============================================
 % Hyphenation

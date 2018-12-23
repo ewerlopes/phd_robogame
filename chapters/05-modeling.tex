@@ -1,52 +1,102 @@
-\chapter{Latent player behavior modeling}
+\chapter{Player behavior modeling in~\glsdesc{pirg}}\label{ch:modeling}
 
-\section{Introduction}
+In this chapter we present some ideas for player modeling in~\gls{pirg}, beginning from the activity recognition system described in the previous chapter.
 
-In the last decade, video game companies have introduced a new paradigm that involves players actively moving in front of the screen, picking up simulated objects around them and interacting with the game in a three-dimensional space. This has been mostly enhanced by immersive, Virtual Reality (VR) games, where players are plunged into an artificial world reproduced by {ad-hoc} intelligent systems and devices~\cite{zyda_visual_2005}. These scenarios, although enabling a deep game experience, may in some cases introduce potential health and safety issues, such as cybersickness and deleterious physiological aftereffects~\cite{stanney_human_1998}.
+\section{A simple activity model}
+In the possession of an activity system we aimed at the definition of an approach to quantify user behavior that can account for the combination of the player physical effort and interaction level. The proposed model was based on the human activity recognition (see chapter~\ref{ch:activity}) and a description of interaction (proximity and body contraction index) relative to the robot co-player.
 
-Physically Interactive RoboGames (PIRG), on the other hand, comprise an emerging application field that consists of a number of autonomous agents (including software and hardware) of which at least one is an autonomous, physical robot and one is a person. These agents interact with each other in the real world by following some game rules so that the human players can have fun~\cite{martinoia_physically_2013}.
+\section{Relational Activity Model}\label{theModel}
 
-PIRG may be seen as well as a specific setting to study human-robot interaction in situations framed by rules, where attention and physical challenges are involved. Furthermore, the increased maturity of fields like social robotics, artificial intelligence and machine learning offers the possibility to design a new generation of such games, where adaptive behavior to support human entertainment, for instance, plays a central role. In general, such applications can foster the wide spread of robots in the society via ludic applications.
+As in~\cite{etheredge_generic_2013}, we defined as behavior a sequence of discrete time-bounded actions performed by the player. Since we are dealing with a physically interactive scenario, these time-bounded actions have strong relation with the amount of physical activity spent, hereby considered as the human ``activity effort''. The relationship with the robot, on the other hand, is considered the ``relative interaction''. 
 
-In a PIRG, the physical, autonomous agents are actively engaged, creating some sort of interaction, either competitive or cooperative. From one's perspective, such games are similar to robotic Exergames~\cite{di_tore_exergames_2012-1, di_tore_exergame-design_2012, di_tore_exergames_2012, huang_can_2017, cruickshank_exergames:_2017}, but with a mobile companion and with less concern for promoting specific activity conditions driven by therapeutic motivations. Like commercial video games, the main aspect in a PIRG is to produce a sense of entertainment and pleasure that can be ``consumed'' by a large number of~users. 
+In the proposed model, the two dimensions (activity and interaction) are combined into a simple overall scoring system capable of describing quantitatively the player's active participation in the~\gls{pirg}. The proposed model is detailed in the next.
 
-It has been noticed~\cite{martinoia_physically_2013, bonarini_timing_2014} that an important aspect of such playing entities and systems during the game should be an exhibition of rational behavior, and in this sense, they must be able to play the role of effective opponents or teammates, since people tend to lose their will to play with, or against, a dull entity. Therefore, a robot adapted to the skill and attitudes of the human player may achieve an acceptable performance, possibly providing a highly entertaining experience. Such requirements motivate the design of player's categorization models in order to understand the player's behavior and preferences, as well as to guide the expected robot adaptation. 
+\subsubsection{Activity}\label{activity}
 
-Possible issues may arise, mainly due to the challenges in modeling the real world and the problem of overcoming common limitations present in a robotic platform. For example, a PIRG designer building a mobile playing agent has to deal with the problem of noisy sensory data, partial information, perception, locomotion and planing in a real environment. Safety issues regarding human-robot interaction are, as well, an important factor that has to be taken into account. All of those aspects, together with budget constraints, make the design of intelligent playing robots a difficult task.
+Equation~\ref{eq:activity_eq} is used to compute the general amount of activity $\alpha(m)$, given the classification of primitive motions from chapter~\ref{ch:activity}:
 
-Companies like~\href{https://anki.com/en-us}{Anki$^{\tiny{\textregistered}}$} started to make use of artificial intelligence techniques to bring consumer robotics into physical gaming experience. One of its product, Anki Drive$^{\tiny{\textregistered}}$, features toy-sized robotic cars controlled by a mobile app. In the game, the cars sense their positions on the track and continually exchange data via Bluetooth$^{\tiny{\textregistered}}$ with a smartphone. The app computes possible actions and decides what each car should do based on its objective. Additionally, the cars can also show different ``personalities''. Despite the app's ability to orchestrate the behaviors of the cars, players are still limited to the use of the smartphone to drive their car and cannot participate in first person in the game.
+\begin{equation}
+	\alpha(m)=\sum_{i \in \mathcal{A}} \omega_{i}\varphi_i(m);\qquad m \in \mathcal{M}
+	\label{eq:activity_eq}
+\end{equation}
+, where $\mathcal{A}$ stands for the set of activities \{``running'', ``locally moving'', ``walking/dodging''\}; $\omega$ stands for the activity weight; $\varphi$ for the stochastic prediction value for the motion primitive $m$.
 
-Following such an example, one may envision PIRG as one of the next robotic products for the mass technological market, which demands a large exploration of new methodologies, especially as concerns the methods for enabling high autonomy, intelligence and adaptive behavior.
+We consider equation~\ref{eq:activity_eq} as a measure of the ``effort'' of the player. The weight $\omega$ states how much each physical activity contributes to the overall quantification and is a hyper-parameter.
 
-Over the years, there have been some important attempts at presenting robots as games. However, in most cases, the robots act more or less as a mobile pet (e.g.,~\cite{fujita_open_1997, brooks_robots_2004}), where the interaction is often seen as limited to almost static positions~\cite{yannakakis_entertainment_2008}, not exploiting rich movement, nor a high level of autonomy, which makes for a low credibility of these toys to really engage lively people~\cite{martinoia_physically_2013, bonarini_timing_2014}. 
+\subsection{Interaction}\label{Interaction}
+In order to model the interaction we take into account the spatial relationship between the player and the robot defined as ``proximity'' and a measure of body contraction named ``contraction index'' (CI).
 
-Some PIRG prototypes have been reported over the last few years. Jedi Trainer 3.0 allowed for a more physical interaction between robot and players~\cite{martinoia_physically_2013}. It was developed with the goal of replicating a scene of the first Star Wars saga movie ``Episode IV - A New Hope''. An autonomous drone flew around the human player (Jedi trainee) and could produce, when needed, the sound of a laser blast. Jedi Trainer was successfully tested in different unstructured environments~\cite{bonarini_timing_2014}, being capable of showing some apparent adaptation, achieved by always making the drone tend to keep a fixed distance from the player so that the speed of movement of the latter could be matched by the drone. The randomness arising from noisy sensors added realism to the drone's behavior, which could be perceived as some kind of rational behavior by the human player~\cite{martinoia_physically_2013}.
+Proximity is a measure defined in the interval [0, 1], computed from the data provided by the Microsoft Kinect\textsuperscript{\textregistered}, normalized given the sensor specifications (see section~\ref{sec:kinectsec}). CI is also in [0 , 1] and it is calculated using a technique related to the bounding region, i.e., the minimum rectangle surrounding the body: the algorithm compares the area covered by this rectangle with the area currently covered by the player's silhouette~\cite{castellano_recognising_2007}.
 
-Another example of PIRG with mobile robots was RoboTower~\cite{bonarini_timing_2014, martinoia_physically_2013}. In the game, a 30 cm high robot had to push down a set of towers in three minutes. Human players could interact with the robot by delaying its movement by placing specific cards on the robot's path; the robot was capable of reading the cards when passing over them. Each card represented either an action the robot had to execute (go back, turn around, stop) or a deficit of its sensors (go blind). There, the authors reported that engagement was related to the challenge of putting the cards at the right place and by the pressure given by time.
+A high CI is associated with an intense interaction because a wide openness of the body is interpreted as a higher focus level of the player w.r.t the robot and to the game; for this reason it will boost the final outcome. Low CI, in turn, is interpreted as a lack of focus or, in general, limited motivation of the player, which penalizes the interaction.
 
-A different and more complex version of RoboTower has been recently implemented~\cite{oliveira_activity_2017, oliveira_modeling_2017}, where humans interact with a three-wheeled omni-directional robot one meter high. In this version, only physical interaction is exploited. The present work uses this version of the game as the case study.
+\subsection{Combined model}\label{sec:engagement}
+The model to describe the player's relational activity is a combination of the activity level and the degree of interaction, named $\epsilon$; it summarizes the player physical activity during the game, weighted by his interaction with the robotic opponent as follows: 
+\begin{equation}
+\label{enagementeq}
+\epsilon=\kappa\alpha(m),
+\end{equation}
 
-Closely related to PIRG, some proposals of user models in games have been made using Playware playground~\cite{lund_playware_2005}. Some of them consider physiological data, such as heart rate~\cite{yannakakis_entertainment_2008}, for capturing and modeling individual entertainment preferences in children. Others focus on more general attributes like force sensing data and entropy of game events~\cite{yannakakis_modeling_2006}.
+where $\kappa= (1-\rho)$ and uses the degree of interaction $\rho$ so that when the output of the fuzzy system is zero (meaning no interaction) the activity level is only the activity $\alpha$. In other cases, $\kappa$ is the multiplying factor that boosts the importance of the activity by putting it in relation with the amount of interaction.  Notice, however, that $\rho$ is an overall degree of interaction, i.e., the combination of CI and proximity. The exact procedure for the combination of the interaction signals is not bound to a specific method. In this work, we have used a fuzzy logic system to obtain the desired combination, described in a linguistic way. In principle, the combination of the signals depends on the specifics of the~\gls{pirg} environment.
 
-Despite the examples of successful PIRG applications using mobile robots, only a few works~\mbox{\cite{oliveira_modeling_2017,yannakakis_entertainment_2008}} concern a direct quantification of the human behavior during game play. In this paper, we present an approach to categorize the players' behaviors by analyzing data about their movement. The primary source of information is a single three-axis accelerometer placed on the player's chest. The analysis is performed by first mapping the stream of data into an image representation, namely a Gramian Angular Field (GAF)~\cite{wang_imaging_2015}, which is subsequently processed by a simple autoencoder~\cite{goodfellow_deep_2016} architecture for unsupervised feature extraction. After the definition of a dictionary of primitives on the feature space, we apply latent Dirichlet allocation~\cite{blei_latent_2003}, a generative model mostly used for document retrieval and classification, to uncover coherent groups of motion patterns that can be used to categorize players.
+\subsection{Evaluation}\label{sec:simple_evalution}
+\subsubsection{Data elaboration}
+We considered 29 matches involving 15 male participants of different ages. The age distribution consisted of children (7-10) and adults (26-40). This sample matches the typical user distribution for this kind of games, and arose in uncontrolled way from the presentation of the game to general public (including also differently aged people and females) in an exhibition context. The variety of behaviors collected in these trials was high and supported our hypothesis about the need of an adapting robot. In these matches, the robot was remotely driven by a human operator. Matches had a minimum time duration of about 40 secs and a maximum of about 1 minute and 10 secs. 
 
-Our decision to use Latent Dirichlet Allocation (LDA) takes inspiration from recent approaches where each game session is represented as a ``document'', and chunks of generated stream data are encoded into discrete ``words''~\cite{smith_mining_2016}. This arrangement is based on the assumption that different players generate different streams of input words, thus different documents, depending on their own motivation or play style. 
+The collected data are the acceleration values along x, y, and z axis with a sampling frequency of 50Hz, which is five times larger than the frequency considered to be sufficient for detecting daily activities from accelerometer data (10Hz)~\cite{kikhia_analyzing_2014}.
 
-The possibility to apply LDA to this problem is further reinforced by noticing the apparent difficulty in objectively separating types of motion patterns, since a player in his/her playing activity may show one or more different motion styles. More explicitly, a player may, for instance, become bored or frustrated with the game and consequently show a low motion profile w.r.t. the one that the same player might have shown at other moments during the same game session; for instance, when he/she was excited about it. Here, we consider that a high motion profile, i.e., high turbulence in acceleration signal, is typical for a highly motivated player, since by common sense, a non-motivated player {tends} to stay relatively still or show a very low acceleration signal.
+In terms of dataset support, 34$\%$ of the motion primitives correspond to locally moving (LM); 25$\%$ to walking/dodging (WD) and 41$\%$ running (R).
 
-The claim that motion style conveys engagement or even emotion~\cite{aristidou2015emotion,shafir2016emotion,tsachor2017somatic} types has been supported by several papers. As an example, systematic approaches for describing movement, such as Laban Movement Analysis (LMA)~\cite{laban1974language}, are often used in deriving low-dimensional representation of movement, facilitating affective motion modeling~\cite{burton2016laban}. This same type of analysis has been applied when investigating motor elements that characterize movements whose execution enhances basic emotions, such as: anger, fear, happiness and sadness~\cite{shafir2016emotion}. In game situations, despite the limited capacity for entertainment detection and modeling in Exergames, LMA had been reported as useful in fostering emotion recognition in states like: concentration, meditation, excitement and frustration~\cite{zacharatos2013emotion}.
+We use a sliding window half a second long,  with 10\% overlap, for the STD graph generation. In our experiments, the produced spikes in variance have a huge discriminative power w.r.t. activities demanding sudden changes in behavior, e. g., a ``running'' motion. We also used a positive half sine wave as windowing function in order to soften the transition between windows. As mentioned, the ``inactive'' type is not considered in the recognition task since it is directly classified by the inactive threshold line.     
 
-Here, we hypothesize that, on average, a player will display his/her game-intrinsic motion style and convey some information about his/her interest in/motivation to play. Discovering which coherent groups of motion style exist in a dataset allows us to estimate to what extent an unknown player relates in terms of his/her own motion profile to known groups. This may ultimately help in designing PIRGs that are able to adapt accordingly in order to offer a better user experience for the players.
+\subsubsection{Model results}
+The model output for two different players can be seen on figure~\ref{fig:modelOutput}. In figure~\ref{fun}, the player is perceived as more active than the one in fig.~\ref{nofun}. The ratio between activity and inactivity exposed by the output matches the observed data and empirically confirms the model viability.
+
+\begin{figure}[h!]
+    \centering 
+	\begin{subfigure}[H]{0.3\textwidth}
+		\centering      
+		\includegraphics[width=\columnwidth]{images/04-activity/combined.png}
+		\caption{}
+		\label{fig:fun}
+	\end{subfigure}
+	~
+	\begin{subfigure}[H]{0.3\textwidth}
+		\centering      
+      	\includegraphics[width=\columnwidth]{images/04-activity/combined_less.png}
+      	\caption{}
+      	\label{fig:nofun}
+     \end{subfigure}
+      \caption{a) Model results for a single match that lasted 45 secs. b) Model output for a less active player. The graph refers to 30 initial secs of activity.}		
+      \label{fig:modelOutput}
+\end{figure}
+
+The model quantitatively describe, in a simple way, the player's relational activity by the combination of the amount of physical activity and interaction relative to the robot. This can be used as a metric expected to enable the robot to take into account the player's attitude in order to adapt its own activity to match it. Using this model, for instance, an active player could be viewed as one having a larger cumulative sum of $\epsilon$ values up to a point in time.
+
+However, this model is limited in several ways, one of such is the manual definition of weights for the activities ($\omega$). Manually selecting those weight becomes difficult as the number of activities grows. We have then worked on a definition of a more robust player model relying on latent representation. This is describe next.
+
+\section{Latent player modeling}
+
+\subsection{Introduction}
+We attempted to mitigate the limitations in the previous model  by first mapping the stream of data into an image representation, namely a Gramian Angular Field (GAF)~\cite{wang_imaging_2015}, which is subsequently processed by a simple autoencoder~\cite{goodfellow_deep_2016} architecture for unsupervised feature extraction. After the definition of a dictionary of primitives on the feature space, we apply latent Dirichlet allocation~\cite{blei_latent_2003}, a generative model mostly used for document retrieval and classification, to uncover coherent groups of motion patterns that can be used to categorize players.
+
+Our decision to use \gls{lda} takes inspiration from recent approaches where each game session is represented as a ``document'', and chunks of generated stream data are encoded into discrete ``words''~\cite{smith_mining_2016}. This arrangement is based on the assumption that different players generate different streams of input words, thus different documents, depending on their own motivation or play style. 
+
+The possibility to apply \gls{lda} to this problem is further reinforced by noticing the apparent difficulty in objectively separating types of motion patterns, since a player in his/her playing activity may show one or more different motion styles. More explicitly, a player may, for instance, become bored or frustrated with the game and consequently show a low motion profile w.r.t. the one that the same player might have shown at other moments during the same game session; for instance, when he/she was excited about it. Here, we consider that a high motion profile, i.e., high turbulence in acceleration signal, is typical for a highly motivated player, since by common sense, a non-motivated player {tends} to stay relatively still or show a very low acceleration signal.
+
+The claim that motion style conveys engagement or even emotion~\cite{aristidou_emotion_2015,shafir_emotion_2016,tsachor_somatic_2017} types has been supported by several papers. As an example, systematic approaches for describing movement, such as~\gls{lma}~\cite{laban_language_1974}, are often used in deriving low-dimensional representation of movement, facilitating affective motion modeling~\cite{burton_laban_2016}. This same type of analysis has been applied when investigating motor elements that characterize movements whose execution enhances basic emotions, such as: anger, fear, happiness and sadness~\cite{shafir_emotion_2016}. In game situations, despite the limited capacity for entertainment detection and modeling in Exergames, \gls{lma} had been reported as useful in fostering emotion recognition in states like: concentration, meditation, excitement and frustration~\cite{zacharatos_emotion_2013}.
+
+Here, we hypothesize that, on average, a player will display his/her game-intrinsic motion style and convey some information about his/her interest in/motivation to play. Discovering which coherent groups of motion style exist in a dataset allows us to estimate to what extent an unknown player relates in terms of his/her own motion profile to known groups. This may ultimately help in designing \gls{pirg}s that are able to adapt accordingly in order to offer a better user experience for the players.
 
 Following this, in this manuscript, a player representation is addressed as how much of each discovered motion types to which we are confident to say a given player is mostly related. We call this representation a {mixture proportion of motion types} (similar to topics in the LDA perspective). 
 
-In summary, we expect to see that similar player-generated data are grouped together in a coherent collection, allowing the distinction of the existing motion types. The results obtained are validated with human supervision, suggesting the applicability of our method to future mechanisms for designing auto-adapting PIRGs agents.
+In summary, we expect to see that similar player-generated data are grouped together in a coherent collection, allowing the distinction of the existing motion types. The results obtained are validated with human supervision, suggesting the applicability of our method to future mechanisms for designing auto-adapting \gls{pirg}s agents.
 
-\section{Mathematical Preliminaries}
+\subsection{Mathematical Preliminaries}
 
 This section presents the basic concepts and principles of the Gramian angular field, autoencoders and latent Dirichlet allocation, our targeted probabilistic graphical model.
 
-\subsection{Gramian Angular Field Images}
+\subsubsection{Gramian Angular Field Images}
 
 The results obtained in this work rely on the transformation of the time series data generated by the player motion into images that can then be processed and understood in terms of emergent patterns that can, in turn, be discovered by state-of-the-art machine learning algorithms. The type of image we have chosen is Gramian Angular Summation/Difference Field (GASF/GADF). Such images had been proposed in the field of time series classification~\cite{wang_imaging_2015}, where the authors evaluated the efficacy of representing time series in a polar coordinate system instead of the typical Cartesian coordinates. For a deep understanding of the method, we suggest reading the original paper, where the authors did not only present the idea of GASF/GADF, but also reported experimental results comparing them with other time series imagery techniques. Here, we present an overview of the technique in order to familiarize the reader with such a method and to point out its role in our proposal.
 
@@ -84,8 +134,7 @@ GADF &= [\,\sin(\phi_{i} + \phi{j}]\, \\
 \end{aligned}
 \end{equation}
 
-$I$ is the unit row vector. After translating the time series from the Cartesian to polar coordinate system, each time step in it is taken as a 1D metric space. By defining the inner product as 
-\mbox{$<x,y> = x \cdot y - \sqrt{1-x^2} \cdot \sqrt{1-y^2}$ and $<x,y> = \sqrt{1-x^2} \cdot y - x \cdot \sqrt{1-y^2}$, } 
+$I$ is the unit row vector. After translating the time series from the Cartesian to polar coordinate system, each time step in it is taken as a 1D metric space. By defining the inner product as $<x,y> = x \cdot y - \sqrt{1-x^2} \cdot \sqrt{1-y^2}$ and $<x,y> = \sqrt{1-x^2} \cdot y - x \cdot \sqrt{1-y^2}$,
 respectively, the GAFs become {quasi-Gramian} matrices, since the defined $<x,y>$ do not satisfy the property of linearity in inner-product space.
 
 Still, according to~\cite{wang_imaging_2015}, the GAFs have several advantages:
@@ -104,56 +153,12 @@ However, the size of the Gramian matrix $G$ is $n \times n$, for $n$ being the l
  \label{figure:gasf_example}
 \end{figure}
 
-\subsection{Latent Dirichlet Allocation}
-Latent Dirichlet Allocation (LDA) is one of the most simple and influential topic models. {A topic model is a formal statistical relationship between a group of observed and latent (unknown) random variables, which specifies a probabilistic procedure to generate topics. The latter, in turn, is defined as a probability distribution over a collection of words}~\cite{reed_latent_2012}.
+\subsubsection{Latent Dirichlet Allocation}
+LDA is one of the most simple and influential topic models. {A topic model is a formal statistical relationship between a group of observed and latent (unknown) random variables, which specifies a probabilistic procedure to generate topics. The latter, in turn, is defined as a probability distribution over a collection of words}~\cite{reed_latent_2012}.
 
-The graphical model shown in Figure~\ref{fig:graphical-model} presents the structure of the LDA model~\cite{blei_latent_2003}. Here, as in~\cite{smith_mining_2016}, the \textit{K}-th probability distribution over input words $\beta$ (called topics) is representative of the $K$ groups (types) of player motion styles in which we are interested. In turn, each document $d$ is a {game play} session for the game. We had to deal with the deterioration of model accuracy when considering the whole game section as a single document. Our solution for the problem was to segment each one of those into subsets based on duration in seconds. This approach raises several issues that are going to be properly addressed in a future work, but still allow one to obtain interesting~results.
+The graphical model shown in Figure~\ref{fig:graphical-model} presents the structure of the \gls{lda} model~\cite{blei_latent_2003}. Here, as in~\cite{smith_mining_2016}, the \textit{K}-th probability distribution over input words $\beta$ (called topics) is representative of the $K$ groups (types) of player motion styles in which we are interested. In turn, each document $d$ is a {game play} session for the game. We had to deal with the deterioration of model accuracy when considering the whole game section as a single document. Our solution for the problem was to segment each one of those into subsets based on duration in seconds. This approach raises several issues that are going to be properly addressed in a future work, but still allow one to obtain interesting~results.
 
-
-
-
-%\begin{figure}[H]
-% \centering
-% \begin{tikzpicture}
-%  [
-%   observed/.style={minimum size=15pt,circle,draw=blue!50,fill=blue!20},
-%   unobserved/.style={minimum size=15pt,circle,draw},
-%   hyper/.style={minimum size=1pt,circle,fill=black},
-%   post/.style={->,>=stealth',semithick},
-%  ]
-%
-%  \node (w-j) [observed] at (0,0) {$w_{d,n}$};
-%  \node (z-j) [unobserved] at (-1.5,0) {$z_{d,n}$};
-%  \node (z-prior) [unobserved] at (-3,0) {$\theta_d$};
-%  \node (z-hyper) [label=above:$\alpha$] at (-4.5,0) {};
-%  \node (w-hyper) [unobserved] at (-1.5,2.5) {$\beta_k$};
-%  \filldraw [black] (-4.5,0) circle (3pt);
-%  
-%  \node (eta-hyper) [label=above:$\eta$] at (0.5,2.5) {};
-%  \filldraw [black] (0.5,2.5) circle (3pt);
-%  
-%  \path
-%  (z-j) edge [post] (w-j)
-%  
-%  (z-hyper) edge [post] (z-prior)
-%  (z-prior) edge [post] (z-j)
-%
-%  (w-hyper) edge [post] (w-j)
-%  (eta-hyper) edge [post] (w-hyper)
-%  ;
-%
-%  \node [draw,fit=(w-j) (z-prior), inner sep=14pt] (plate-context) {};
-%  \node [above right] at (plate-context.south west) {$D$};
-%  \node [draw,fit=(w-j) (z-j), inner sep=10pt] (plate-token) {};
-%  \node [above right] at (plate-token.south west) {$N$};
-%  \node [draw,fit=(w-hyper), inner sep=10pt] (plate-topic) {};
-%  \node [above right] at (plate-topic.south west) {$K$};
-% \end{tikzpicture}
-% \caption{Latent Dirichlet Allocation (LDA) model diagram~\cite{blei_latent_2003}. Each word $w_{d,n}$ corresponds to a GASF encoding obtained from an accelerometer attached to the player during game play. In turn, a game play is interpreted as a document \textit{d} (set of player-generated words, i.e., action patterns). $z_{d,n}$ represents the type (topic) assignment for a given word $w_{d,n}$, and $\theta_{d}$ is the mixture proportions representing the game session. In this work, we are interested in representing the player game session by $\theta_{d}$.}
-% \label{fig:graphical-model}
-%\end{figure}
-
-
+%\input{lda_graph.tex}
 
 In these terms, a document may present multiple types $\beta_{k}$ with mixture proportions $\theta_{d}$ This mixture of proportions defines a player at each instant of time. The choice of the $N_{D}$ words comes from $\overline{\beta}_{d}$, which acts as the weighted average of the game play types for a given document. This average is defined as follows~\cite{blei_latent_2003,smith_mining_2016}:
 
@@ -161,9 +166,9 @@ In these terms, a document may present multiple types $\beta_{k}$ with mixture p
 \overline{\beta}_{d} = \sum_{n=1}^{K} \theta_{d}(k) \cdot \beta_{k}
 \end{equation}
 
-The \textit{n}-th word $w_{d,n}$ of document \textit{d} is, in our case, the GASF encoding obtained, as we will explain later. $z_{d,n} \in \{1:K\}$ refers to the random type from which a word is drawn. Following the standard LDA model, $\alpha$ and $\eta$ are hyperparameters that control the sparsity in the mixture proportions and word distributions~\cite{smith_mining_2016}.
+The \textit{n}-th word $w_{d,n}$ of document \textit{d} is, in our case, the GASF encoding obtained, as we will explain later. $z_{d,n} \in \{1:K\}$ refers to the random type from which a word is drawn. Following the standard \gls{lda} model, $\alpha$ and $\eta$ are hyperparameters that control the sparsity in the mixture proportions and word distributions~\cite{smith_mining_2016}.
 
-\subsection{Autoencoder}\label{section:autoencoder}
+\subsubsection{Autoencoder}\label{section:autoencoder}
 
 In many problems, we may have to deal with highly dimensional data that represent the situation of the world as captured by the sensors. Given that the raw data dimensionality could be practically intractable, the common procedure in these cases is to reduce the dimensionality possibly keeping only the important features of the input data.
 
@@ -251,8 +256,8 @@ However, looking at deeper levels, the layers show a clear structure; in Figure~
 \label{fig:levels_autoencoder}
 \end{figure}
 
-\section{Problem Statement}
-This section formulates the problem of modeling the player as a probabilistic mixture of uncovered player styles from data. There are at least three basic dimensions (or problems) of interest that must be considered when building a model of this kind for PIRGs. Such dimensions are related to the specific capabilities of a mobile robot to achieve a reasonable in-game performance. We delineate such dimensions as follows:
+\subsection{Problem Statement}
+This section formulates the problem of modeling the player as a probabilistic mixture of uncovered player styles from data. There are at least three basic dimensions (or problems) of interest that must be considered when building a model of this kind for \gls{pirg}s. Such dimensions are related to the specific capabilities of a mobile robot to achieve a reasonable in-game performance. We delineate such dimensions as follows:
 
 \begin{itemize}[leftmargin=*,labelsep=5.8mm]
 \item {Dimension \#1: Fundamental robot behavior}, which concerns the fundamental aspects of the robot locomotion, timing of actions, localization and other abilities to keep it alive and well-functioning during the game play.
@@ -270,7 +275,7 @@ The basic assumption is that a highly active player would naturally express his/
 
 Following this line of reasoning, we also assume players do not fake their engagement by unnecessarily performing strong activities, like running, when they actually are not engaged in the game or feel bored by the robot behavior. Therefore, we assume that a highly motivated player would act more intensively and frequently than a non-motivated one, thus showing a more turbulent acceleration signal profile.
 
-In situations like PIRG, movement information is useful and should not be disregarded. Furthermore, a model that is able to extract a description of the player's movement profile for the purpose of robot behavior adaptation would generate interesting dynamics able to hide existing platform limitations (kinematics constraints, tracking problems, etc.) and boost game experience.
+In situations like \gls{pirg}, movement information is useful and should not be disregarded. Furthermore, a model that is able to extract a description of the player's movement profile for the purpose of robot behavior adaptation would generate interesting dynamics able to hide existing platform limitations (kinematics constraints, tracking problems, etc.) and boost game experience.
 
 One important aspect not considered yet by our assumptions is the role of skill level. For example, a highly skilled player could try to minimize his/her energy expenditure by performing precise movements towards winning the game and in theory could perfectly show a low-movement profile. Moreover, these assumptions cannot directly measure player engagement in the game, given that it is also possible for a player to move not too much, but, at the same time, be highly engaged. 
 
@@ -323,12 +328,12 @@ In summary, we are interested in investigating time series data, especially acce
 
 
 
-\section{Technical Approach}
-This section describes our approach while emphasizing the differences and similarities with respect to existing methods. We take inspiration from approaches like~\cite{smith_mining_2016, wang_encoding_2015, wang_imaging_2015} and aim at modeling game sessions as ``documents'', where player's acceleration data are considered as ``words''. We use Latent Dirichlet Allocation (LDA)~\cite{blei_latent_2003} to categorize the player's motion profile as a composition or mixture of game play motion types, the latter being analogous to the ``topics'' in the general application of LDA for document modeling.
+\subsection{Technical Approach}
+This section describes our approach while emphasizing the differences and similarities with respect to existing methods. We take inspiration from approaches like~\cite{smith_mining_2016, wang_encoding_2015, wang_imaging_2015} and aim at modeling game sessions as ``documents'', where player's acceleration data are considered as ``words''. We use LDA~\cite{blei_latent_2003} to categorize the player's motion profile as a composition or mixture of game play motion types, the latter being analogous to the ``topics'' in the general application of \gls{lda} for document modeling.
 
 Differently from~\cite{smith_mining_2016}, our input word atoms are not discrete. Instead, they are continuous (acceleration data) and also are not attached to any explicit meaning. Take, for instance, the natural interpretability of joystick input signals like ``left'' and ``right'', which convey their respective meaning when controlling a game character, and compare it with an acceleration signal that carries no obvious absolute meaning.
 
-The adopted method for selecting the input words is based on sliding windows (just as in~\cite{smith_mining_2016}), without overlap. Considering each game session as a document, the windowed segments play the role of words. Since the space is continuous, a procedure of discretization and dictionary learning for LDA had to be performed. For this, we clustered the segments and used the so-obtained cluster centroids as dictionary words.
+The adopted method for selecting the input words is based on sliding windows (just as in~\cite{smith_mining_2016}), without overlap. Considering each game session as a document, the windowed segments play the role of words. Since the space is continuous, a procedure of discretization and dictionary learning for \gls{lda} had to be performed. For this, we clustered the segments and used the so-obtained cluster centroids as dictionary words.
 
 We have used GASF images instead of GADF because the mapping functions of the rescaled time series in $[\,0,1]\,$ are bijections, which allows for precise reconstruction of the original time series~\cite{wang_imaging_2015}. The reconstruction takes advantage of the the main diagonal of GASF, i.e., $\{G_{ii}\} = \{\cos{2\phi_{i}}\}$, and is performed as reported in Equation~(\ref{equation:reconstruction})~\cite{wang_imaging_2015}: 
 %%Please note that the citation of figures should be in numerical order, figure 8 appeared before figure 7, please revise.
@@ -336,7 +341,7 @@ We have used GASF images instead of GADF because the mapping functions of the re
 \cos(\phi)=\sqrt{\frac{G_{ii}+1}{2}} \qquad \phi \in [\,0,\frac{\pi}{2}]\,
 \end{equation}
 
-An example of signal decomposition into GASF images is shown in Figure~\ref{figure:acc_signal_gasfs}. Given recent advances in deep learning and pattern recognition for images, we take the route of~\cite{wang_encoding_2015} and exploit the applicability of autoencoders for extracting unsupervised features from GASF images (see Section~\ref{section:autoencoder}). This is relevant since the process of feature engineering is time-consuming and laborious. Moreover, unsupervised feature extraction from such methods has been proven to work well~\cite{wang_imaging_2015, wang2016time}.
+An example of signal decomposition into GASF images is shown in Figure~\ref{figure:acc_signal_gasfs}. Given recent advances in deep learning and pattern recognition for images, we take the route of~\cite{wang_encoding_2015} and exploit the applicability of autoencoders for extracting unsupervised features from GASF images (see Section~\ref{section:autoencoder}). This is relevant since the process of feature engineering is time-consuming and laborious. Moreover, unsupervised feature extraction from such methods has been proven to work well~\cite{wang_imaging_2015, wang_time_2016}.
 Sparse encoding via linear-algebra methods for dictionary learning is also a possibility. However, in our experiments, it turned out to be not as efficient as autoencoders. We present details of our experimental activity in the next section. Our methodology is summarized in {Figure~\ref{diagram:methodology}.
 
 %\begin{figure}[H]
@@ -359,107 +364,14 @@ Sparse encoding via linear-algebra methods for dictionary learning is also a pos
 %  \path [l] (features) -- (dict);
 %  \path [l] (dict) -- (lda);
 %\end{tikzpicture}
-%\caption{The general diagram for our methodology. At first, game time series are extracted, which are then segmented into windows (sliding windows method). Such segments are then turned into GASF images, whose representations are obtained using the autoencoder. Since the basic LDA method works with a multinomial distribution at the topics, we define a dictionary of visual words before feeding each GASF feature document representation to it.}
+%\caption{The general diagram for our methodology. At first, game time series are extracted, which are then segmented into windows (sliding windows method). Such segments are then turned into GASF images, whose representations are obtained using the autoencoder. Since the basic \gls{lda} method works with a multinomial distribution at the topics, we define a dictionary of visual words before feeding each GASF feature document representation to it.}
 %\label{diagram:methodology}
 %\end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Materials and Methods}
+\subsection{Experimental Results}
+In this section, the exploration of an undercomplete representation of the GASF images using a simple autoencoder architecture is firstly reported, then we discuss how we transform the extracted features into input words for the \gls{lda} model. Finally, we show the results when confronting the model output with human judgment. All experimental code used is available at the link in supplementary materials. 
 
-\subsection{The Robotic Platform}\label{roboplat} 
-We have adopted a holonomic robot ({Triskar}), free to move in any direction at a maximum speed comparable to that of people in indoor environments (1.4 m/s). Triskar presents simultaneously and independently controlled rotational and translational motion capabilities thanks to three omni-directional wheels, each actuated by a motor and pointing in different directions.
-
-The kinematics of the holonomic robot is described by the following matrix equation:
-\begin{equation}
-\begin{bmatrix}
-V_x \\ V_y \\ \dot{\theta} 
-\end{bmatrix} = 
-\begin{bmatrix}
-0 & -\frac{1}{\sqrt{3}}r & \frac{1}{\sqrt{3}}r \\
--\frac{2}{3}r & \frac{1}{3}r & \frac{1}{3}r \\
-\frac{r}{3L} & \frac{r}{3L} & \frac{r}{3L}
-\end{bmatrix}\cdot
-\begin{bmatrix}
-\omega_1 \\ \omega_2 \\ \omega_3
-\end{bmatrix}
-\end{equation}
-where r is the wheel's radius, $V_x$ and $V_y$ are the linear velocity components of the robot along \textit{x} and \textit{y} axis, $\dot{\theta}$ is the angular velocity component around the \textit{z}-axis passing through the robot center of mass and, finally, $\omega_i$ [i=1,2,3] are the angular velocities of each wheel. We consider $[X_f, Y_f]$ the fixed (world) reference frame, while $[X_m, Y_m]$ is the moving (robot) reference frame; the robot's orientation is denoted by angle $\theta$, which is the angle of the axis $X_m$ with respect to $X_f$ (positive in the counterclockwise direction), and finally, the wheel orientation in the robot coordinate system is equal to 30 degrees. Figure~\ref{kinematic} depicts how these variables play their roles in our robot kinematics.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.35\textwidth, height=0.25\textwidth]{images/05-modeling/kinematic.png}
-\caption{Kinematic representation of a holonomic base.}
-\label{kinematic}
-\end{figure}
-
-The robot body consists of a triangular, omni-directional base 8 cm high (diameter 40 cm), where motors, batteries and electronics are embedded. On the base, an auxiliary aluminum structure is mounted, hosting the on-board computer and a Microsoft Kinect$^{\tiny{\textregistered}}$ sensor, used for player tracking. In~total, the robot is 85 cm high (see Figure~\ref{figure:game_match}). In our experiments, we have used the Adaptive Monte Carlo Localization (AMCL) node from the Robotic Operating System (ROS) environment, which made localization and navigation easier~\cite{ballardini_ira_laser_tools:_2014}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.45\textwidth]{images/05-modeling/event.jpg}
-\caption{An example of the game match configuration. The human player is wearing a purple robe, which allows him to be identified by the robot. Towers are seen in orange (height 110 cm). The particular match in this figure used three towers; however, in normal conditions, the game comprises four different towers positioned on the corners of the playground; the latter being a rectangle marked on the floor.}
-\label{figure:game_match}
-\end{figure}
-
-\subsection{Game Scenario}
-For the present work, the playground is a rectangular area of 4 m $\times$ 2 m, where on each corner, tubes representing towers are placed (see Figure~\ref{figure:game_match}). Each tower is equipped with a button and four Light Emitting Diodes (LEDs) that can be progressively turned on. Each tower LED requires the tower button to be pushed for about 2.5~s to turn on, meaning that a tower takes about 10 s to light up all four of its LEDs. Such LEDs are used as a representation of the progress of the human player in capturing a specific tower. % please confirm if Figure need to add before 10, such as Figure 10. CONFIRMED
-
-After turning on all LEDs of a particular tower during game play, it is said that the player has captured it. Button pressing time is cumulative and can be distributed for different moments; this means that the player will not lose his/her progress if he/she stops pushing the button before a tower is captured. Each tower has a circuit, which transmits its status to the robot. 
-
-In order to win, the human player must be able to secure all the existing towers without letting a single one be knocked down by the robot. If, at anytime, a tower falls (because of the robot or player), the game ends, and the human player loses. 
-
-Since the robot is a holonomic base, it is able to move across the entire playground just as the human player, and it is only constrained by the fact that an already captured tower, or one whose button is currently being pushed by the player, cannot be teared down. The player can also block the robot path by staying on it. Notice that, while the player is trying to capture a given tower, the robot can try to tear down another one. By relying on the laser scans, the robot can also perceive the human player during the game, so as to avoid hitting him/her while moving. Figure~\ref{figure:overallgame} summarizes the overall idea of the game.
-
-When playing the game, we ask the human player to wear a colored robe in order to allow for blob detection and user tracking.  These tasks are carried out by the use of a Microsoft Kinect$^{\tiny{\textregistered}}$ sensor. In the future, we plan to study the extraction of behavior features using such device, which may potentially help to understand gameplay in a more fine-grained way.
-
-We have used a custom accelerometer board (see Figure~\ref{figure:circuits}) attached to the player's chest in order to capture detailed player motion information. The choice of the accelerometer position was conditioned by the need to avoid the introduction of noise from irrelevant player motion. With the sensor placed on the chest, we aimed at getting a more stable reference for motion in comparison to, for instance, data gathered from the sensor placed on the arm or thigh~\cite{oliveira_activity_2017}. The custom accelerometer module is based on the \href{https://playground.arduino.cc/Main/MPU-6050}{InvenSense MPU-6050} three-axis accelerometer board and an \href{https://www.arduino.cc}{Arduino Uno} micro-controller (see Figure~\ref{figure:circuits}). The circuit also contains a \href{http://www.nordicsemi.com/eng/Products/2.4GHz-RF/nRF24L01}{Nrf24l01} radio-frequency module that allows accelerometer and tower data to be sent to the on-board computer.
-
-Using the dataset from previous work~\cite{oliveira_activity_2017,oliveira_modeling_2017}, we considered 29 matches involving 15 male participants of different ages. The age distribution consisted of children (7--10) and adults (26--40). Recorded matches had a minimum duration of about 40 seconds and a maximum of about 1 min and 10 seconds. The collected data correspond to acceleration values along the \textit{x-}, \textit{y-} and \textit{z-}axis with a sampling frequency of 50 Hz, which is five-times larger than the frequency considered to be sufficient for detecting daily activities from accelerometer data (10 Hz) \cite{atallah_sensor_2010, ravi_activity_2005, kikhia_analyzing_2014}.
-
-In our experiments, we have also decided to use univariate accelerometer data instead of the multivariate three-axis information. For that, we took a linear combination of the axis favoring the z-axis, the one pointing forward from the player. The justification for this is that from our observations, very rarely, the player would run sideways or jump. Therefore, with the linear combination, we intend to collapse the multivariate axis information into a univariate signal that encompasses all the motion information more compactly; this makes the analysis easier to perform. Specifically, we considered the linear combination $comb(d) = 0.5 \times d.z + 0.25 \times d.y + 0.25 \times d.x$, where $d.x, d.y, d.z$ are acceleration samples from the \textit{x-}, \textit{y-}, and \textit{z-}axis, respectively. 
-
-\begin{figure}[H]
-	\centering
-	\begin{subfigure}[b]{0.4\textwidth}
-		\includegraphics[width=5cm]{images/05-modeling/situation1}
-   \caption{}
-		\label{situation1} 
-	\end{subfigure}
-  \hspace{1cm}
-	\begin{subfigure}[b]{0.4\textwidth}
-		\includegraphics[width=5cm]{images/05-modeling/situation2}
-		\caption{}
-		\label{situation2}
-	\end{subfigure}
-	\begin{subfigure}[b]{0.4\textwidth}
-		\includegraphics[width=5cm]{images/05-modeling/situation3}
-		\caption{} 
-		\label{situation3}
-	\end{subfigure}
-	\caption{Schematic representation of the game. (\textbf{a}) The player is trying to capture Tower 4. When all four LEDs on the tower are lit, the tower is captured. (\textbf{b}) The robot starts moving in order to attack and tear down Tower 2. The robot cannot try to tear down the tower that is currently being captured by the player or an already captured one. (\textbf{c}) The human player defends Tower 2. The player stops the action of the robot by blocking its trajectory. Notice how the progress on Tower 4 is not lost even if the player stops pressing its button.} 
-  \label{figure:overallgame}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[b]{0.4\textwidth}
-\includegraphics[width=5cm]{images/05-modeling/acc_board.jpg}
-\caption{}
-\label{figure:accelerometer}
-\end{subfigure}
-\begin{subfigure}[b]{0.4\textwidth}
-\includegraphics[width=5cm]{images/05-modeling/tower_board.jpg} 
-\caption{}
-\label{figure:receiver}
-\end{subfigure}
-\caption{(\textbf{a}) The custom accelerometer board. (\textbf{b}) The on-board receiver circuit.}
-\label{figure:circuits}
-\end{figure} \unskip
-
-\section{Experimental Results}
-In this section, the exploration of an undercomplete representation of the GASF images using a simple autoencoder architecture is firstly reported, then we discuss how we transform the extracted features into input words for the LDA model. Finally, we show the results when confronting the model output with human judgment. All experimental code used is available at the link in supplementary materials. 
-
-\subsection{Feature Extraction}
+\subsubsection{Feature Extraction}
 
 The first question we need to answer concerns the size of the sliding window. This parameter regards the definition of the GASF images used as building blocks for the dictionary learning. The~window size should be large enough to capture motion patterns relevant for the player characterization, but not so large to confound their interpretation. We tried different window sizes, and in the end, we followed~\cite{oliveira_activity_2017} and decided to consider half a second of data per window without overlap, which allows for a fine-grained data representation.
 
@@ -478,18 +390,18 @@ It is possible to notice from the reconstruction result that, despite such a lar
 
 From Figure~\ref{figure:reconstruction}, we can also see that the obtained time series reconstruction presents some holes. This seems to be caused by the information loss in the reconstruction and demands further investigation. However, in our experimentation, it did not seem to affect performance. 
 
-\subsection{Dictionary Learning and Input Word Definition}
+\subsubsection{Dictionary Learning and Input Word Definition}
 Latent Dirichlet allocation works by considering the relationship among word tokens with respect to a collection of documents. Therefore, in order to use the method, we needed to come up with a way to encode the taxonomy of GASF images into a discrete set of fixed tokens describing the motion primitives appearing in each game session. We opted to follow~\cite{prince_computer_2012} and encode the features extracted from the GASF using the autoencoders as visual words, composing the game session document.
 
-After getting the 64-dimensional vector representation for each GASF image (see Section~\ref{section:autoencoder}), we cluster them into $V$ groups using the K-means algorithm. In this way, we define a dictionary of size $V$, with each word corresponding to a cluster centroid. Each game session is then translated into a collection of $V$ possible clusters, which can then be fed into the LDA algorithm.
+After getting the 64-dimensional vector representation for each GASF image (see Section~\ref{section:autoencoder}), we cluster them into $V$ groups using the K-means algorithm. In this way, we define a dictionary of size $V$, with each word corresponding to a cluster centroid. Each game session is then translated into a collection of $V$ possible clusters, which can then be fed into the \gls{lda} algorithm.
 
-From text mining and information retrieval, we know that having documents with different sizes can be a potential issue. This is because given the bag of words representation used in LDA, a small document may be included as a subset in a larger one. Additionally, it might be a problem to evaluate longer documents in our scenario, since, at least from a human perspective, it is not simple to define the overall behavior.
+From text mining and information retrieval, we know that having documents with different sizes can be a potential issue. This is because given the bag of words representation used in \gls{lda}, a small document may be included as a subset in a larger one. Additionally, it might be a problem to evaluate longer documents in our scenario, since, at least from a human perspective, it is not simple to define the overall behavior.
 
 In text mining, this issue is handled by imposing a weight based on the length of the document; in our case, instead, we decided to split each session into smaller segments of 15 s each. In this setting, the evaluation is more consistent, and it is possible that the behavior of a player will be maintained within segments. We decided this length for each document both for convenience with respect to the window length and from the assumption that in each fraction of 15 s, the player can show a consistent behavior, which can be somehow easily identifiable. In the next section, we present the results achieved with the approach we just presented.
 
 \subsection{Validation}
 
-Our ultimate objective is to represent the player motion style by a mixture of topic proportions following the LDA framework. Unfortunately, the method by itself demands the programmer to initialize the desired number of topics. Thus, we had to perform a search for the optimal value given our dataset.
+Our ultimate objective is to represent the player motion style by a mixture of topic proportions following the \gls{lda} framework. Unfortunately, the method by itself demands the programmer to initialize the desired number of topics. Thus, we had to perform a search for the optimal value given our dataset.
 
 By performing grid search, we selected a range of values for the two main hyperparameters, namely dictionary size, for the input word definition, and number of topics. We would like to keep the number of topics low, preferably less than 10, since by observing our dataset, it is not possible to distinguish many groups of different motion styles; this suggests that a coarse-grained definition would be better. Choosing the number of topics to be at most 10, as in~\cite{smith_mining_2016}, the evaluation of the uncovered topics remains manageable, while maintaining a certain degree of freedom for the existing motion diversity.
 
@@ -505,7 +417,7 @@ Each line represents a topic, while each column represents a word. As one can se
 
 In order to validate the discovered topics, we use human judgment. We invited volunteers to watch a set of pairs of recorded game segments (15 s each) and point out the similarities between players in their motivation as perceived by their motion. Subjects had to judge how similar, on a scale from 0--5, the movements of two players were. With this, we generated a similarity matrix to be used as the ground truth and main guide for deciding which hyper-parameter value to use and to check whether the proposed method could achieve reasonable results.
 
-The similarity matrix was composed of $406$ independent evaluations from six different human subjects. The generated evaluation matrix was then compared with a cosine similarity matrix generated after training the LDA in our dataset. The similarity, in this case, is based on the mixture proportions among the discovered topics. 
+The similarity matrix was composed of $406$ independent evaluations from six different human subjects. The generated evaluation matrix was then compared with a cosine similarity matrix generated after training the \gls{lda} in our dataset. The similarity, in this case, is based on the mixture proportions among the discovered topics. 
 
 We used this information to define the number of topics and the number of words. The best set of parameters is the one that presents a higher similarity compared to the one expressing human judgment, thus the smallest Mean Squared Error (MSE). The graph in Figure~\ref{hyperparameter_results} shows the results obtained varying the size of the dictionary (number of cluster centroids) and the number or topics. From it, we have decided to pick 100 as the number of visual words and 10 for the topics present in our dataset.
 
@@ -516,23 +428,23 @@ We used this information to define the number of topics and the number of words.
   \label{hyperparameter_results}
 \end{figure}
 
-The observed similarity results were verified by visual inspection of video logs from estimated similar players; that is, by checking how reported mixture proportions actually look similar in video. However, we state that much work should still be performed towards easily and reliably assessing model correctness and selection. This also relates to the possibility of confidently giving names to discovered motion types, very much in the way as is done in classic LDA for text categorization.
+The observed similarity results were verified by visual inspection of video logs from estimated similar players; that is, by checking how reported mixture proportions actually look similar in video. However, we state that much work should still be performed towards easily and reliably assessing model correctness and selection. This also relates to the possibility of confidently giving names to discovered motion types, very much in the way as is done in classic \gls{lda} for text categorization.
 
 Another aspect that demands further investigation is how to avoid the decrease in accuracy when considering variable-sized game sessions. As mentioned before, game sessions with different sizes may artificially increase similarity in case one is a subset of another. The solution to this problem provides only a baseline, and much more sophisticated approaches to the problem should be~devised.
 
-We believe that a potential way for improvements in interpretability and accuracy is that of removing the vector quantization in defining each topic. It would be interesting to remain in the continuous domain defined by our input data representation (GASF features), instead of relying on a fixed predefined vocabulary set used for training the LDA. Such vectorization is known to lead to information loss~\cite{hu_latent_2012}. In avoiding such an issue, one possibility may be replacing the topic multinomial distribution by a mixture of Gaussians~\cite{hu_latent_2012}.
+We believe that a potential way for improvements in interpretability and accuracy is that of removing the vector quantization in defining each topic. It would be interesting to remain in the continuous domain defined by our input data representation (GASF features), instead of relying on a fixed predefined vocabulary set used for training the \gls{lda}. Such vectorization is known to lead to information loss~\cite{hu_latent_2012}. In avoiding such an issue, one possibility may be replacing the topic multinomial distribution by a mixture of Gaussians~\cite{hu_latent_2012}.
 
-\section{Discussion}
+\subsection{Discussion}
 In this work, we introduced an approach to identify the player motion styles from measurements obtained by the use of a single three-axial accelerometer sensor. Such a signal is then transformed using the Gramian angular field in an image that represents its content. The reason for such representation stems from recent publications aiming at using deep learning and state-of-the-art image processing techniques for achieving better classification results. Additionally, using the autoencoder for representing the obtained GASFs reduced the workload necessary for hand-crafting features, as often done when using machine learning classification/clustering methods with time series data.
 
-By applying latent Dirichlet allocation to characterize the motion behavior of different players, we were interested in getting a description that would foster the development of self-adjusting PIRGs agents capable of improving/sustaining engagement. In this, we had shown that the model is able to capture the overall human judgment by matching reported similarities. 
+By applying latent Dirichlet allocation to characterize the motion behavior of different players, we were interested in getting a description that would foster the development of self-adjusting \gls{pirg}s agents capable of improving/sustaining engagement. In this, we had shown that the model is able to capture the overall human judgment by matching reported similarities. 
 
-This is the first work, to our knowledge, that tries to model the motion behavior of the player using this type of signal in conjunction with LDA in a robogame scenario. We have demonstrated that the proposed approach is able to cluster and represent different behaviors learned from data. We have evidence that our methodology can achieve better performances than that of relying solely on the measurements of the accelerometer as input for the dictionary learning step. We are still working to provide a fair comparison between the two approaches.
+This is the first work, to our knowledge, that tries to model the motion behavior of the player using this type of signal in conjunction with \gls{lda} in a robogame scenario. We have demonstrated that the proposed approach is able to cluster and represent different behaviors learned from data. We have evidence that our methodology can achieve better performances than that of relying solely on the measurements of the accelerometer as input for the dictionary learning step. We are still working to provide a fair comparison between the two approaches.
 
 As future work, we want to test our approach with a series of different input signals in order to assess its capability. One alternative could be the incorporation of proximity information in order to capture how proximity patterns relate to a player game play style. Moreover, we are interested in measuring the player's effort expenditure in terms of difficulty of motion given a difficult setting for the robot. 
 
 In our method, we also wish to incorporate time dependency. We believe such information would help to describe variations in playing style during play, given the opportunity to detect change points in styles and favor game (robot behavior) personalization. This also may help to avoid the rubber-band effect, a system instability concern often present when designing auto-adjusting game systems.
 
-Another means for improvements, and one that we are currently working on, is that of removing the vector quantization step necessary for the definition of the multinomial distribution of words that defines each topic. We believe that it would be interesting to remain in the continuous domain defined by our input data, instead of relying on a fixed predefined set of tokens, i.e., the vocabulary set used for training the LDA. Our current experimentation goes along the lines of testing how a Gaussian version of LDA would work in our domain and whether that could give better results. Additionally, comparing our results with a continuous version of LDA would help to answer questions regarding {stop word} filtering, such as: To what extent removing certain common segments would improve or worsen accuracy?
+Another means for improvements, and one that we are currently working on, is that of removing the vector quantization step necessary for the definition of the multinomial distribution of words that defines each topic. We believe that it would be interesting to remain in the continuous domain defined by our input data, instead of relying on a fixed predefined set of tokens, i.e., the vocabulary set used for training the \gls{lda}. Our current experimentation goes along the lines of testing how a Gaussian version of \gls{lda} would work in our domain and whether that could give better results. Additionally, comparing our results with a continuous version of \gls{lda} would help to answer questions regarding {stop word} filtering, such as: To what extent removing certain common segments would improve or worsen accuracy?
 
 Finally, we are working to redesign the experiments in order to allow for collecting user survey data, which comprise a valuable resource regarding player style and engagement levels. This is all in order to increase our understanding in interpreting the obtained results. We plan to collect self-reported engagement levels when comparing with different robot behavior configuration while allowing for adaptation. Regarding such adaptation, we currently are investigating how to relate the robot game's difficult settings (such as velocity, tower LED control rules, among others) and the mixture proportion of motion types discovered by our reported method. One alternative is to design a utility function that would describe what is the pay-off in facing a certain player given a certain difficult setting, therefore turning the adaptation problem into a full on-line optimization procedure where we try to match player motion types with robot behavior implied by difficulty settings.

@@ -1,0 +1,85 @@
+%=============================================
+% Miscellaneous
+%---------------------------------------------
+\usepackage{paralist}
+\usepackage{enumitem}
+\usepackage[justification=justified, labelfont=bf]{caption}
+\usepackage{booktabs}
+\usepackage[toc]{glossaries}
+\usepackage{multirow}
+\usepackage{float}
+
+%=============================================
+% Math && Theorems
+%---------------------------------------------
+\usepackage{mathtools}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{amsthm}
+
+%=============================================
+% Graphics
+%---------------------------------------------
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{tabularx}
+\usepackage{dcolumn}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest, plot coordinates/math parser=false} 
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{tikzscale}
+\usetikzlibrary{fit,positioning,backgrounds}
+\usepgfplotslibrary{external}
+\tikzexternalize[prefix=tempfig/]
+\usepackage{amssymb}
+\usepackage{xcolor}
+
+%=============================================
+% Algorithms
+%---------------------------------------------
+%\usepackage{algorithm}
+\usepackage[]{algorithm2e}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+
+%=============================================
+% tocbibind - Control table of contents, figures, etc
+%---------------------------------------------
+\usepackage[nottoc]{tocbibind}
+
+%=============================================
+% LAST IMPORTS
+%---------------------------------------------
+% Hyperref should be the last and cleveref the very last
+\usepackage[unicode,bookmarks=true,bookmarksopen=true,hidelinks]{hyperref}
+\usepackage[nameinlink, capitalise]{cleveref}
+
+%=============================================
+% Tkiz IMAGE TYPE
+%---------------------------------------------
+%%% THIS IS FOR Tkiz IMAGE TYPE %%%%%%
+\usepackage{tikz}
+\usetikzlibrary{fit,arrows,calc,positioning}
+\usetikzlibrary{bayesnet}
+\usepackage{pgfplots}
+\usetikzlibrary{mindmap,trees}
+\pgfplotsset{compat=newest} 
+\pgfplotsset{plot coordinates/math parser=false}
+\usepackage[framemethod=TikZ]{mdframed}
+
+%=============================================
+% Bibliography
+%---------------------------------------------
+\usepackage[style=numeric-comp,useprefix,hyperref,backend=bibtex]{biblatex}
+
+%=============================================
+% Figure box
+%---------------------------------------------
+\usepackage{framed}
+\usepackage[most]{tcolorbox}
+
+%=============================================
+% Hyphenation
+%---------------------------------------------
+\hyphenation{ro-bo-ga-me}
