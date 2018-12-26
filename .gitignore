@@ -21,5 +21,7 @@
 *.bak
 *.mtc1
 *.out
+*.run.xml
 *.auxlock
+*.DS_Store
 *.synctex.gz
