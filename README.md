@@ -1,1 +1,2 @@
 # phd_thesis
+*.aux
