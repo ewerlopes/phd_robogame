@@ -18,6 +18,8 @@
 *.lot
 *.maf
 *.mtc
+*.bak
 *.mtc1
 *.out
+*.auxlock
 *.synctex.gz
