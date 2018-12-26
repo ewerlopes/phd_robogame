@@ -25,3 +25,4 @@
 *.auxlock
 *.DS_Store
 *.synctex.gz
+*-blx.bib
