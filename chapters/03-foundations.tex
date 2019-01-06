@@ -1,18 +1,21 @@
 \chapter{Foundations}\label{ch:foundation}
 
 \section{Game environment}\label{sec:game_environment}
-During work research we have proposed a new \gls{pirg} where the ``playground'' consisted of a rectangular area of 4m$\times$2m where, on each corner, tubes (henceforth called ``towers'') were placed. Each tower is equipped with a button (which sits on the tower's cap) and four~\gls{led} that can be progressively turned on, one by one.  Each~\gls{led} requires the button to be pressed for 2.5 seconds, meaning that the tower takes about 10 seconds of button push in order to light up all of the four~\gls{led}s.
+To support our research activity, we have designed and implemented a new \gls{pirg}. 
+%ANDY to each paragraph a motivation for the choice should be reported, possibly referring to something already mentioned in the section about the state of art, about PIRG design. The aim is not only to describe the playground, but to support somehow the decisions with some methodological finding.
+\\
+The playground consists of a rectangular area of 4m$\times$4m where, on each corner, tubes (henceforth called ``towers'') were placed. Each tower is equipped with a button (which sits on the tower's cap) and four~\gls{led}s that can be progressively turned on, one by one.  Each~\gls{led} requires the button to be pressed for 2.5 seconds, meaning that the tower takes about 10 seconds of button push in order to light up all of the four~\gls{led}s.
 
-The~\gls{led}s are supposed to display the progress of the human player in capturing a specific tower. For a given tower, after turning on all~\gls{led}s, it is said that the player has captured it; Figure~\ref{tubes} presents the towers that were used in the game.
+The~\gls{led}s are supposed to display the progress of the human player in capturing a specific tower. For a given tower, after turning on all~\gls{led}s, it is said that the player has captured it; Figure~\ref{tubes} presents the towers that were used in the game. When a tower is secured, the robot cannot aim at it anymore.
 Button pressing time is cumulative and can be distributed on different moments -- this means that the player will not lose his progress if he stops pressing the button before the tower is completely captured. 
 
-In order to win, the human player must be able to secure all the existing towers without letting a single one be knocked down by the robot. If, at anytime, a tower falls (because of the robot or player) the game ends and the human player is defeated. 
+In order to win, the human player must be able to secure all the existing towers without letting a single one be knocked down by the robot. If, at anytime, a tower falls (because of the robot or the player) the game ends and the human player is losing. 
 
-The robot is able to move across the entire playground just as the human player and it is only constrained by the fact that an already captured tower, or one whose button is currently being pressed by the player, cannot be teared down. The player can also block the robot path by staying in front of it, causing the later to likely change target tower. Notice that, while the player is trying to capture a given tower, the robot can try to tear down another one.
+The robot is able to move across the entire playground just as the human player and it is only constrained by the fact that an already captured tower, or one whose button is currently being pressed by the player, cannot be teared down. The player can also block the robot path by staying in front of it, causing the later to likely change target tower. Notice that, while the player is trying to capture a given tower, the robot can try to tear down any other one.
 
-By relying on the lasers scans the robot can perceive its environment, locate itself and the human player during the game, being able to perform obstacle avoidance when appropriated.
+%ANDY This would go in the robot description -> By relying on the lasers scans the robot can perceive its environment, locate itself and the human player during the game, being able to perform obstacle avoidance when appropriated.
 
-This game is designed so that the robot, given its agility and maximum speed (1 m/sec) could always win, but it should show the appropriate and believable behavior to keep the player engaged and interested.
+This game is designed so that the robot, given its agility and maximum speed (1.4 m/sec) could always win, but it should show the appropriate and believable behavior to keep the player engaged and interested. %ANDY Here is one of the places were the smartness of game design has to be put in evidence.
 
 %\begin{figure}[H]
 %	\centering
@@ -46,7 +49,7 @@ This game is designed so that the robot, given its agility and maximum speed (1 
 %	\item figure~\ref{situation3}: The player stops the action of the robot by blocking its trajectory and defending the attacked tower. \textit{Please notice} how the progress on Tower-4 is not lost even if the player dismiss capturing it.
 %\end{itemize}
 
-During the game, the robot must be able to track the human player movements while navigating the path through the various target towers mainly to collect information on the activity level of its opponent (chapter~\ref{chapter4}). Details on the platform is given in section~\ref{sec:roboplat}.
+During the game, the robot must be able to track the movements of the human player while navigating the path through the various target towers mainly to collect information on the activity level of its opponent (chapter~\ref{chapter4}). Details about the robot platform is given in section~\ref{sec:roboplat}.
 
 %\begin{figure}[H]
 %	\centering
@@ -59,7 +62,7 @@ During the game, the robot must be able to track the human player movements whil
 %To obtain the data from the human player that are needed to perform the tracking we used the Microsoft Kinect presented in~\ref{kinectsec} and a computer vision algorithm for blob detection previously integrated in the ROS environment using OpenCV libraries.
 
 \section{Towers}\label{sec:towers}
-Each tower is powered individually, being capable of transmitting its status to the robot at a constant rate. The circuit uses the NodeMCU V3 ESP8266 ESP-12E WiFi module\footnote{\url{https://einstronic.com/wp-content/uploads/2017/06/NodeMCU-ESP8266-ESP-12E-Catalogue.pdf} accessed on December 17th, 2018.} whose connection is done via a private network. The communication between towers and the robot is support through TCP protocol using the rosserial\_server\footnote{\url{http://wiki.ros.org/rosserial_server} accessed on December 17th, 2018.} package. Figure~\ref{fig:tower_board} presents the board together with its pinout. 
+Each tower is powered individually, being capable of transmitting its status to the robot at a constant rate. The circuit uses the NodeMCU V3 ESP8266 ESP-12E WiFi module\footnote{\url{https://einstronic.com/wp-content/uploads/2017/06/NodeMCU-ESP8266-ESP-12E-Catalogue.pdf} accessed on December 17th, 2018.} whose connection is done via a private network. The communication between towers and the robot is supported through TCP protocol using the rosserial\_server\footnote{\url{http://wiki.ros.org/rosserial_server} accessed on December 17th, 2018.} package. Figure~\ref{fig:tower_board} presents the board together with its pinout. 
 
 \begin{figure}[thpb]
   \centering
@@ -78,7 +81,8 @@ Each tower is powered individually, being capable of transmitting its status to 
   \label{fig:tower_board}
 \end{figure}
 
-A $7.4$V LiPo battery is used on each tower as can been seen on figure~\ref{fig:tower_caps}. The nominal voltage for the boards is $5$V, which is supplied through a voltage regulator. An angle switch allows the detection of fallen towers. A schematic of such event is provided in figure~\ref{fig:tilt_circuit}.
+A $7.4$V LiPo battery is used on each tower as can been seen on figure~\ref{fig:tower_caps}. The nominal voltage for the boards is $5$V, which is supplied through a voltage regulator. %An angle switch %ANDY What is this? A tilt sensor?
+A tilt sensor allows the detection of fallen towers. A schematic of the circuit developed to detect such event is provided in figure~\ref{fig:tilt_circuit}.
 
 \begin{figure}[H]
   \centering
@@ -112,48 +116,53 @@ A $7.4$V LiPo battery is used on each tower as can been seen on figure~\ref{fig:
 \end{figure}
 
 \section{The robotic platform}\label{sec:roboplat} 
-We have designed an holonomic robot as experimental platform. This robot, called Triskar, is free to move in any direction at a speed comparable to that of people in indoor environments (up to 1.4~m/sec). In all prototypes, the base consisted of a metallic, triangular-shaped base where motors, batteries, computer and necessary electronics were embedded. Triskar has simultaneously and independently controlled rotational and translational motion capabilities all thanks to three omni-directional wheels actuated by a motor each. 
+We have designed an holonomic robot as experimental platform. This robot, called Triskar, is free to move in any direction at a speed comparable to that of people in indoor environments (up to 1.4~m/sec).The base consists of a metallic, triangular-shaped structure where motors, batteries, computer and necessary electronics are embedded. Triskar has simultaneously and independently controlled rotational and translational motion capabilities all thanks to three omni-directional wheels actuated by a motor each. The movement on flat floor abilities are similar to those of a good human player, as well as its projection of the ground plane, thus making Triskar a good base for PIRGs, in particular the one that we have designed. 
 
-During the research, we had designed several versions where the first two had versions an overall hight of 85~cm. The first three of which had a kinect sensor on top allowing for player tracking. Given the need to improve robustness, we have redefined the base by making structural changes toward vibration control and stability, which increased the overall high to 1 meter (3rd version). We also added new sensors such as planar laser scans needed to obtain reliable obstacle avoidance (3rd and 4th version). Figure~\ref{fig:evolution} depicts our prototype evolution.
+During the research progress, we have designed several versions of Triskar, where the first two had an overall height of 85~cm, so comparable to that of kid players, but also acceptable for adult players. The first three versions were adopting a Kinect\textsuperscript{\textregistered} sensor on top aimed at player tracking. Given the need to improve robustness, we have redefined the base by making structural changes to limit vibrations and improve stability of the sensors, which increased the overall high to 1 meter (3rd version). We also added new sensors such as planar laser scans needed to obtain reliable obstacle avoidance (3rd and 4th version). Figure~\ref{fig:evolution} depicts our prototype evolution. Finally, on the fourth version we dropped the 3-D camera, deemed to be too much unreliable for player detection, and devised for this goal algorithms based on laser scans only. We kept the height in the same range as before, for the mentioned reasons, although it was no longer needed to hold Kinect\textsuperscript{\textregistered}. To justify the height and give a character to the robot, we added eyes and hair on top, which were appreciated by players.
 
 \begin{figure}[H]
       \centering
       \begin{subfigure}[b]{0.3\textwidth}
       	\centering
-	    \framebox{\parbox{3cm}{\includegraphics[width=3cm, height=5.4cm]{images/03-foundation/base1}}}
+	    \framebox{\parbox{3cm}{\includegraphics[width=3cm%, height=5.4cm
+	    ]{images/03-foundation/base1}}}
 	  	\caption{}
       \end{subfigure}
 	 ~
 	 \begin{subfigure}[b]{0.3\textwidth}
 	 	\centering
-		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=5.4cm]{images/03-foundation/base2}}}  
+		\framebox{\parbox{3cm}{\includegraphics[width=3cm%, height=5.4cm
+		]{images/03-foundation/base2}}}  
 		\caption{}   
       \end{subfigure}
 	 ~
 	  \begin{subfigure}[b]{0.3\textwidth}
 		\centering
-	  	\framebox{\parbox{3cm}{\includegraphics[width=3cm,height=5.4cm]{images/03-foundation/mobilerobot.jpeg}}}
+	  	\framebox{\parbox{3cm}{\includegraphics[width=3cm%,height=5.4cm
+	  	]{images/03-foundation/mobilerobot.jpeg}}}
 	  	\caption{}\label{robot}
       \end{subfigure}
       ~
       \begin{subfigure}[b]{0.3\textwidth}
       	\centering
-      	\framebox{\parbox{3cm}{\includegraphics[width=3cm,height=5.4cm]{images/03-foundation/newmobilerobot.png}}}\label{newrobot}
+      	\framebox{\parbox{3cm}{\includegraphics[width=3cm%,height=5.4cm
+      	]{images/03-foundation/newmobilerobot.png}}}\label{newrobot}
       	\caption{}
       \end{subfigure}
       ~
       \begin{subfigure}[b]{0.3\textwidth}
 	      \centering
-	      \framebox{\parbox{3cm}{\includegraphics[width=3cm,height=5.4cm]{images/03-foundation/base4.png}}}\label{newrobot}
+	      \framebox{\parbox{3cm}{\includegraphics[width=3cm%,height=5.4cm
+	      ]{images/03-foundation/base4.png}}}\label{newrobot}
 	      \caption{}
       \end{subfigure}
-      \caption{Prototype evolution. a) first version; b) second version differing on a button placed above the kinect; c) third version improving instability. d) fourth version including lasers on the base; e) current version during the Maker Faire 2018 in Rome (the European edition) from October 12th to 14th of 2018. A better placement of lasers has made the use of the Kinect unnecessary.}
+      \caption{Prototype evolution. a) first version; b) second version differing on a button placed above the kinect; c) third version improving instability. d) fourth version including lasers on the base; e) current version during the Maker Faire 2018 in Rome (the European edition) from October 12th to 14th of 2018. A better placement of lasers has made the use of Kinect unnecessary.}
       \label{fig:evolution}
 \end{figure}
 
 \subsection{Sensors}
 \subsubsection{Microsoft Kinect\textsuperscript{\textregistered}\label{sec:kinectsec}}
-The Microsoft Kinect\textsuperscript{\textregistered} sensor is a peripheral device that functions much like a webcam. However, in addition to providing an RGB image with its 1080p color camera, it also provides a depth map,  meaning that for every pixel of the depth image provided by the sensor, Kinect provides the distance from the sensor. This makes the sensor suitable for a variety of computer vision problems like background removal, blob detection, and people tracking.
+The Microsoft Kinect\textsuperscript{\textregistered} sensor is a 3-D camera: in addition to providing an RGB image with its 1080p color camera, it also provides a depth map,  meaning that for every pixel of the depth image provided by the sensor, Kinect\textsuperscript{\textregistered} provides the distance from the sensor. This makes the sensor suitable for a variety of computer vision problems like background removal, blob detection, and people tracking.
 
 \begin{figure}[H]
 	\centering
@@ -184,7 +193,7 @@ The Microsoft Kinect\textsuperscript{\textregistered} sensor is a peripheral dev
 \label{kinectfeatures}
 \end{table}
 
-We have used~\href{https://github.com/OpenKinect/libfreenect2}{libfreenect2}, a library for managing the Kinect device on Linux. We have then created a custom tracking node capable of estimating the player's position in two phases: First, color blob detection. Second, segmentation on the depth frame using~\href{https://en.wikipedia.org/wiki/Region_growing}{\textit{region growing}} algorithm for the purpose of detecting the player's body. Two features can be detected from this procedure: distance (relative to the robot) and contraction index. The first is calculated from the mean value of the depth pixels around the center of the blob. The latter, in turn, is computed based on the subtraction of the occupied area with respect to the dimension of the bounding box that encompasses the segmented silhouette (see Figure~\ref{fig:segmenta}).
+We have used~\href{https://github.com/OpenKinect/libfreenect2}{libfreenect2}, a library for managing the Kinect\textsuperscript{\textregistered} device on Linux. We have then created a custom tracking node capable of estimating the player's position in two phases: First, color blob detection. Second, segmentation on the depth frame using~\href{https://en.wikipedia.org/wiki/Region_growing}{\textit{region growing}} algorithm for the purpose of detecting the player's body. Two features can be detected from this procedure: distance (relative to the robot) and contraction index. The first is calculated from the mean value of the depth pixels around the center of the blob. The latter is computed based on the subtraction of the occupied area with respect to the dimension of the bounding box that encompasses the segmented silhouette (see Figure~\ref{fig:segmenta}). This feature had been considered as a cue about the fact that the player was opening arms, so, possibly, actively participate to the game..
 
 \begin{figure}[H]
   \centering 
@@ -221,7 +230,7 @@ The Hokuyo URG-04LX consists of a compact stacked structure with a spindle motor
 	\label{fig:hokuyo} 
 \end{figure}
 
-A full scan is performed every 100 ms. The two laser scanners were mounted on each side of the lower chassis allowing for a $360^\circ$ coverage around the robot.
+A full scan is performed every 100 ms. We mounted a laser scanner on each side of the lower chassis allowing for a $360^\circ$ coverage around the robot at a height of 30 cm from the floor.
 
 \subsection{Motors}
 The three motors are MAXON 118798 DC motor RE36 GB 70W KL 2WE, whose characteristics are reported in Figure~\ref{motor} and Table~\ref{maxon}.
@@ -283,7 +292,7 @@ Encoders contain a single Light Emitting Diode (LED) as its light source. The li
 
 \subsection{Onboard computer}
 \label{onboard pc}
-For computing a Shuttle XPC Slim DH270 was used. The device has a $190 \times 165 \times 43$~mm steel case weighting $1.3$~kg.  The armature presents two holes for Kensington Locks and numerous threaded holes (M3) at both sides allowing for an easy placement. The operating system used was the~\textit{Ubuntu 16.04.3 LTS (64bit)}.
+For computing a Shuttle XPC Slim DH270 was used. The device has a $190 \times 165 \times 43$~mm steel case, and weights $1.3$~kg.  The armature presents two holes for Kensington Locks and numerous threaded holes (M3) at both sides allowing for an easy placement. The operating system used was the~\textit{Ubuntu 16.04.3 LTS (64bit)}.
 
 \begin{figure}[H]
 	\centering
@@ -319,12 +328,17 @@ The provided modules allow to control different type of motors that can be model
   \caption{a) UDC board (1 per each motor) capable of driving motors up to 70 W, with torque, speed, and position closed loop control. General attributes: 5-28V supply; 3A max (5A peak); current sense; encoder input; limit switch input; 25 x 45 mm in size. b) IO board (1 per each motor): Integrate existing hardware into the real-time Nova Core bus with analog and digital signals. General attributes: 8 digital GPIO;  4 analog inputs; 2 analog outputs; 2 UART; 1 I2C; 1 SPI; 25 x 45 mm in size. c) USB board (used for data collection) Interface the real-time Nova Core bus with a computer and logs data to microSD memory. General attributes: USB connector;  UART connector; microSD card slot; rosserial support; 25 x 45 mm in size.}
   \label{fig:boards}
 \end{figure}
+%ANDY all the technical details and names of devices could go in an appendix, while I'll leave here a functional description of robot and sensors, giving the characteristics that are functionally relevant, e.g., speed, omnidirectionality, range of sensors, their data rate, ...
 
 \subsection{Kinematics}\label{sec:kinematics}
 
-Kinematics is a branch of classical mechanics that describes the motion of points, bodies, and systems of bodies without considering the mass of each or the forces that caused the motion.
-The configuration of a rigid mobile robot is commonly described by six variables, its three-dimensional Cartesian coordinates and its three Euler angles (roll, pitch, yaw) relative to an external coordinate frame~\cite{thrun_probabilistic_2005}. If the robot is considered as moving on a planar surface, this reduces to two Cartesian coordinates and an orientation angle.
-The kinematic model of an omni-directional base consists of an equation of motion of the robot in function of wheels velocity without considering the forces acting on the system. In this section, a kinematic model for a 3-wheeled omni-directional robot will be derived, while the 3-wheeled omni-directional robot used for this thesis work will be described in deep in chapter~\ref{chapter3}.
+%ANDY This is a definition that could be given for granted -> Kinematics is a branch of classical mechanics that describes the motion of points, bodies, and systems of bodies without considering the mass of each or the forces that caused the motion.
+
+
+%ANDY Actually, all this section can be an appendx. It is not entral to your thesis.
+
+The pose of a rigid mobile robot is commonly described by six variables, its three-dimensional Cartesian coordinates and its three Euler angles (roll, pitch, yaw) relative to an external coordinate frame~\cite{thrun_probabilistic_2005}. If the robot is considered as moving on a planar surface, this reduces to two Cartesian coordinates and an orientation angle.
+The kinematic model of an omni-directional base consists of an equation of motion of the robot in function of wheels velocity without considering the forces acting on the system. In this section, a kinematic model for a 3-wheeled omni-directional robot will be derived.
 
 \begin{figure}[H]
   \centering
