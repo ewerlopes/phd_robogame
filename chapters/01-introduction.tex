@@ -1,10 +1,12 @@
 \chapter{Introduction}
-What seems to be a natural evolution for game playing experience is to bring the elimination of screens and devices in order to present the users with the possibility to physically interact with autonomous agents in their homes without the need to produce a virtual reality. This pretty new style of games has been recently defined as~\gls{pirg} and has as the main objective the exploitation of the real world (in both its dynamical unstructured and structured aspects) as environment and one or more real, physical, autonomous robots as game opponents or companions~\cite{martinoia_physically_2013}.
+\epigraph{\itshape Virtute enim ipsa non tam multi praediti esse quam videri volunt}{--- Cicero, De Amicitia, Cap. XCVIII}
 
-Like commercial virtual games, the main aspect of~\gls{pirg}s is to produce a sense of entertainment and pleasure that can be ``consumed'' by a large number of users\footnote{In this work, since the player is an user for the gaming application both words ``player(s)'' and ``user(s)'' will be used interchangeably.}. Furthermore, an important aspect of autonomous robots and systems during the game should be, as expected, an exhibition of rational behavior and, in this sense, they must be capable enough to play the role of opponents or teammates effectively, since by practical means people tend to avoid to play with or against a dull entity~\cite{martinoia_physically_2013}.
-To come up with better agents it's easy to think about extracting knowledge from the behavior of co-players and implementing some mechanism for modeling them, in particular their preference for specific low-level actions and interaction patterns. Being able to recognize co-player's intention may substantially improve the capacity of taking better decisions about the actions to take.  At least in the human's perspective, this ability is critical since interpersonal interaction presupposes understanding  motivations and high-level plans, as well as estimation of future events~\cite{sukthankar_plan_2014}.
+What seems to be a natural evolution for game playing experience is to bring the elimination of screens and devices in order to present the users with the possibility to physically interact with autonomous agents in their homes without the need to produce a virtual reality. This pretty new style of games has been recently defined as~\gls{pirg} and has as the main objective the exploitation of the real world (in both its dynamical unstructured and structured aspects) as environment and one or more real, physical, autonomous robots as game opponents or companions~\citep{martinoia_physically_2013}.
 
-When it comes to extract useful information from agent's behavior, one can see at least two main different, yet related, approaches: \begin{inparaenum}[\itshape a\upshape)]\item Modeling for competitive advantage and \item Modeling for experience optimization\end{inparaenum}. In the former, techniques for evaluating pay-offs from interaction patterns, such that provided from \textit{game theory}, play an important role not only to what concerns interactions with virtual agents, but real-world events involving humans as agents (e.g. trading, patrolling, competition) or physical robot entities. In order to get some competitive advantage against an adversary with private strategies and conflicting goals it is necessary to adapt to the dynamics of the situation caused by the game play~\cite{rofer_overview_2012}. In essence, this means that it is vital to pay attention to any information from the opponent's behavior that might help to optimize the decision making process and find appropriate countermeasures.
+Like commercial virtual games, the main aspect of~\gls{pirg}s is to produce a sense of entertainment and pleasure that can be ``consumed'' by a large number of users\footnote{In this work, since the player is an user for the gaming application both words ``player(s)'' and ``user(s)'' will be used interchangeably.}. Furthermore, an important aspect of autonomous robots and systems during the game should be, as expected, an exhibition of rational behavior and, in this sense, they must be capable enough to play the role of opponents or teammates effectively, since by practical means people tend to avoid to play with or against a dull entity~\citep{martinoia_physically_2013}.
+To come up with better agents it's easy to think about extracting knowledge from the behavior of co-players and implementing some mechanism for modeling them, in particular their preference for specific low-level actions and interaction patterns. Being able to recognize co-player's intention may substantially improve the capacity of taking better decisions about the actions to take.  At least in the human's perspective, this ability is critical since interpersonal interaction presupposes understanding  motivations and high-level plans, as well as estimation of future events~\citep{sukthankar_plan_2014}.
+
+When it comes to extract useful information from agent's behavior, one can see at least two main different, yet related, approaches: \begin{inparaenum}[\itshape a\upshape)]\item Modeling for competitive advantage and \item Modeling for experience optimization\end{inparaenum}. In the former, techniques for evaluating pay-offs from interaction patterns, such that provided from \textit{game theory}, play an important role not only to what concerns interactions with virtual agents, but real-world events involving humans as agents (e.g. trading, patrolling, competition) or physical robot entities. In order to get some competitive advantage against an adversary with private strategies and conflicting goals it is necessary to adapt to the dynamics of the situation caused by the game play~\citep{rofer_overview_2012}. In essence, this means that it is vital to pay attention to any information from the opponent's behavior that might help to optimize the decision making process and find appropriate countermeasures.
 
 The focus on modeling behavior for experience optimization, is much related to the idea of extracting useful features from users in order to adjust parameters that are correlated with their experience in the activity, for the sake of offering a better product or helping the user to achieve some particular goals. In a gaming scenario, this notion is commonly applied when designers attempt to define a mechanism capable of adjusting the difficulty or general appearance of the game in the expectation of rising the player's entertainment. Very traditionally, the sense of game difficulty is designed to increase along the course of the experience, and it can either happen in a linear fashion or through steps represented by the levels or phases, where a player is forced to select the difficulty level through a set of discrete options (easy, medium, hard, very hard). However, given the observation that very often this ``static'' way of setting up a difficulty curve is not accurate enough and it may not account for the difference between players or even the different learning rates of each of them. In principle, it turns out useful and natural to think about coming up with modeling techniques that may empower the play experience. 
 
@@ -21,7 +23,7 @@ In this thesis work, after providing a panorama of approaches that take inspirat
 
 The scope of this document is heavily centered on model proposals that can latently model player activities and general behavior. 
 
-\section{Research questions, hypothesis and objectives}	
+\section{Research questions, hypothesis and objectives}\label{sec:research_question}
 Since in any kind of~\gls{pirg} autonomous robot are supposed to be perceived as smart entities, the key point for investigation deals with finding good answers to two main questions:
 
 \begin{itemize}
@@ -37,7 +39,9 @@ Specifically, the general goals of this thesis where:
 \begin{itemize}
 %\item To identify and devise~\gls{ml}-based techniques for player modeling to design~\gls{pirg} from the view of human-robot interaction. %ANDY I did not understand what you meant with this and my rewriting is a non-sense
 %EWERTON: it did not make sense even for me. =)
-\item To implement user's behavior modeling in~\gls{pirg} robots by reasoning about data coming from player tracking in the shortest possible time, as required by the~\gls{pirg} setting.
+\item To understand and report phenomena that impact player engagement through the use of a mobile adversarial robot in a~\gls{pirg} environment;
+\item To learn important concepts of design of mobile agents for~\gls{pirg};
+\item To implement user's behavior modeling in~\gls{pirg} robots by reasoning about data coming from player tracking in the shortest possible time, as required by the~\gls{pirg} setting;
 \item To explore ways of robot behavior adjustment using information about past interactions (player's typical behaviors, preferences, etc.).
 \end{itemize}
 
@@ -65,7 +69,7 @@ game experience to players had been proposed over the years. The chapter present
 \section{Paper contributions}
 This thesis is based on expanded versions of the following publications and manuscripts:
 \begin{itemize}
-\item \fullcite{oliveira_learning_2018}
-\item \fullcite{oliveira_modeling_2017}
-\item \fullcite{oliveira_activity_2017}
+\item \cite{oliveira_learning_2018}
+\item \cite{oliveira_modeling_2017}
+\item \cite{oliveira_activity_2017}
 \end{itemize}

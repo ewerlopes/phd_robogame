@@ -1,0 +1,40 @@
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[ every annotation/.style = {draw,
+                         fill = white, font = \Large}, scale=0.75,transform shape]
+                         
+      \path[mindmap,concept color=black!40,text=white,
+        every node/.style={concept,circular drop shadow},
+        root/.style    = {concept color=black!40,
+          font=\large\bfseries,text width=10em},
+        level 1 concept/.append style={font=\Large\bfseries,
+          sibling angle=60,text width=7.7em,
+        level distance=15em,inner sep=0pt},
+        level 2 concept/.append style={font=\bfseries,level distance=9em},
+      ]
+        node[concept, font=\fontsize{18pt}{17pt}\selectfont\bfseries] {Competitive\\Advantage}
+        [clockwise from=0]
+        % child[concept color=green!50!black] {
+        %   node[concept] {Planning}
+        %   [clockwise from=90]
+        %   child { node[concept, scale=1, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {World\\representation} }
+        %   child { node[concept] {Hz} }
+        %   child { node[concept] {Price} }
+        %   child { node[concept, font=\fontsize{9pt}{17pt}\selectfont\bfseries] {Processing} }
+        % }  
+        child[concept color=blue] {
+          node[concept] {Timing}
+          [clockwise from=30]
+          child { node[concept] {Reaction} }
+          child { node[concept] {Actuation} }
+        }
+        child[concept color=red] {
+            node[concept] {Planning}
+            child { node[concept, scale=1.5, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {World\\Modeling} }
+            child { node[concept, scale=1.5, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {Complexity}}
+        }
+        child[concept color=orange] { node[concept,font=\fontsize{14pt}{17pt}\selectfont\bfseries] {Safety}};
+    \end{tikzpicture}
+    \caption{Some relevant concepts in the competitive advantage dimension of a~\gls{pirg} agent.}
+    \label{graph:COMPETITIVE_structure}
+\end{figure}

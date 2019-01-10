@@ -24,14 +24,6 @@
 \usepackage{subcaption}
 \usepackage{tabularx}
 \usepackage{dcolumn}
-\usepackage{pgfplots}
-\pgfplotsset{compat=newest, plot coordinates/math parser=false} 
-\usepackage{xcolor}
-\usepackage{tikz}
-\usepackage{tikzscale}
-\usetikzlibrary{fit,positioning,backgrounds}
-\usepgfplotslibrary{external}
-\tikzexternalize[prefix=tempfig/]
 \usepackage{amssymb}
 \usepackage{xcolor}
 
@@ -52,26 +44,43 @@
 % LAST IMPORTS
 %---------------------------------------------
 % Hyperref should be the last and cleveref the very last
-\usepackage[unicode,bookmarks=true,bookmarksopen=true,hidelinks]{hyperref}
+\usepackage[unicode, bookmarks=true, bookmarksopen=true, hidelinks]{hyperref}
 \usepackage[nameinlink, capitalise]{cleveref}
 
 %=============================================
 % Tkiz IMAGE TYPE
 %---------------------------------------------
-%%% THIS IS FOR Tkiz IMAGE TYPE %%%%%%
 \usepackage{tikz}
+\usepackage{pgfplots}
 \usetikzlibrary{fit,arrows,calc,positioning}
 \usetikzlibrary{bayesnet}
-\usepackage{pgfplots}
+\usetikzlibrary{intersections}
 \usetikzlibrary{mindmap,trees}
-\pgfplotsset{compat=newest} 
+\pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}
-\usepackage[framemethod=TikZ]{mdframed}
+
+%\usepackage{dtklogos}
+\usetikzlibrary{shadows}
+% Information boxes
+\newcommand*{\info}[4][16.3]{%
+  \node [ annotation, #3, scale=0.65, text width = #1em,
+          inner sep = 2mm ] at (#2) {%
+  \list{$\bullet$}{\topsep=0pt\itemsep=0pt\parsep=0pt
+    \parskip=0pt\labelwidth=8pt\leftmargin=8pt
+    \itemindent=0pt\labelsep=2pt}%
+    #4
+  \endlist
+  };
+}
 
 %=============================================
 % Bibliography
 %---------------------------------------------
-\usepackage[style=numeric-comp,useprefix,hyperref,backend=bibtex]{biblatex}
+%\usepackage[style=numeric-comp,useprefix,hyperref,backend=bibtex]{biblatex}
+%\addbibresource{bibliography}   <- with biblatex
+
+\usepackage[round, comma]{natbib}
+\bibliographystyle{plainnat}
 
 %=============================================
 % Figure box
@@ -83,3 +92,18 @@
 % Hyphenation
 %---------------------------------------------
 \hyphenation{ro-bo-ga-me}
+\hyphenation{mod-el-ing}
+\hyphenation{au-ton-o-mous}
+\hyphenation{omni-di-rec-tional}
+
+%=============================================
+% Scale fonts
+%---------------------------------------------
+\usepackage{scalefnt}
+
+%=============================================
+% Epigraph
+%---------------------------------------------
+\usepackage{epigraph}
+\setlength\epigraphwidth{.8\textwidth}
+\setlength\epigraphrule{0pt}

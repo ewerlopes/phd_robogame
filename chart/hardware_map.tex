@@ -1,0 +1,54 @@
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[ every annotation/.style = {draw,
+                         fill = white, font = \Large}, scale=0.75,transform shape]
+                         
+      \path[mindmap,concept color=black!40,text=white,
+        every node/.style={concept,circular drop shadow},
+        root/.style    = {concept color=black!40,
+          font=\large\bfseries,text width=10em},
+        level 1 concept/.append style={font=\Large\bfseries,
+          sibling angle=90,text width=7.7em,
+        level distance=15em,inner sep=0pt},
+        level 2 concept/.append style={font=\bfseries,level distance=9em},
+      ]
+        node[concept, font=\fontsize{20pt}{17pt}\selectfont\bfseries] {Hardware}
+        [clockwise from=0]
+        child[concept color=blue] {
+          node[concept] {Power\\Supply}
+          [clockwise from=-60]
+          child { node[concept, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {Consumption} }
+          child { node[concept] {Capacity} }
+        }
+        child[concept color=black] {
+            node[concept] {Computing\\Power}
+            [clockwise from=-10]
+            child[concept] { node[concept] {Tracking} }
+            child[concept] {
+                node[concept,scale=1.5,font=\fontsize{9pt}{17pt}\selectfont\bfseries] {Navigation}
+                    child { node[concept, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {SLAM} }
+                    child { node[concept, font=\fontsize{8pt}{17pt}\selectfont\bfseries] {OA} }
+            }
+            child[concept] {
+              node[concept] {Sensing}
+              [counterclockwise from=150]
+              child { node[concept, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {Range} }
+              child { node[concept, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {HZ} }
+              child { node[concept, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {Cost} }
+              child { node[concept, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {Proc} }
+            }  
+        }
+        child[concept color=red] {
+            node[concept] {Structure}
+            [clockwise from=-50]
+            child { node[concept, font=\fontsize{8pt}{17pt}\selectfont\bfseries] {Kinematics}
+            }
+            child { node[concept, font=\fontsize{8pt}{17pt}\selectfont\bfseries] {Material}
+            }
+            child { node[concept, font=\fontsize{8pt}{17pt}\selectfont\bfseries] {Robustness}
+            }
+        };
+    \end{tikzpicture}
+    \caption{Some relevant concepts in the hardware dimension for the design of a~\gls{pirg} mobile agent. SLAM stands for Simultaneous localization and Mapping, a set of techniques related to navigation. OA stands for Obstacle Avoidance. Proc and Hz, under sensing, stand for Processing and Frequency respectively.}
+    \label{graph:HARDWARE_structure}
+\end{figure}

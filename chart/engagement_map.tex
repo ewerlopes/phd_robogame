@@ -1,0 +1,30 @@
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[ every annotation/.style = {draw,
+                         fill = white, font = \Large}, scale=0.75,transform shape]
+                         
+      \path[mindmap,concept color=black!40,text=white,
+        every node/.style={concept,circular drop shadow},
+        root/.style    = {concept color=black!40,
+          font=\large\bfseries,text width=10em},
+        level 1 concept/.append style={font=\Large\bfseries,
+          sibling angle=60,text width=7.7em,
+        level distance=15em,inner sep=0pt},
+        level 2 concept/.append style={font=\bfseries,level distance=9em},
+      ]
+        node[concept, font=\fontsize{16pt}{17pt}\selectfont\bfseries] {Engagement\\ Optimization}
+        [clockwise from=0]
+        child[concept color=green!50!black] {
+          node[concept] {Player\\Modeling}
+          [clockwise from=90]
+          child { node[concept] {Behavior} }
+          child { node[concept] {Learning} }
+          child { node[concept, scale= 1.2, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {Engagement} }
+        }
+        child[concept color=orange] { node[concept] {Difficult\\Selection}
+        child { node[concept, scale=1.5, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {Deception} }
+        };
+    \end{tikzpicture}
+    \caption{Some relevant concepts in the engagement optimization dimension of a~\gls{pirg} agent.}
+    \label{graph:ENGAGEMENT_structure}
+\end{figure}

@@ -1,11 +1,14 @@
-\chapter{Exploring Activity Recognition in Robogames}\label{ch:activity} %ANDY This title is too general for a chapter. It should be made more specific and fitting the purpose.
+\chapter{Exploring Activity Recognition in Robogames}\label{ch:activity}
 
+%ISSUE: "Exploring Activity Recognition in Robogames"
+    %ANDY: This title is too general for a chapter. It should be made more specific and fitting the purpose.
 On a~\gls{pirg}, one is often interested in modeling the human player behavior and, from such modeling, program the system to respond properly. Our research began by exploring activity recognition and how it could be incorporated in the design of~\gls{pirg}s. 
 
-In literature, some approaches for activity recognition are based on the analysis of data coming from camera devices. Others, instead, focus on data coming from wearable devices, such as: cellphones, watches and~\gls{imu} -- a specific-purpose device for measuring accelerations and rotation angles. Across years, the type of analysis carried out has pretty much shifted from basic exploratory analysis,~\eg summary statistics %ANDY summary?
+In literature, some approaches for activity recognition are based on the analysis of data coming from camera devices. Others, instead, focus on data coming from wearable devices, such as: cellphones, watches and~\gls{imu} -- a specific-purpose device for measuring accelerations and rotation angles. Across years, the type of analysis carried out has pretty much shifted from basic exploratory analysis,~\eg summary statistics %ANDY summary? EWERTON: Summary statistics is a well-known concept, see this: https://en.wikipedia.org/wiki/Summary_statistics
 , to complex data-based models, such as those from the~\gls{ml} community. The advantage of this is in the fact that~\gls{ml} models often grant better results due to the identification of hidden structures present in data.
 
 One may spot at least two groups into which to classify works in the area: those performed off-line and those performed on-line. The first focus on the exploitation of methods for the case were data are first collected, tagged and them processed. The philosophy behind on-line methods, as the name suggests, rely on methodologies that can process the data on the go, providing real-time information about the estimated activity. In all of the vast literature in this field,~\gls{ml}-based approaches rely on some kind of transformation to the data in order to increase recognition results. %ANDY this type of considerations would be nice in the state-of-art chapter, to frame what is there. Here you may recall and motivate the line that you followed.
+%EWERTON: However, notice that the state-of-art is more concerned with PIRG and not the activity recognition.
 
 In the following, we present how we exploit a simple transformation of the input space targeting the creation of a flexible, generic, and well defined framework for activity recognition in a~\gls{pirg} scenario. To the best of our knowledge, our proposal is the first one to incorporate activity recognition on a~\glsdesc{pirg} involving a human and a mobile robot in an adversarial game setting.
 
@@ -13,7 +16,7 @@ In the following, we present how we exploit a simple transformation of the input
 
 Proper measurement and classification of an individual's physical  activity is fundamental to %understand the relationship between physical activity and health %ANDY What health has to do here?
 %, but, also, to achieve an enhanced level of interaction between humans and robots. 
-model players in~\gls{pirg, where the objective is the exploitation of both the real world as environment, and of one or more real, physical, autonomous robots as game opponents or companions of human players. Activity recognition plays a fundamental role to adapt the robot strategy to support the player's entertainment during the game.
+model players in~\gls{pirg}, where the objective is the exploitation of both the real world as environment, and of one or more real, physical, autonomous robots as game opponents or companions of human players. Activity recognition plays a fundamental role to adapt the robot strategy to support the player's entertainment during the game.
 
 Here we propose a model which aims at classifying player's activity in a~\gls{pirg} game using a 3-axis custom accelerometer positioned on the player's chest. We define a set of high level activity classes that are automatically classified relying on a supervised machine learning framework. Our methodology consists of transforming the raw input space into one that is able to capture variance of the signal to emphasize the recognition of the target activities. 
 
