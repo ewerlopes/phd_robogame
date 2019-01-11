@@ -14,23 +14,23 @@ Robogames can be one of the next robotic products for the mass technological mar
 
 In the game set, the cars are sensing their positions on a carpet-like track and continually exchanging data via Bluetooth with the mobile phone. The app computes possible actions and decides what each car should do based on its objective. Thus, because is the app that defines how each car behaves and creates different gameplay scenarios, the cars can have different ``personalities'' and get customized features. Despite of the app ability for orchestrating the behaviors of the cars and posit a sense of autonomous driving, players are still limited to the use of their mobile to actually drive the cars, racing against each other or taking on the~\gls{ai} (facing other cars). Players are not directly involved in physical interaction with the robot, and play a kind of \textit{indirect} \gls{pirg} through a mechanical device used as a kind of avatar representing the players themselves.
 
-Since some years, a set of~\gls{pirg}s have been developed and tested at the Artificial Intelligence and Robotics Laboratory (Politecnico di Milano, Italy), focusing on a more direct, physical interaction with players, as defined in~\cite{martinoia_physically_2013}. As an example, the Jedi Trainer 3.0 was developed with the goal of resembling a scene of the first Star Wars saga movie ``Episode IV - A New Hope''. The game was designed to use an autonomous drone, a Parrot quadricopter, flying around the human player (Jedi trainee) and shooting at appropriate time by making a sound recalling the shot of a laser blast. The drone always aims at shooting at the ``Jedi trainee'' (human player) chest that in turn physically interact with it using a light-saber-looking object trying to parry the drone attack. The Jedi Trainer has been successfully tested in different unstructured environments, as reported in~\cite{bonarini_timing_2014} and~\cite{martinoia_physically_2013}.
+Since some years, a set of~\gls{pirg}s have been developed and tested at the Artificial Intelligence and Robotics Laboratory (Politecnico di Milano, Italy), focusing on a more direct, physical interaction with players, as defined in~\cite{martinoia_physically_2013}. As an example, the Jedi Trainer 3.0 (see figure~\ref{fig:jedi_trainer}) was developed with the goal of resembling a scene of the first Star Wars saga movie ``Episode IV - A New Hope''. The game was designed to use an autonomous drone, a Parrot quadricopter, flying around the human player (Jedi trainee) and shooting at appropriate time by making a sound recalling the shot of a laser blast. The drone always aims at shooting at the ``Jedi trainee'' (human player) chest that in turn physically interact with it using a light-saber-looking object trying to parry the drone attack. The Jedi Trainer has been successfully tested in different unstructured environments, as reported in~\cite{bonarini_timing_2014} and~\cite{martinoia_physically_2013}.
 
-% \begin{figure}[htp]
-%   \centering  
-%   \includegraphics[]{figures/jedi_trainer.png}
-%   \caption{The drone and the Jedi trainee playing JediTrainer 3.0. On the bottom right the image taken by the on board camera, on the left the in- terpretation of the image in terms of color blobs. The green rectangle on the top of the blue one is the target where the drone is aimed at blast its laser shot~\cite{bonarini_timing_2014}.}
-%    \label{jediTrainer}
-% \end{figure}
+\begin{figure}[h]
+  \centering  
+  \framebox{\parbox{6cm}{\includegraphics[ width=6cm]{images/02-art/jedi_trainer}}}
+  \caption{The drone and the Jedi trainee playing JediTrainer 3.0. On the bottom right the image taken by the on board camera, on the bottom left the interpretation of the image in terms of color blobs. The green rectangle on the top of the blue one is the target where the drone is aimed at blast its laser shot~\cite{bonarini_timing_2014}.}
+  \label{fig:jedi_trainer}
+\end{figure}
 
-Another example is RoboTower. It is inspired by the videogame Rock of Ages. In the game, a 30 cm high robot has to bring down a set of towers in three minutes. Human players can interact with the robot by delaying its movement through the use of cards. These cards are selected from a deck they have in their hands and put in front of the robot, which can read them when it passes over. Each card represents either an action that the robot has to execute (go back, turn around) or a deficit for its sensors (go blind), or a stop for an amount of time. A red tower correspond to the player's home and when ruined he loses; other towers are production plants that are used to recharge the delaying cards, and make them again playable after a given time proportional to the number of active plants (Fig.~\ref{RoboTower}).
+Another example is RoboTower. It is inspired by the videogame Rock of Ages. In the game, a 30 cm high robot has to bring down a set of towers in three minutes. Human players can interact with the robot by delaying its movement through the use of cards. These cards are selected from a deck they have in their hands and put in front of the robot, which can read them when it passes over. Each card represents either an action that the robot has to execute (go back, turn around) or a deficit for its sensors (go blind), or a stop for an amount of time. A red tower correspond to the player's home and when ruined he loses; other towers are production plants that are used to recharge the delaying cards, and make them again playable after a given time proportional to the number of active plants (Fig.~\ref{fig:robo_tower}).
 
-% \begin{figure}[htp]
-%   \centering  
-%   \includegraphics[scale=0.7]{figures/robotower.png}
-%   \caption{The robot, the cards and the towers used in RoboTower~\cite{bonarini_timing_2014}.}
-%    \label{RoboTower}
-% \end{figure}
+\begin{figure}[htp]
+  \centering  
+  \framebox{\parbox{4cm}{\includegraphics[width=4cm]{images/02-art/robotower}}}
+  \caption{The robot, the cards and the towers used in RoboTower~\cite{bonarini_timing_2014}.}
+    \label{fig:robo_tower}
+\end{figure}
 
 %ANDY Other robogames have been proposed by others in the last years and they should be at least cited, putting in evidence the absence of player's modeling.
 

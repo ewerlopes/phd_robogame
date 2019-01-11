@@ -16,6 +16,21 @@
     \label{fig:tilt_circuit} 
 \end{figure}
 
+
+% std_msgs/Header header
+
+% uint8 TYPE_TOWER_HAS_FALLEN=1
+% uint8 TYPE_TOWER_OFFLINE=2
+% uint8 TYPE_TOWER_ONLINE=3
+% uint8 TYPE_TOWER_CAPTURED=4
+
+% uint8 id
+% uint8 status
+% bool[4] leds
+% uint8 bt_presses
+% float32 press_accuracy
+% \caption{Data package structure transmitted from the tower to the robot. The code sintax is that of  }
+
 \section{Kinematics of a 3-wheeled omni-directional robot}
 The pose of a rigid mobile robot is commonly described by six variables, its three-dimensional Cartesian coordinates and its three Euler angles (roll, pitch, yaw) relative to an external coordinate frame~\citep{thrun_probabilistic_2005}. If the robot is considered as moving on a planar surface, this reduces to two Cartesian coordinates and an orientation angle.
 The kinematic model of an omni-directional base consists of an equation of motion of the robot in function of wheels velocity without considering the forces acting on the system. In this section, a kinematic model for a 3-wheeled omni-directional robot will be derived.
@@ -70,7 +85,7 @@ We can transform from robot to world coordinates system as:
 \dot{y}^m_R\\
 \omega
 \end{bmatrix}
-\label{rotation}
+\label{eq:rotation}
 \end{equation}
 
 $P_0$ denotes the position of the center of mass with respect to the world frame as:
@@ -195,7 +210,7 @@ The kinematic model with respect to the robot coordinate system is given by:
 	\end{bmatrix}	
 \end{equation*}
 
-If we now consider the equation~\ref{rotation} the kinematic model with respect to the world coordinate system is described as:
+If we now consider the equation~\ref{eq:rotation} the kinematic model with respect to the world coordinate system is described as:
 \begin{equation}
 \begin{bmatrix}
 \dot{x}_R\\
@@ -358,7 +373,7 @@ Equation~\ref{inversekin} represents the inverse kinematic model for the conside
 \subsection{Motors}
 The three motors are MAXON 118798 DC motor RE36 GB 70W KL 2WE, whose characteristics are reported in Figure~\ref{motor} and Table~\ref{maxon}.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[draft=false, width=\textwidth]{images/03-foundation/motor}
 	\caption{MAXON 118798 DC motor schematic. Three units were used in our platform.}
@@ -405,11 +420,581 @@ The three motors are MAXON 118798 DC motor RE36 GB 70W KL 2WE, whose characteris
 
 \subsubsection{Encoders}
 On each motor a 110513 tacho ENCODER HEDS 5540 500IMP 3K is mounted to get the speed of the motor, whose characteristics are reported in Figure~\ref{enc}.
-\begin{figure}[htbp]
+
+\begin{figure}[h]
 	\centering
 	\includegraphics[draft=false,width=\textwidth]{images/03-foundation/enc}
 	\caption{Motor encoders deployed for motion sensing and control.}
 	\label{enc} 
 \end{figure}
-E
-ncoders contain a single Light Emitting Diode (LED) as its light source. The light is collimated into a parallel beam by means of a single lens located directly over the LED. Opposite the emitter is the integrated detector circuit. This IC consists of multiple sets of photodetectors and the signal processing circuitry necessary to produce the digital waveforms. The code-wheel rotates between the emitter and detector, causing the light beam to be interrupted by the pattern of spaces and bars on the code-wheel. The photodiodes detect these interruptions and send signals to the signal processing circuitry that produces the final outputs that is an index pulse $P_O$ which is generated once for each full rotation of the code-wheel.
+
+Encoders contain a single Light Emitting Diode (LED) as its light source. The light is collimated into a parallel beam by means of a single lens located directly over the LED. Opposite the emitter is the integrated detector circuit. This IC consists of multiple sets of photodetectors and the signal processing circuitry necessary to produce the digital waveforms. The code-wheel rotates between the emitter and detector, causing the light beam to be interrupted by the pattern of spaces and bars on the code-wheel. The photodiodes detect these interruptions and send signals to the signal processing circuitry that produces the final outputs that is an index pulse $P_O$ which is generated once for each full rotation of the code-wheel.
+
+\section{Power distribution}
+We have used a rapid discharging lead-acid battery FIAMM 12FGHL34 12V 9Ah. This battery has been designed for optimal performance and protection against power disturbances. Ideal for~\gls{ups} intensive discharge applications, emergency power systems, security systems, data processing centers. Technical characteristics in table~\ref{tab:power_techicals}.
+
+\begin{table}[h]
+	\begin{center}
+		\begin{tabular}{|c|c|}
+		\hline
+        Voltage & 12V \\
+        \hline 
+        Capacity & 20h 9Ah \\
+        \hline 
+        Size & 15,00 x 7,00 x 10,00 cm \\
+        \hline 
+        Weight & 2,90 Kg \\
+        \hline 
+        Connectors & Faston 6,3 \\
+        \hline 
+        Application & Alarm systems, Emergency lights, Renewable energies, \gls{ups}.\\
+        \hline 
+    \end{tabular}
+    \caption{Technical characteristics of the FIAMM 12FGHL34 lead-acid battery.}
+    \label{tab:power_techicals}
+    \end{center}
+\end{table}
+
+\section{Additional tower navigation details}
+Recall that the equation~\ref{eq:rotation} allows us to perform the transformation from reference frames. The $x$ and $y$ robot position in robot frame is defined as $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, respectively. Another problem that must be considered at this point is to guarantee the decoupling between robot rotations and translations (the control of the robot orientation must be completely independent from the xy-translation, since this will enable the robot to track the movement of the human player while navigating during the game). 
+
+Let us consider again the equation~\ref{model2} introduced in section~\ref{kinematics}
+\begin{equation*}
+	\begin{bmatrix}
+		\dot{x}_R\\
+		\dot{y}_R\\
+		\dot{\theta}
+	\end{bmatrix} =
+	\begin{bmatrix}
+		\frac{2}{3}\cos(\theta+\delta) & -\frac{2}{3}\cos(\theta-\delta) & \frac{2}{3}\sin(\theta)\\
+		\frac{2}{3}\sin(\theta+\delta) & -\frac{2}{3}\sin(\theta-\delta) & \frac{2}{3}\cos(\theta)\\
+		\frac{1}{3L} & \frac{1}{3L} & \frac{1}{3L}
+	\end{bmatrix}
+	\begin{bmatrix}
+		\dot{q_1}\\
+		\dot{q_2}\\
+		\dot{q_3}\\
+	\end{bmatrix}	
+\end{equation*}
+As we already anticipated, the transformation matrix is full rank. A matrix is said to have full rank if its rank equals the largest possible for a matrix of the same dimensions. Now considering the matrix properties, we know that if $A$ is a square matrix ($m = n$), then $A$ is invertible if and only if $A$ has rank $n$ (that is, $A$ has full rank).\\
+For the high-level control laws without considering the wheel velocities, the kinematic model is given as:
+\begin{equation}
+\begin{bmatrix}
+\dot{\bar{x}}_R\\
+\dot{\bar{y}}_R\\
+\dot{\bar{\theta}}_R
+\end{bmatrix}
+= G
+\begin{bmatrix}
+\dot{\bar{x}}_R^m\\
+\dot{\bar{x}}_R^m\\
+\dot{\omega}
+\end{bmatrix}
+\label{controllaw}
+\end{equation}
+where:
+
+\begin{equation}
+G=\begin{bmatrix}
+^wR_m(\theta) & 0\\
+0 & 1\\
+\end{bmatrix}\qquad
+^wR_m(\theta)=\begin{bmatrix}
+\cos(\theta) &-\sin(\theta)\\
+\sin(\theta) & \cos(\theta)\\
+\end{bmatrix}
+\end{equation}
+As already stated in section~\ref{kinematics}, $^wR_m(\theta)$ is the transformation matrix from the robot coordinate system to the world coordinate system. Since G is full rank, the characteristics of decoupled movements are also kept in equation~\ref{controllaw}.\\
+As anticipated, it is now necessary to transform the velocities from world frame to robot body frame, the trigonometric functions of angle $\theta$ in the transformation matrix $G$ determine the nonlinearities of the kinematic model. Since the matrix G is full rank, this nonlinear model can be exactly linearized by introducing a simple compensator~\cite{li2009motion}.\\
+We define an \textit{Inverse Input-Output Linearization} based control approach where:
+\begin{equation}
+C = G^{-1},
+\end{equation} 
+denotes that the translation and rotation of the robot are decoupled, and guarantees the separate control of these two movements.
+The linearized system becomes $\mathbf{\dot{x}} = \mathbf{u}$ with a new input vector \textbf{u} = [$u_1,u_2,u_3$]$^T$.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{Chapter5/Figs/comp1}
+	\rule{35em}{0.5pt}
+	\caption{Linearized system by the component C.} 
+	\label{comp1}
+\end{figure}
+
+Figure~\ref{comp1} shows a linear system completely decoupled and enable to control the robot translation and rotation in a separate way. \\
+When a controller $K$ is designed based on this simple linear system, the controller of the original system is generated as $CK$. The overall control loop, consists of the nonlinear system, the compensator, and the controller shown below:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{Chapter5/Figs/comp2}
+	\rule{35em}{0.5pt}
+	\caption{Closed-loop control system.} 
+	\label{comp2}
+\end{figure}
+Considering figure~\ref{comp2}, $\mathbf{x_d}$ is a vector of desired positions to reach, or waypoints.
+Based on this input-output linearized system, path following and orientation tracking problems can be analyzed with respect to the robot translation and rotation control.\\
+The outputs of algorithm~\ref{pointopoint} will then be the input of the compensator shown in figure~\ref{comp1}, and its outputs will be $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, which are the required velocity set points of the robot considering the robot reference frame.
+
+\begin{algorithm}[H]
+	\# Transform the un-smoothed velocity set-points [$\dot{\bar{x}}_R$, $\dot{\bar{y}}_R$] from world frame to robot reference frame, while keeping linear and angular movements of the robot decoupled.\;
+	$G=\begin{bmatrix}
+	^wR_m(\theta) & 0\\
+	0 & 1\\
+	\end{bmatrix}$\;
+	\# Define C matrix and world-frame velocity vector\;
+	$C = G^{-1}$\;
+	$\dot{x}=[\dot{\bar{x}}_R, \dot{\bar{y}}_R]$\;
+	\# Convert velocity commands from world to robot frame\;
+	$\begin{bmatrix}
+	\dot{\bar{x}}_R^m\\
+	\dot{\bar{y}}_R^m\\
+	\end{bmatrix}=C
+	\begin{bmatrix}
+	\dot{\bar{x}}_R\\
+	\dot{\bar{y}}_R\\
+	\end{bmatrix}
+	$\;
+	\Return $\dot{\bar{x}}_R^m$, $\dot{\bar{y}}_R^m$
+	\caption{Linear compensation and world-to-body transformation of the velocity set-point} 
+	\label{compensator}
+\end{algorithm}
+
+With this approach, the velocity set-points $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, returned from the algorithm~\ref{compensator}, dynamically change during the game and often the variation has a step-function shaped form that causes the low level actuation to react violently to make the robot reaching the desired velocity, especially when starting from the initial position with 0-velocity (see figures~\ref{vel14} and~\ref{wheel14}).
+This will result in the robot wheels undergoing in slippage due to the too sharp acceleration required to reach the velocity set-point. As explained in paragraph~\ref{slippage}, this is an undesired effect that is source of non-systematic odometry errors that may lead to instability and loss of localization. A number of tests have been performed to quantify the effect of the wheel slippage during the initial robot acceleration phase. In these tests the robot linearly translates along $x$ and $y$ axis and receives the initial velocity set-point at $1m/s$ or $1.4m/s$. In figures~\ref{opti14},~\ref{amcl14},~\ref{poserror14},~\ref{opti14y},~\ref{amcl14y}, and~\ref{poserror14y} we can see the localization error introduced during the xy-translation.
+
+To avoid this effect, a velocity smoother has been introduced in order to obtain a smooth velocity set-point control signal to be sent to the robot low level actuation to avoid wheels slippage during the  acceleration phase. The inputs of the velocity smoother are the un-smoothed velocity set-points [$\dot{\bar{x}}_R^m$, $\dot{\bar{y}}_R^m$], some of the internal parameters such as maximum allowed velocity and maximum allowed acceleration can be changed online to modify the final response of the robot, t. The output are the final xy-velocity control signals [$\dot{x}_R^m$, $\dot{y}_R^m$] in robot reference frame that will be sent to the low level actuation.
+
+\begin{algorithm}[H]
+	\# define initial velocity\;
+	$\dot{x}_{(t-1)}$ = $\left[{\dot{\bar{x}}_R^m}_{(t-1)},\quad {\dot{\bar{y}}_R^m}_{(t-1)}\right]$\;
+	\# Define accelerations\;
+	$\ddot{x}= \left[ {\dot{\bar{x}}_R^m}_{(t)}-{\dot{\bar{x}}_R^m}_{(t-1)},\quad {\dot{\bar{y}}_R^m}_{(t)}-{\dot{\bar{y}}_R^m}_{(t-1)}\right]$\;
+	\# Acceleration clamping \;
+	\eIf{$\ddot{x}\geq\ddot{x}_{\text{max}}$}{
+		$\ddot{x}=\ddot{x}_{\text{max}}$\;
+	}{
+	\If{$\ddot{x}<\ddot{x}_{\text{max}}$}{
+		$\ddot{x}=-\ddot{x}_{\text{max}}$\;
+	}}
+	\# Generate smoothing factor, $K_s$ is a proportional gain, $\dot{\bar{x}}$ is the maximum desired velocity and $T_\text{max}$ is the maximum time elapsed to reach the set-point, all those factors can be tuned ($K_s\cdot T_\text{max} > 0 $)\;
+	$\tau = \left| \cfrac{1}{K_s\cdot\cfrac{T_\text{max}}{\dot{x}_{\text{max}}}}\right|\qquad(0\leq\tau\leq1)$\;
+	\# Smooth the velocity control signal\;
+	${\dot{x}_R^m} = {\dot{\bar{x}}_R^m}_{(t-1)}+\tau\cdot{\dot{\bar{x}}_R^m}_{(t)}-\tau\cdot{\dot{\bar{x}}_R^m}_{(t-1)}$ \;
+	${\dot{y}_R^m} = {\dot{\bar{y}}_R^m}_{(t-1)}+\tau\cdot{\dot{\bar{y}}_R^m}_{(t)}-\tau\cdot{\dot{\bar{y}}_R^m}_{(t-1)}$ \;
+	\Return $\dot{x}_R^m$, $\dot{y}_R^m$
+	\caption{Velocity Smoother} 
+	\label{smoother}
+\end{algorithm}
+\begin{table}[h]
+	\begin{center}
+		\begin{tabular}{|c|c|}
+			\hline
+			Parameter & value\\
+			\hline
+			$\ddot{x}_{\text{max}}$  & $0.5m/s^2$\\
+			\hline
+			$\dot{x}_{\text{max}}$  & $0.7m/s$\\
+			\hline
+			$T_{\text{max}}$  & $3$ sec\\
+			\hline
+			$K_s$  & $50$ sec\\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{Velocity Smoother parameters tuning}
+	\label{parsmoother}
+\end{table}
+With the values reported in table~\ref{parsmoother}, the behavior shown in figure~\ref{controlsweep} has been obtained. 
+
+The velocity smoother runs together with the Point-to-Point Navigation algorithm to apply robot's velocity and acceleration limits to the incoming commands before resending them to the robot. It basically pre-filters any incoming command input based on some acceleration constraints. 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[ width=7cm]{images/03-foundation/controlsweep}
+	\caption{Smoothing of a step-shaped unsmoothed velocity set-point, at $t=1\text{sec}$ a sweep of 10 step transition set-points is fed as input of the velocity smoother, in the image are shown the smoothed values for each test case} 
+	\label{controlsweep}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.6\textwidth}
+		\includegraphics[ width=6cm]{images/03-foundation/ksweep}
+		\caption{$K_s$ parameter sweep}
+		\label{sit1} 
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.6\textwidth}
+		\includegraphics[ width=6cm]{images/03-foundation/maxaccsweep}
+		\caption{$\ddot{x}_{\text{max}}$ sweep}
+		\label{sit2}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.5\textwidth}
+		\includegraphics[ width=5cm]{images/03-foundation/maxvel}
+		\caption{$\dot{x}_{\text{max}}$ parameter sweep}
+		\label{sit3} 
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.5\textwidth}
+		\includegraphics[width=5cm]{images/03-foundation/Tmaxsweep}
+		\caption{$T_{\text{max}}$ sweep}
+		\label{sit4}
+	\end{subfigure}
+	\label{param1}
+	\caption{Effect of the variation of the various parameters on the final response. In these trials, while varying a parameter, the others were kept at the values shown in table~\ref{parsmoother}}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{images/03-foundation/opti14}
+	\rule{35em}{0.5pt}
+	\caption{GroundTruth Robot Position - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing)} 
+	\label{opti14}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{images/03-foundation/amcl14}
+	\rule{35em}{0.5pt}
+	\caption{AMCL map position - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing)} 
+	\label{amcl14}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{images/03-foundation/poserror14}
+	\rule{35em}{0.5pt}
+	\caption{Position error - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing)} 
+	\label{poserror14}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{images/03-foundation/opti14y}
+	\rule{35em}{0.5pt}
+	\caption{GroundTruth Robot Position - 1.4m/s y-velocity setpoint (slipping / no velocity smoothing)} 
+	\label{opti14y}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{images/03-foundation/amcl14y}
+	\rule{35em}{0.5pt}
+	\caption{AMCL map position - 1.4m/s y-velocity setpoint (slipping / no velocity smoothing)} 
+	\label{amcl14y}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{images/03-foundation/poserror14y}
+	\rule{35em}{0.5pt}
+	\caption{Position error - 1.4m/s y-velocity setpoint (slipping / no velocity smoothing)} 
+	\label{poserror14y}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{images/03-foundation/vel14}
+	\rule{35em}{0.5pt}
+	\caption{Robot measured linear velocity - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing)} 
+	\label{vel14}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{images/03-foundation/wheel14}
+	\rule{35em}{0.5pt}
+	\caption{wheels measured angular velocity - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing)} 
+	\label{wheel14}
+\end{figure}
+
+% ******************************* Thesis Appendix A ********************************
+\section{Fuzzy Rules} 
+\subsection{Repulsive behavior if obstacles are encountered}
+
+\begin{enumerate}
+	\item \textbf{IF} $\left[\left( \text{min\_front\_left} == \textsf{close}\right) \textbf{ OR } \left(\text{min\_front\_right} == \textsf{close}\right)\right]$\\ 
+	\textbf{THEN} $\Rightarrow\left[\left( V_x = \textsf{stop} \right) \textbf{AND} \left(V_y = -0.5\right)\right]$
+	
+	\item \textbf{IF} $\left[\left( \text{min\_front\_left} == \textsf{far}\right) \textbf{ AND } \left(\text{min\_front\_right} == \textsf{far}\right) \textbf{AND} \left(\text{near\_goal} == \textsf{false}\right)
+	\right]$\\ 
+	\textbf{THEN} $\Rightarrow\left[\left( V_x = \textsf{stop} \right) \textbf{AND} \left(V_y = -0.4\right)\right]$
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{close}$) \textbf{AND} ($\text{index\_rear\_left}$ == $\textsf{is\_rear\_left}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.4}) \textbf{AND} ($V_y$ = \textsf{0.5})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{close}$) \textbf{AND} ($\text{index\_rear\_left}$ == $\textsf{is\_left}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]		\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.5}) \textbf{AND} ($V_y$ = \textsf{0.4})]
+
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{far}$) \textbf{AND} ($\text{index\_rear\_left}$ == $\textsf{is\_rear\_left}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.3}) \textbf{AND} ($V_y$ = \textsf{0.4})]
+
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{far}$) \textbf{AND} ($\text{index\_rear\_left}$ == $\textsf{is\_left}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.4}) \textbf{AND} ($V_y$ = \textsf{0.3})]
+
+	\item \textbf{IF} [($\text{min\_rear\_right}$ == $\textsf{close}$) \textbf{AND} ($\text{index\_rear\_right}$ == $\textsf{is\_rear\_right}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.4}) \textbf{AND} ($V_y$ = \textsf{0.5})]	
+	
+	\item \textbf{IF} [($\text{min\_rear\_right}$ == $\textsf{close}$) \textbf{AND} ($\text{index\_rear\_right}$ == $\textsf{is\_right}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.5}) \textbf{AND} ($V_y$ = \textsf{0.4})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_right}$ == $\textsf{far}$) \textbf{AND} ($\text{index\_rear\_right}$ == $\textsf{is\_rear\_right}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.3}) \textbf{AND} ($V_y$ = \textsf{0.4})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_right}$ == $\textsf{far}$) \textbf{AND} ($\text{index\_rear\_right}$ == $\textsf{is\_right}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.4}) \textbf{AND} ($V_y$ = \textsf{0.3})]
+	
+	\item \textbf{IF} [($\text{min\_left}$ == $\textsf{close}$) \textbf{AND} ($\text{index\_left}$ == $\textsf{is\_left}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.5}) \textbf{AND} ($V_y$ = \textsf{stop})]
+	
+	\item \textbf{IF} [($\text{min\_left}$ == $\textsf{close}$) \textbf{AND} ($\text{index\_left}$ == $\textsf{is\_rear\_left}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.5}) \textbf{AND} ($V_y$ = \textsf{0.2})]
+	
+	\item \textbf{IF} [($\text{min\_left}$ == $\textsf{close}$) \textbf{AND} ($\text{index\_left}$ == $\textsf{is\_front\_left}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.5}) \textbf{AND} ($V_y$ = \textsf{-0.2})]
+	
+	\item \textbf{IF} [($\text{min\_left}$ == $\textsf{far}$) \textbf{AND} ($\text{index\_left}$ == $\textsf{is\_left}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.4}) \textbf{AND} ($V_y$ = \textsf{stop})]
+	
+	\item \textbf{IF} [($\text{min\_left}$ == $\textsf{far}$) \textbf{AND} ($\text{index\_left}$ == $\textsf{is\_rear\_left}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.4}) \textbf{AND} ($V_y$ = \textsf{0.1})]
+	
+	\item \textbf{IF} [($\text{min\_left}$ == $\textsf{far}$) \textbf{AND} ($\text{index\_left}$ == $\textsf{is\_rear\_left}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.4}) \textbf{AND} ($V_y$ = \textsf{0.1})]
+	
+	\item \textbf{IF} [($\text{min\_right}$ == $\textsf{close}$) \textbf{AND} ($\text{index\_right}$ == $\textsf{is\_right}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.5}) \textbf{AND} ($V_y$ = \textsf{stop})]
+	
+	\item \textbf{IF} [($\text{min\_right}$ == $\textsf{close}$) \textbf{AND} ($\text{index\_right}$ == $\textsf{is\_rear\_right}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.5}) \textbf{AND} ($V_y$ = \textsf{0.2})]
+	
+	\item \textbf{IF} [($\text{min\_right}$ == $\textsf{close}$) \textbf{AND} ($\text{index\_right}$ == $\textsf{is\_front\_right}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.5}) \textbf{AND} ($V_y$ = \textsf{-0.2})]
+	
+	\item \textbf{IF} [($\text{min\_right}$ == $\textsf{far}$) \textbf{AND} ($\text{index\_right}$ == $\textsf{is\_right}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.4}) \textbf{AND} ($V_y$ = \textsf{stop})]
+	
+	\item \textbf{IF} [($\text{min\_right}$ == $\textsf{far}$) \textbf{AND} ($\text{index\_right}$ == $\textsf{is\_rear\_right}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.4}) \textbf{AND} ($V_y$ = \textsf{0.1})]
+	
+	\item \textbf{IF} [($\text{min\_right}$ == $\textsf{far}$) \textbf{AND} ($\text{index\_right}$ == $\textsf{is\_front\_right}$)\\
+	\textbf{AND} (near\_goal == \textsf{false})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.4}) \textbf{AND} ($V_y$ = \textsf{-0.1})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{far}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} ($\text{index\_front\_left}$ == $\textsf{is\_front\_left}$)
+	\textbf{AND} (near\_goal == \textsf{false})]\\
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{stop}) \textbf{AND} ($V_y$ = \textsf{-0.3})]
+
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{far}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} ($\text{index\_front\_left}$ == $\textsf{is\_left}$)
+	\textbf{AND} (near\_goal == \textsf{false})]\\
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.3}) \textbf{AND} ($V_y$ = \textsf{-0.1})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{far}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} ($\text{index\_front\_left}$ == $\textsf{is\_front\_right}$)
+	\textbf{AND} (near\_goal == \textsf{false})]\\
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.3}) \textbf{AND} ($V_y$ = \textsf{-0.1})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{close}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} ($\text{index\_front\_left}$ == $\textsf{is\_front\_left}$)
+	\textbf{AND} (near\_goal == \textsf{false})]\\
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{stop}) \textbf{AND} ($V_y$ = \textsf{-0.3})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{close}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} ($\text{index\_front\_left}$ == $\textsf{is\_left}$)
+	\textbf{AND} (near\_goal == \textsf{false})]\\
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.3}) \textbf{AND} ($V_y$ = \textsf{-0.2})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{close}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} ($\text{index\_front\_left}$ == $\textsf{is\_front\_right}$)
+	\textbf{AND} (near\_goal == \textsf{false})]\\
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.3}) \textbf{AND} ($V_y$ = \textsf{-0.2})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{far}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} ($\text{index\_front\_right}$ == $\textsf{is\_front\_right}$)
+	\textbf{AND} (near\_goal == \textsf{false})]\\
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{stop}) \textbf{AND} ($V_y$ = \textsf{-0.3})]
+	
+	\newpage
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{far}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} ($\text{index\_front\_right}$ == $\textsf{is\_right}$)
+	\textbf{AND} (near\_goal == \textsf{false})]\\
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.3}) \textbf{AND} ($V_y$ = \textsf{-0.1})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{far}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} ($\text{index\_front\_right}$ == $\textsf{is\_front\_right}$)
+	\textbf{AND} (near\_goal == \textsf{false})]\\
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.3}) \textbf{AND} ($V_y$ = \textsf{-0.1})]	
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{close}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} ($\text{index\_front\_right}$ == $\textsf{is\_front\_right}$)
+	\textbf{AND} (near\_goal == \textsf{false})]\\
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{stop}) \textbf{AND} ($V_y$ = \textsf{-0.3})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{close}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} ($\text{index\_front\_right}$ == $\textsf{is\_right}$)
+	\textbf{AND} (near\_goal == \textsf{false})]\\
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.3}) \textbf{AND} ($V_y$ = \textsf{-0.2})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{close}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} ($\text{index\_front\_right}$ == $\textsf{is\_front\_right}$)
+	\textbf{AND} (near\_goal == \textsf{false})]\\
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.3}) \textbf{AND} ($V_y$ = \textsf{-0.2})]
+\end{enumerate}
+
+\subsection{Attractive behavior if near towers}
+
+\begin{enumerate}
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
+	\textbf{AND} (near\_goal == \textsf{true})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{stop}) \textbf{AND} ($V_y$ = \textsf{-0.5})]
+	
+	\newpage
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textbf{not } \textsf{dontcare}$)\\
+	\textbf{AND} (near\_goal == \textsf{true})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.4}) \textbf{AND} ($V_y$ = \textsf{-0.4})]
+	
+	\item \textbf{IF} [($\textbf{not }\text{min\_rear\_left}$ == $\textsf{\textbf{not }dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} (near\_goal == \textsf{true})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.4}) \textbf{AND} ($V_y$ = \textsf{0.4})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\textbf{not }\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} (near\_goal == \textsf{true})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.4}) \textbf{AND} ($V_y$ = \textsf{-0.1})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\textbf{not }\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} (near\_goal == \textsf{true})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.4}) \textbf{AND} ($V_y$ = \textsf{-0.1})]
+	
+	\item \textbf{IF} [($\textbf{not }\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{\textbf{not }dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{\textbf{not }dontcare}$)\\
+	\textbf{AND} (near\_goal == \textsf{true})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{stop}) \textbf{AND} ($V_y$ = \textsf{-0.4})]
+	
+	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{\textbf{not }dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{\textbf{not }dontcare}$)\\
+	\textbf{AND} (near\_goal == \textsf{true})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{0.4}) \textbf{AND} ($V_y$ = \textsf{-0.3})]
+	
+	\item \textbf{IF} [($\textbf{not }\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
+	\textbf{AND} ($\textbf{not }\text{min\_left}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
+	\textbf{AND} ($\text{min\_front\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} ($\text{min\_right}$ == $\textsf{\textbf{not }dontcare}$) 
+	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$)\\
+	\textbf{AND} (near\_goal == \textsf{true})]
+	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{-0.4}) \textbf{AND} ($V_y$ = \textsf{-0.3})]
+\end{enumerate}
