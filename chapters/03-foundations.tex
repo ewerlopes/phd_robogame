@@ -1,5 +1,5 @@
 \chapter{Hardware}\label{ch:foundation}
-\epigraph{Day by day, what you choose, what you think and what you do is who you become.}{--- Heraclitus}
+\epigraph{For the things we have to learn before we can do them, we learn by doing them.}{--- Aristotle, The Nicomachean Ethics}
 \section{Game environment}\label{sec:game_environment}
 As mentioned in section~\ref{sec:research_question}, we were interested in understanding phenomena related to player engagement in~\gls{pirg}s with a mobile adversarial robot. For that, we had chosen to use RoboTower~\citep{bonarini_timing_2014} as a starting point, perfecting the interaction and playability.
 
@@ -62,7 +62,7 @@ In summary, our game, called RoboTower v2, was designed such that we could have 
 %To obtain the data from the human player that are needed to perform the tracking we used the Microsoft Kinect presented in~\ref{kinectsec} and a computer vision algorithm for blob detection previously integrated in the ROS environment using OpenCV libraries.
 
 \section{Towers}\label{sec:towers}
-Each tower was powered individually, being capable of transmitting its status to the robot at a constant rate. The circuit used the~\href{https://einstronic.com/wp-content/uploads/2017/06/NodeMCU-ESP8266-ESP-12E-Catalogue.pdf}{NodeMCU V3 ESP8266 ESP-12E} WiFi module\footnote{\url{https://goo.gl/TzAjwi} accessed on December 17th, 2018.} (see figure~\ref{fig:tower_electronics}) whose connection was done via a private network. The communication between towers and the robot was supported through TCP protocol using the rosserial\_server\footnote{\url{http://wiki.ros.org/rosserial_server} accessed on December 17th, 2018.} package. Appendix~\ref{app:hard_appendix} provides additional hardware details for the towers. 
+Each tower was powered individually, being capable of transmitting its status to the robot at a constant rate. The circuit used the~\href{https://einstronic.com/wp-content/uploads/2017/06/NodeMCU-ESP8266-ESP-12E-Catalogue.pdf}{NodeMCU V3 ESP8266 ESP-12E} WiFi module\footnote{\url{https://goo.gl/TzAjwi} accessed on December 17th, 2018.} (see figure~\ref{fig:tower_electronics}) whose connection was done via a private network. The communication between towers and the robot was supported through~\gls{tcp} using the rosserial\_server\footnote{\url{http://wiki.ros.org/rosserial_server} accessed on December 17th, 2018.} package. Appendix~\ref{app:hard_appendix} provides additional hardware details for the towers. 
 
 As power supply, a $7.4$V LiPo battery was used on each tower as can been seen on figure~\ref{fig:tower_electronics}. The nominal voltage for the boards was $5$V, which is supplied through a voltage regulator. A tilt sensor allows for the detection of fallen towers. A schematic of the circuit developed to detect such event is provided in figure~\ref{fig:tilt_circuit}.
 
@@ -364,7 +364,7 @@ Since the ultimate goal of the robot is to physically tear down one of the four 
 	\label{rulesbehavior}
 \end{figure}
 
-\subsection{Player perception and Tracking}
+\subsection{Player perception \& tracking}
 For opening the device, we have used libfreenect2\footnote{~\url{https://github.com/OpenKinect/libfreenect2} accessed on \today.}, a library for managing the Kinect\textsuperscript{\textregistered} device on Linux. We have then created a custom tracking node capable of estimating the player's position in two phases: First, color blob detection. Second, segmentation on the depth frame using \textit{region growing} algorithm for the purpose of detecting the player's body. Two features can be detected from this procedure: distance (relative to the robot) and contraction index. The first is calculated from the mean value of the depth pixels around the center of the blob. The latter is computed based on the subtraction of the occupied area with respect to the dimension of the bounding box that encompasses the segmented silhouette (see Figure~\ref{fig:segmenta}). This feature had been considered as a cue about the fact that the player was opening arms, so, possibly, actively participate to the game.
 
 \begin{figure}[h]

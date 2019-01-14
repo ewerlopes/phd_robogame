@@ -33,8 +33,12 @@
             child { node[concept, scale=1.5, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {World\\Modeling} }
             child { node[concept, scale=1.5, font=\fontsize{7pt}{17pt}\selectfont\bfseries] {Complexity}}
         }
-        child[concept color=orange] { node[concept,font=\fontsize{14pt}{17pt}\selectfont\bfseries] {Safety}};
+        child[concept color=orange] { node[concept,font=\fontsize{14pt}{17pt}\selectfont\bfseries] {Safety}
+            [counterclockwise from=-90]
+            child { node[concept, font=\fontsize{8pt}{17pt}\selectfont\bfseries] {collision}}
+            child { node[concept, font=\fontsize{8pt}{17pt}\selectfont\bfseries] {structural}}
+        };
     \end{tikzpicture}
-    \caption{Some relevant concepts in the competitive advantage dimension of a~\gls{pirg} agent.}
+    \caption{Some relevant concepts for the design of the competitive advantage in our autonomous agent~\gls{pirg}.}
     \label{graph:COMPETITIVE_structure}
 \end{figure}
