@@ -57,20 +57,20 @@ We use a sliding window half a second long, with 10\% overlap, for the STD graph
 %ANDY This resembles, but adds something what was already mentioned in another section    
 
 \subsubsection{Model results}
-The model output for two different players can be seen in figure~\ref{fig:modelOutput}. In figure~\ref{fun}, the player is perceived as more active than the one in fig.~\ref{nofun}. The ratio between activity and inactivity exposed by the output matches the observed data and empirically confirms the model viability.
+The model output for two different players can be seen in figure~\ref{fig:modelOutput}. In figure~\ref{fig:fun}, the player is perceived as more active than the one in fig.~\ref{fig:nofun}. The ratio between activity and inactivity exposed by the output matches the observed data and empirically confirms the model viability.
 
-\begin{figure}[h!]
+\begin{figure}[h]
     \centering 
-	\begin{subfigure}[H]{0.3\textwidth}
+	\begin{subfigure}[h]{\columnwidth}
 		\centering      
-		\includegraphics[width=\columnwidth]{images/04-activity/combined.png}
+		\includegraphics[draft=false, width=\columnwidth]{images/04-activity/combined.png}
 		\caption{}
 		\label{fig:fun}
 	\end{subfigure}
 	~
-	\begin{subfigure}[H]{0.3\textwidth}
+	\begin{subfigure}[h]{\columnwidth}
 		\centering      
-      	\includegraphics[width=\columnwidth]{images/04-activity/combined_less.png}
+      	\includegraphics[draft=false,width=\columnwidth]{images/04-activity/combined_less.png}
       	\caption{}
       	\label{fig:nofun}
      \end{subfigure}
@@ -85,14 +85,13 @@ one of which is the manual definition of weights for the activities ($\omega$). 
 
 \section{Latent player modeling}
 
-\subsection{Introduction} %ANDY see comment above
-We attempted to mitigate the limitations in the previous model by first mapping the stream of data to an image representation, namely a Gramian Angular Field (GAF)~\cite{wang_imaging_2015}, which is subsequently processed by a simple autoencoder~\cite{goodfellow_deep_2016} architecture for unsupervised feature extraction. %ANDY Why would this limit the issues of the previous simple model?
+We attempted to mitigate the limitations in the previous model by first mapping the stream of data to an image representation, namely a Gramian Angular Field (GAF)~\citep{wang_imaging_2015}, which is subsequently processed by a simple autoencoder~\citep{goodfellow_deep_2016} architecture for unsupervised feature extraction. %ANDY Why would this limit the issues of the previous simple model? EWERTON: Because no handcrafted features are designed.
 
-After the definition of a dictionary of primitives on the feature space, we apply latent Dirichlet allocation (\gls{lda}~\cite{blei_latent_2003}), a generative model mostly used for document retrieval and classification, to uncover coherent groups of motion patterns that can be used to categorize players.
+After the definition of a dictionary of primitives on the feature space, we apply ~\gls{lda}~\citep{blei_latent_2003}, a generative model mostly used for document retrieval and classification, to uncover coherent groups of motion patterns that can be used to categorize players.
 
-Our decision to use \gls{lda} takes inspiration from recent approaches where each game session is represented as a ``document'', and chunks of generated stream data are encoded into discrete ``words''~\cite{smith_mining_2016}. This arrangement is based on the assumption that different players generate different streams of input words, thus different documents, depending on their own motivation or play style. 
+Our decision to use \gls{lda} takes inspiration from recent approaches where each game session is represented as a ``document'', and chunks of generated stream data are encoded into discrete ``words''~\citep{smith_mining_2016}. This arrangement is based on the assumption that different players generate different streams of input words, thus different documents, depending on their own motivation or play style. 
 
-The possibility to apply \gls{lda} to this problem is further reinforced by noticing the apparent difficulty in objectively separating types of motion patterns, since a player in his/her playing activity may show one or more different motion styles. More explicitly, a player may, for instance, become bored or frustrated with the game and consequently show a low motion profile w.r.t. the one that the same player might have shown in other moments during the same game session, for instance, when he/she was excited about it. Here, we consider that a high motion profile, i.e., high turbulence in acceleration signal, is typical for a highly motivated player, since by common sense %ANDY this should not be assessed by common sense, but by data
+The possibility to apply~\gls{lda} to this problem is further reinforced by noticing the apparent difficulty in objectively separating types of motion patterns, since a player in his/her playing activity may show one or more different motion styles. More explicitly, a player may, for instance, become bored or frustrated with the game and consequently show a low motion profile w.r.t. the one that the same player might have shown in other moments during the same game session, for instance, when he/she was excited about it. Here, we consider that a high motion profile, i.e., high turbulence in acceleration signal, is typical for a highly motivated player, since by common sense %ANDY this should not be assessed by common sense, but by data
 , a non-motivated player {tends} to stay relatively still, or to show a very low acceleration signal.
 
 The claim that motion style conveys engagement or even emotion~\cite{aristidou_emotion_2015,shafir_emotion_2016,tsachor_somatic_2017} types has been supported by several papers. As an example, systematic approaches for describing movement, such as~\gls{lma}~\cite{laban_language_1974}, are often used to derive low-dimensional representation of movement, facilitating affective motion modeling~\cite{burton_laban_2016}. This same type of analysis has been applied when investigating motor elements that characterize movements whose execution enhances basic emotions, such as: anger, fear, happiness and sadness~\cite{shafir_emotion_2016}. In game situations, despite the limited capacity for entertainment detection and modeling in Exergames, \gls{lma} had been reported as useful in fostering emotion recognition in states like: concentration, meditation, excitement and frustration~\cite{zacharatos_emotion_2013}.
@@ -100,10 +99,9 @@ The claim that motion style conveys engagement or even emotion~\cite{aristidou_e
 Here, we hypothesize that, on average, a player will display his/her game-intrinsic motion style and convey some information about his/her interest in/motivation to play. Discovering which coherent groups of motion style exist in a dataset allows us to estimate to what extent an unknown player relates in terms of his/her own motion profile to known groups. This may ultimately support the design of \gls{pirg}s able to adapt in order to offer a better play experience.
 
 Following this, in this manuscript, a player representation is addressed as how much of each discovered motion types to which we are confident to say a given player is mostly related. %ANDY To be rephrased, it is so involute that I can hardly understand, and I do not touch it
-We call this representation a {mixture proportion of motion types} (similar to topics in the LDA perspective). 
+We call this representation a {mixture proportion of motion types} (similar to topics in the~\gls{lda} perspective). 
 
-In summary, we expect to see that similar player-generated data are grouped together in a coherent collection, enabling to distinguish among motion types. The results obtained are validated with human supervision, %ANDY Why <- should be supported by this -> ?
-suggesting the applicability of our method to future mechanisms for designing auto-adapting \gls{pirg}s agents.
+In summary, we expect to see that similar players are grouped together in a coherent collection, enabling to distinguish among motion types. The results obtained are validated with human supervision, suggesting the applicability of our method to future mechanisms for designing auto-adapting agents.
 
 \subsection{Mathematical Preliminaries}
 
@@ -345,7 +343,7 @@ In summary, we are interested in investigating time series data, especially acce
 
 
 \subsection{Activity modeling}
-This section describes our approach to model the activity of the player, while emphasizing the differences and similarities with respect to existing methods. We take inspiration from approaches like~\cite{smith_mining_2016, wang_encoding_2015, wang_imaging_2015} and aim at modeling game sessions as ``documents'', where player's acceleration data are considered as ``words''. We use LDA~\cite{blei_latent_2003} to categorize the player's motion profile as a composition or mixture of game play motion types, the latter being analogous to the ``topics'' in the general application of \gls{lda} for document modeling.
+This section describes our approach to model the activity of the player, while emphasizing the differences and similarities with respect to existing methods. We take inspiration from approaches like~\cite{smith_mining_2016, wang_encoding_2015, wang_imaging_2015} and aim at modeling game sessions as ``documents'', where player's acceleration data are considered as ``words''. We use~\gls{lda}~\cite{blei_latent_2003} to categorize the player's motion profile as a composition or mixture of game play motion types, the latter being analogous to the ``topics'' in the general application of \gls{lda} for document modeling.
 
 Differently from~\cite{smith_mining_2016}, our input word atoms are not discrete. Instead, they are continuous (acceleration data) and also are not attached to any explicit meaning. Take, for instance, the natural interpretability of joystick input signals like ``left'' and ``right'', which convey their respective meaning when controlling a game character, and compare it with an acceleration signal that carries no obvious absolute meaning.
 
@@ -360,7 +358,7 @@ We have used GASF images instead of GADF because the mapping functions of the re
 \end{equation}
 
 An example of signal decomposition into GASF images is shown in Figure~\ref{figure:acc_signal_gasfs}. Given recent advances in deep learning and pattern recognition for images, we take the route of~\cite{wang_encoding_2015} and exploit the applicability of autoencoders for extracting unsupervised features from GASF images (see Section~\ref{section:autoencoder}). This is relevant since the process of feature engineering is time-consuming and laborious. Moreover, unsupervised feature extraction from such methods has been proven to work well~\cite{wang_imaging_2015, wang_time_2016}.
-Sparse encoding via linear-algebra methods for dictionary learning is also a possibility. However, in our experiments, it turned out to be not as efficient as autoencoders. We present details of our experimental activity in the next section. Our methodology is summarized in {Figure~\ref{diagram:methodology}.
+Sparse encoding via linear-algebra methods for dictionary learning is also a possibility. However, in our experiments, it turned out to be not as efficient as autoencoders. We present details of our experimental activity in the next section. Our methodology is summarized in figure~\ref{diagram:methodology}.
 
 %\begin{figure}[H]
 %	\centering

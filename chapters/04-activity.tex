@@ -34,15 +34,13 @@ Considering a game environment,~\cite{jablonsky_evaluating_2017} investigated se
 
 Similarly, in~\cite{alshurafa_designing_2014} a stochastic approximation framework for intensity independent activity recognition based on clustering techniques is proposed. The aim is to enhance and automate the calculation of~\gls{met} and also to improve an exergaming (video games that are also a form of exercise) platform consisting of two main components: an accelerometer-embedded belt and an~\gls{rpg} video game called \textit{FreedroidRPG} that was used as incentive for the participant to perform physical activity throughout the day. The study shows the ability of the used stochastic approximation framework to extrapolate unknown intensity levels from a few known ones that can be used to enhance activity recognition.
 
-Several studies in literature also focused on the comparison between multi-sensor versus single-sensor activity detection and also on the optimal body placement of such sensors.
-
-The work of~\cite{gao_evaluation_2014} compared two distinct types of wearable systems: single-sensor wearable systems adopting complex algorithms and multi-sensor systems employing light-weight algorithms. The impact of the sampling rate on the recognition accuracy was then investigated using four classifiers. The experimental results illustrated that the recognition accuracy was steady at 50-Hz and above, and the single sensor system was more sensitive to the sampling rate than the multi-sensor system.
+Several studies in the literature also focused on the comparison between multi-sensor versus single-sensor activity detection and also on the optimal body placement of such sensors. The work of~\cite{gao_evaluation_2014} compared two distinct types of wearable systems: single-sensor wearable systems adopting complex algorithms and multi-sensor systems that employ lightweight algorithms. The impact of the sampling rate on the recognition accuracy was then investigated using four classifiers. The experimental results illustrated that the recognition accuracy was steady at 50-Hz and above, and the single sensor system was more sensitive to the sampling rate than the multi-sensor system.
 
 The work of~\cite{trost_machine_2014} is, in turn, focused on making a comparison between the activity recognition rates of an activity classifier trained on acceleration signal collected on the wrist and hip. During the experiments 52 children and adolescents completed 12 activity trials that were categorized into 7 activity classes: \textit{lying down}, \textit{sitting}, \textit{standing}, \textit{walking}, \textit{running}, \textit{basketball}, and \textit{dancing}. As result, the hip model exhibited great classification accuracy for \textit{sitting}, \textit{standing}, \textit{walking}, and \textit{running}; acceptable classification accuracy for \textit{lying down} and \textit{basketball}; and modest accuracy for \textit{dance}. The wrist model, in turn, exhibited excellent classification accuracy for \textit{sitting}, \textit{standing}, and \textit{walking}; acceptable classification accuracy for \textit{basketball}; and modest accuracy for \textit{running}, \textit{lying down} and \textit{dance}.
 
-We followed the popular approaches, such as~\cite{ravi_activity_2005, bao_activity_2004}, where the methodology relies on the use of supervised learning methods, powered by the extraction of discriminative features from a sliding window. However, the use of such method in our application scenario rises same special issues: since the annotated data come from real game interaction between a human and a mobile robot, the activities are not limited in any aspect.
+We followed the popular approaches, such as~\cite{ravi_activity_2005} and~\cite{bao_activity_2004}, where the methodology relies on the use of supervised learning methods, powered by the extraction of informative features from a sliding window. However, the use of such method in our application scenario rises same special issues: since the annotated data come from real game interaction between a human and a mobile robot, the activities are not limited in any aspect.
 
-Additionally, when using a traditional sliding window method, special attention has to be made on the choice of window size. This is because while a too narrow window will produce very accurate representations of the current state, the results will also be heavily affected by noise. On the other hand, a too wide window results in more stable, yet similarly inaccurate results due to the effects of change in the underlying data~\cite{bifet_learning_2007}. 
+Additionally, when using a traditional sliding window method, special attention has to be made on the choice of window size. This is because while a too narrow window will produce very accurate representations of the current state, the results will also be heavily affected by noise. On the other hand, a too wide window results in more stable, yet similarly inaccurate results due to the effects of change in the underlying data~\citep{bifet_learning_2007}. 
 
 Equally concerning, fixed-size windows are likely to ignore differences in the duration of activities. This happens very often in our scenarios where different in-game situations would make the players react differently. For instance, the time the player spends running is a product of multiple factors, including personal motivations and robot state given in-game situation. This would demand adaptive strategies for using sliding windows, as suggested by~\cite{noor_adaptive_2016}. However, in this work we follow a different route, by proposing to perform activity recognition by first transforming the data stream input space (acceleration raw data) into a different space that would capture the ``turbulence'' of the signal underlying each activity of interest. The motivation is that a running activity, for example, would be categorized by a different amount of turbulence compared to other activities.
 
@@ -100,14 +98,13 @@ In our game, by using an accelerometer attached to the player, we were mainly in
 \begin{itemize}
 \item  \textbf{running:} describes a running activity. For this experiment, multiple styles of running are not considered. For instance, ``fast'' or ``slow'' running are considered as the same.
 \item \textbf{walking/dodging:} represents the walking and dodging activity. The latter refers to a sudden quick movement to avoid the robot or to call its attention.
-\item  \textbf{locally\_moving:} a player generic motion that is too small to fall into other categories, but not so small to be characterized as inactivity. Robot path-blocking motions also fall into this type of motion.
+\item  \textbf{locally\_moving:} a player generic motion that is too small to fall into other categories, but not so small to be characterized as inactivity. Motion to block to block the path of the robot also fall into this type of motion.
 \item  \textbf{inactive:} motion that are too low in intensity to be characterized as one of the above activities. A crisp threshold is used to delimit this category. 
 \end{itemize}
-%ANDY <-
 
-By analyzing the data, we observed that player activities occur in ``bursts'', being followed by a short period of inactivity (or rest), i.e., a short period where the player is not really moving, or the expressed acceleration is too small to be related to any activity of interest.
+By analyzing the data, we observed that player activities occur in ``bursts'' that are followed by a short period of inactivity (or rest), i.e., a short period where the player is not really moving, or the expressed acceleration is too small to be related to any activity of interest.
 
-Resting periods are a common characteristic present in any physical game, both related to the organic human need for resting after an intense physical activity or even during strategic moments of pause. Examples of this can be seen when the player is pushing a button on a tower, or is trying to block the robot's path or even when is waiting still for a specific robot position on the environment.
+Resting periods are a common characteristic present in any physical game and is related to the organic human need for resting after an intense physical activity or even during strategic moments of pause. Examples of this can be seen when the player is pushing a button on a tower, or is trying to block the robot's path or even when is waiting still for a specific robot position on the environment.
 
 On such moments of inactivity, the changes in acceleration are usually small, reflected in a relative flatness of the signal (e.g., secs 9-12 and 15-18 on figure~\ref{acc_graph}) and this enables the delimitation of an activity begin/end moment.
 
@@ -266,23 +263,23 @@ Despite the fact that our method relies on the computation of a fixed slide wind
 
 We have conducted experiments on using our method online, and the results have been satisfactory. One drawback, however, is on the possibility of having two different activities associated to the same motion primitive. This is likely to occur when the player rapidly shifts between two activities. For example, this happens when the player stops running for a fraction of a second and then immediately starts walking. In that case we see a small decrease in the signal variance that may not be enough to characterize an inactivity period. Note that a value below the inactive threshold is the event that separates motion primitives.
 
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
-    \begin{subfigure}[b]{0.2\textwidth}
+    \begin{subfigure}[b]{7cm}
        \centering
-       \includegraphics[width=5cm, height=5cm]{images/04-activity/conf_mtx.eps}
+       \includegraphics[width=7cm, height=5cm]{images/04-activity/conf_mtx.eps}
        \caption{}
 	\end{subfigure}
 	~
-    \begin{subfigure}[b]{0.2\textwidth}
+    \begin{subfigure}[b]{7cm}
      	\centering
-        \includegraphics[width=5cm, height=5cm]{images/04-activity/roc.eps}
+        \includegraphics[width=7cm, height=6cm]{images/04-activity/roc.eps}
         \caption{}
 	\end{subfigure}
 	\caption{a) Confusion matrix for the trained Random Forest ensemble method and the associated. b) \gls{roc} curve.}\label{fig:mtx-roc}
 \end{figure}
 
-\section{Conclusion}
+\section{Considerations}
 % reviewers said that the paper lacks of novelty. Maybe in the conclusion we should point out again that our methods is designed to be as more general as possible (we don't rely on pre-defined activities, the player is free to move as he want, it works for individuals with very different phisical building etc...). Also some comparison between our results and the one of other studies should be made, I think we should point on the generality of the solution. In general in the conclusion section we should answer to the question "why should I use this method instead of another one???" any idea?? - DAVIDE%
 %IDEA 1 - our methods is quite easy to be implemented and does not require a big computational effort, besides in its simplicity is also a powerful and intuitive description method for both type and level of activity with a good level of accuracy (something like this) - DAVIDE%
 In this work, we have investigated the recognition of high-level human player activity in a Physically Interactive RobotGame (PIRG) scenario, where a human player faces a mobile robot. We have used the variance in player motion as data instances and primary source of information from where to extract features and then train a machine learning model. 
