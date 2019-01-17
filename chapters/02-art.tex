@@ -45,7 +45,8 @@ Also, it is important to focus on the exploration of mobile robot bases with che
 Properly exploiting cognitive abilities in robogames may increase the player's engagement since any apparently rational behavior of the robot may bring to accept it as a robotic companion (or opponent) ``while random actions or too complex strategies for the cognitive or perception levels of the players are perceived as not purposeful''~\citep{martinoia_physically_2013}. Due to the inherent complexity involved in the typical scenario, it is not possible to entirely rely on ``hard-coded'' abilities that are static across time and once learned by the human player tend to decrease interest. The problem of designing new interesting~\gls{pirg}s calls for the massive use of~\gls{ml}-based techniques to make sense of the obtained interaction information, thus presenting itself a new field of research.
 
 \section{Overall design guidelines}\label{sec:dimensions}
-From our experience, we have identified at least three dimension in which one must pay attention to when designing a new~\gls{pirg}. Each dimension presents its own set of utilities/challengers some of which is summarized in figure~\ref{graph:PIRG_design_structure}. Aspects related to hardware bound the behavior of the platform of choice. Since in this work a mobile agent is used, concepts like power consumption, processing power, sensing, robustness and kinematic constraint become relevant and must be addressed properly towards being able to follow game rules and yet provide fun. 
+From our experience, we have identified at least three dimension in which one must pay attention to when designing a new~\gls{pirg}. Each dimension presents its own set of utilities/challengers some of which are summarized in Figure~\ref{graph:PIRG_design_structure}. 
+
 
 \begin{figure}[h]
     \centering
@@ -113,22 +114,25 @@ From our experience, we have identified at least three dimension in which one mu
     \label{graph:PIRG_design_structure}
 \end{figure}
 
-Another aspect of importance related to hardware is the case of in-game elements that are external to the robot, but important for the game interaction, \ie, those whose existence is conditioned to the game rules. An example of such elements are the cards and towers in RoboTower~\citep{bonarini_timing_2014} and towers in RoboTower v2~\citep{oliveira_activity_2017}. Despite such elements being external to the robot, one must deal with the perception of such elements and how the robot interact with them when playing.
+There are at least three basic dimensions (or problems) of interest that must be considered when building a model of this kind for \gls{pirg}s. Such dimensions are related to the specific capabilities of a mobile robot to achieve a suitable in-game performance. We delineate such dimensions as follows:
 
-In all games, playing for competitive advantage is a main requirement. An additional requirement is that of playing for entertainment optimization. These two requirements make up the two additional dimensions considered during~\gls{pirg} design and have their own set of tools where some is depicted in figure~\ref{graph:PIRG_design_structure}. 
+\begin{itemize}[leftmargin=*,labelsep=5.8mm]
+\item {\textbf{Dimension \#1:} Fundamental robot behavior}, which concerns the fundamental aspects of the robot locomotion, timing of actions, localization and other abilities to keep it alive and well-functioning during the game play. In other words, this dimension makes up for the hardware specification of the platform. Another aspect of importance related to hardware is the case of in-game elements that are external to the robot, but important for the game interaction, \ie, those whose existence is conditioned to the game rules. An example of such elements are the cards and towers in RoboTower~\citep{bonarini_timing_2014} and towers in RoboTower v2~\citep{oliveira_activity_2017}. Despite such elements being external to the robot, one must deal with the perception of such elements and how the robot interact with them when playing.
+\item {\textbf{Dimension \#2:} In-game competitive capabilities}, which are more related to the intelligent selection of actions aimed at achieving in-game goals. In other words, this dimension captures the intricacies of planning and rational behavior, using solutions developed for dimension \#1.
+\item {\textbf{Dimension \#3:} Adaptive power}, which is a higher level dimension concerned with how and when during the game to adjust the robot performance to match that of the current player.
+\end{itemize}
 
+For dimension \#1, the designer should care about the setup of an appropriate robotic platform, including aspects like: electrical disturbances, power consumption, kinematic constraints, processing capabilities, sensing, robot physical structure and safety. These are recurrent aspects that must be appropriately dealt with. 
+Dimension \#2 encompasses the problem of finding a plan or strategy to achieve the robot goals. This is the problem most related to the competitive behavior the robot can impose on the human player, since action selection is driven by the tendency to maximize the robot's own pay-off. After all, the robot has to give the idea that it is at best trying to beat/help its opponent(s)/companion(s).
 
-%EWERTON:  MORE CAN BE WRITTEN HERE, NO?
+Dimension \#3, organically based on \#1 and \#2, defines constraints on the robot behavior such that the action selection is no longer just governed by the tendency to be competitive/helpful, but is also driven by the compelling necessity to support the player interaction, in real time, as robustly as possible. Although not essential for dimension \#2, player modeling techniques are an essential mechanism for dimension \#3. Such techniques are intended to account for the player usual behavior, thus, being useful for improving platform behavior. It is in this aspect of modeling that we concentrated most of our work, as it is going to be clear from chapter~\ref{ch:modeling}.
 
-
-%\input{chart/competitive_map.tex}
-%\input{chart/engagement_map.tex}
 
 %\subsection{Timing issues}\label{DDA}
 
 %As discussed previously, a desired goal for~\gls{pirg} design is to have autonomous robots able to adjust behavior towards optimizing the player experience. In the direction of achieving this result, one may see some sub-tasks that are fundamental to the problem, i.e., one must \begin{inparaenum}[\itshape a\upshape)]\item deal with the maximization of the player's expectation about the agent rationale -- making believable companion/adversarial roles be effectively implemented; \item deal with timing requirements for the design of interaction -- since asynchronous actions may hugely impact engagement; \item feature selection; and \item modeling framework -- with the aim to select one of the focuses presented on section~\ref{expOptimization}\end{inparaenum}.
 
-\cite{bonarini_timing_2014} presented key aspects on timing issues observed during the design of several robogames, some of which related to the structure of the game:
+Additional to the general dimensions mentioned above,~\cite{bonarini_timing_2014} presented key aspects on timing issues observed during the design of several robogames, some of which related to the structure of the game:
 
 \begin{itemize}
 \item \textbf{Duration of the game}: This is a key-point since a game should reach its end in a time that guarantees to keep the players involved and to make them enjoy it. This greatly depends on the activity to be performed. In the~\gls{pirg} case, the user's physical activity, i.e the workload, is the core of the interaction and it must be taken into account when defining the game duration so that the player can come to the end with a proper fatigue requirement. The reader is invited to think about the effect on engagement when this point is not well designed.

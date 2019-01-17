@@ -37,7 +37,7 @@ For systems using a fixed-size window, the system is likely to ignore difference
 
 \section{Data Collection}\label{sec:data_collection}
 
-%When playing the game (see section~\ref{sec:game_environment}), we ask the human player to wear a colored robe (see figure~\ref{game}) in order to allow for blob detection and tracking, leading to feature extraction. These visual features, however, were out of the scope of this experiment, since we describe only results relying on the accelerometer data. %ANDY So lets' trim this sentence
+%When playing the game (see section~\ref{sec:game_environment}), we ask the human player to wear a colored robe (see Figure~\ref{game}) in order to allow for blob detection and tracking, leading to feature extraction. These visual features, however, were out of the scope of this experiment, since we describe only results relying on the accelerometer data. %ANDY So lets' trim this sentence
 To detect player movement, we have used a custom accelerometer board attached to the player's chest in order to capture detailed player motion information. The device is based on the InvenSense MPU-6050 3-axis accelerometer board and an Arduino Uno micro-controller. The circuit also contains a Nrf24l01 radio-frequency module that allows the accelerometer data to be sent to the on-board computer. Figure~\ref{fig:the_accelerometer} shows our custom accelerometer device.
 
 \begin{figure}[H]
@@ -94,9 +94,9 @@ By analyzing the data, we observed that player activities occur in ``bursts'' th
 
 Resting periods are a common characteristic present in any physical game and is related to the organic human need for resting after an intense physical activity or even during strategic moments of pause. Examples of this can be seen when the player is pushing a button on a tower, or is trying to block the robot's path or even when is waiting still for a specific robot position on the environment.
 
-On such moments of inactivity, the changes in acceleration are usually small, reflected in a relative flatness of the signal (e.g., secs 9-12 and 15-18 on figure~\ref{acc_graph}) and this enables the delimitation of an activity begin/end moment.
+On such moments of inactivity, the changes in acceleration are usually small, reflected in a relative flatness of the signal (e.g., secs 9-12 and 15-18 on Figure~\ref{acc_graph}) and this enables the delimitation of an activity begin/end moment.
 
-\begin{figure}[h!]
+\begin{figure}[h]
       \centering
       \includegraphics[width=\linewidth]{images/04-activity/newGraph.eps}
       \caption{Graph of acceleration in x, y and z axis for a game that lasted about 40 seconds.}
@@ -105,7 +105,7 @@ On such moments of inactivity, the changes in acceleration are usually small, re
 
 One way to describe the activity information associated to the acceleration patterns is by considering the amount of signal ``turbulence''. As a measure of such turbulence, we rely on the information present on the signal variance. 
 
-For this, we processed the incoming data stream by computing the standard deviation of the signal inside a sliding window. This transforms the original input space in a new space where activity information is much more evident, resulting in the generation of a continuous graph, where pulses refer to a given player's physical activity (see figure~\ref{fig:std_graph}).
+For this, we processed the incoming data stream by computing the standard deviation of the signal inside a sliding window. This transforms the original input space in a new space where activity information is much more evident, resulting in the generation of a continuous graph, where pulses refer to a given player's physical activity (see Figure~\ref{fig:std_graph}).
 
 Working in this way turns out to be simpler than to perform data annotation by, for instance, using a predefined sliding windows size. In our case, activities, such as ``running'', do not have fixed time duration, which makes the applicability of fixed sliding windows methods not quite suitable~\cite{noor_adaptive_2016}.
 
@@ -178,16 +178,14 @@ Following the classification need, we have extracted the following descriptors f
 \item \textbf{rms}: Return the root mean square.
 \end{itemize}
 
-%\begin{figure*}[!t]
-% ensure that we have normalsize text
-%\normalsize
-%      \centering
-%      {\includegraphics[width=\textwidth]{figures/featureImportance.eps}}
-%      \caption{Feature importance computed by a forest of decision trees classifiers.}
-%      \label{feature_importance}
-%\end{figure*}
+\begin{figure}[h]
+     \centering
+     {\includegraphics[width=\textwidth]{images/04-activity/featureImportance}}
+     \caption{Feature importance computed by a forest of decision trees classifiers.}
+     \label{fig:feature_importance}
+\end{figure}
 
-Note that the motion primitives carry sufficient information to distinguish between target physical activities. For example, ``running'' is related to a motion primitive that has a longer duration and a higher amplitude value (see figure~\ref{fig:running}) as opposed to the duration and amplitude values of a player local motion (figure~\ref{fig:localmov}). Following the same argument, a ``walking'' activity has higher amplitude values compared with a local movement. A holistic view of the classification approach is detailed in Figure~\ref{approach}. 
+Note that the motion primitives carry sufficient information to distinguish between target physical activities. For example, ``running'' is related to a motion primitive that has a longer duration and a higher amplitude value (see Figure~\ref{fig:running}) as opposed to the duration and amplitude values of a player local motion (figure~\ref{fig:localmov}). Following the same argument, a ``walking'' activity has higher amplitude values compared with a local movement. A holistic view of the classification approach is detailed in Figure~\ref{approach}. 
 
 \subsection{Classification setup}
 
@@ -197,7 +195,7 @@ On our experiments, the std graph was generated considering a sliding window 500
 
 The primitives were labeled as follows: $34\%$ as ``locally\_moving''; $25\%$ as ``walking/dodging'' and $41\%$ as ``running''. The remaining percentile was left out due to the incapacity in identifying a underlying activity (maybe because the player was moving too slow or aimlessly) or because the data explicitly did not corresponded to one perform when playing. As argued above, the ``inactive'' type had not to be labeled, since it is directly classified by the inactive threshold. From video log inspection, we observed that most of the useless motion would occur below a threshold of $0.2$.
 
-Before training classifiers, we performed feature selection by evaluating the importance of the extracted features (see section~\ref{sec:activity_analysis}) using random forest method, composed by 300 decision trees.% (see Figure~\ref{feature_importance}).
+Before training classifiers, we performed feature selection by evaluating the importance of the extracted features (see section~\ref{sec:activity_analysis}) using random forest method, composed by 300 decision trees. (see Figure~\ref{fig:feature_importance}).
 
 \section{Results and discussion}\label{sec:activity_discussion}
 
@@ -205,7 +203,7 @@ We tested different classifiers using 10-fold cross validation in order to have 
 
 \begin{table}[h]\footnotesize
   \centering
-  \caption{Cross-validation accuracy results for several classification methods using the 5 most significant features.% show in Figure~\ref{feature_importance}.
+  \caption{Cross-validation accuracy results for several classification methods using the 5 most significant features shown in Figure~\ref{fig:feature_importance}.
   }
   \begin{tabular}{| c | c |}
     \hline

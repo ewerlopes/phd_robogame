@@ -39,7 +39,7 @@ where $\kappa= (1-\rho)c$.  The $c$ in the calculation of $\kappa$ represents a 
 
 Notice, however, that $\rho$ is an overall degree of interaction, i.e., the combination of~\gls{ci} and proximity. The exact procedure for the combination of the interaction signals is not bound to a specific method. In this work, we have used a fuzzy logic system to obtain the desired combination, described in a linguistic way. In principle, the combination of the signals depends on the specifics of the~\gls{pirg} environment.
 
-For the evaluation of the model we have reused the same data from section~\ref{sec:data_collection}. The model output for two different players can be seen in figure~\ref{fig:model_output}. In figure~\ref{fig:fun}, the player is perceived as more active than the one in fig.~\ref{fig:nofun}, which is reflected by the difference in the inactivity time and the amplitude of the bars.
+For the evaluation of the model we have reused the same data from section~\ref{sec:data_collection}. The model output for two different players can be seen in Figure~\ref{fig:model_output}. In Figure~\ref{fig:fun}, the player is perceived as more active than the one in fig.~\ref{fig:nofun}, which is reflected by the difference in the inactivity time and the amplitude of the bars.
 
 \begin{figure}[h]
     \centering 
@@ -67,205 +67,22 @@ one of which is the manual definition of weights for the activities ($\omega$). 
 
 \section{Latent player modeling}
 
-We attempted to mitigate the limitations in the previous model by first mapping the stream of data to an image representation, namely a Gramian Angular Field (GAF)~\citep{wang_imaging_2015}, which is subsequently processed by a simple autoencoder~\citep{goodfellow_deep_2016} architecture for unsupervised feature extraction. %ANDY Why would this limit the issues of the previous simple model? EWERTON: Because no handcrafted features are designed.
+We attempted to improve upon the previous model in several ways. First, by mapping the stream of accelerometer data to an image representation, called Gramian Angular Field (GAF) images~\citep{wang_imaging_2015}. We do this in order to take advantage from algorithms for unsupervised feature extraction, such as autoencoders~\citep{goodfellow_deep_2016}, and reduce the effort in handcrafting representation features for the user behavior. After the definition of a dictionary of primitives on the feature space, we apply ~\gls{lda}~\citep{blei_latent_2003}, a discrete generative model (an admixture model) mostly used for document retrieval and classification, to uncover coherent groups of motion patterns that can be used to categorize players.
 
-After the definition of a dictionary of primitives on the feature space, we apply ~\gls{lda}~\citep{blei_latent_2003}, a generative model mostly used for document retrieval and classification, to uncover coherent groups of motion patterns that can be used to categorize players.
+The model here is comprehensively different from the simple one presented in the previous section: it does not take into account features of interaction, but only the player's acceleration patterns (despite not being considered, there is no fundamental constraint from which to prevent the use of such data); there is also no need to manually set scaling factors from target activities since the model explores the importance of each acceleration spike by itself; furthermore, the model is able to provide on its own the distinction between players so that it can easily be used for clustering. Each player is player is represented by a normalized vector where each component denotes the proportion of membership for a given class of players uncovered from data.
 
-Our decision to use \gls{lda} takes inspiration from recent approaches where each game session is represented as a ``document'', and chunks of generated stream data are encoded into discrete ``words''~\citep{smith_mining_2016}. This arrangement is based on the assumption that different players generate different streams of input words, thus different documents, depending on their own motivation or play style. 
+In special, our decision to use~\gls{lda} was inspired by the work of~\cite{smith_mining_2016}, which considers each game session as a ``document'' and the player generated stream data as the ``words'' of such document. The interpretation of game session as documents and player data as words preserves the jargon of the text mining and information retrieval literature from which~\gls{lda} is most used for. The main assumption is that different players generate different streams of input words, thus different  ``documents'', depending on their own motivation or play style. 
 
-The possibility to apply~\gls{lda} to this problem is further reinforced by noticing the apparent difficulty in objectively separating types of motion patterns, since a player in his/her playing activity may show one or more different motion styles. More explicitly, a player may, for instance, become bored or frustrated with the game and consequently show a low motion profile w.r.t. the one that the same player might have shown in other moments during the same game session, for instance, when he/she was excited about it. Here, we consider that a high motion profile, i.e., high turbulence in acceleration signal, is typical for a highly motivated player, since by common sense %ANDY this should not be assessed by common sense, but by data
-, a non-motivated player {tends} to stay relatively still, or to show a very low acceleration signal.
+The feasibility of applying~\gls{lda} to this problem is further reinforced by noticing the apparent difficulty in objectively separating the existing types of motion patterns in the acceleration signal via inspection. A player in his/her playing activity may show different motion patterns that are often not clearly distinguishable between each other and thus not easy to provide a supervision for,~\ie a class tag. Here, the assumption is that a high motion profile, i.e., high turbulence in acceleration signal, is typical for a highly motivated player, since we believe a non-motivated player tends to stay relatively still, or to show a very low acceleration profile.
 
-The claim that motion style conveys engagement or even emotion~\cite{aristidou_emotion_2015,shafir_emotion_2016,tsachor_somatic_2017} types has been supported by several papers. As an example, systematic approaches for describing movement, such as~\gls{lma}~\cite{laban_language_1974}, are often used to derive low-dimensional representation of movement, facilitating affective motion modeling~\cite{burton_laban_2016}. This same type of analysis has been applied when investigating motor elements that characterize movements whose execution enhances basic emotions, such as: anger, fear, happiness and sadness~\cite{shafir_emotion_2016}. In game situations, despite the limited capacity for entertainment detection and modeling in Exergames, \gls{lma} had been reported as useful in fostering emotion recognition in states like: concentration, meditation, excitement and frustration~\cite{zacharatos_emotion_2013}.
+The claim that motion patterns convey engagement or even emotional state~\citep{aristidou_emotion_2015,shafir_emotion_2016,tsachor_somatic_2017} has been supported by several academic papers. Systematic approaches for describing body movement, such as~\gls{lma}~\citep{laban_language_1974}, are often used to derive low-dimensional representation of mood, facilitating affective motion modeling~\citep{burton_laban_2016}. This same type of analysis has been applied when investigating motor elements that characterize movements whose execution enhances basic emotions, such as: anger, fear, happiness and sadness~\citep{shafir_emotion_2016}. In game situations, despite the limited capacity for entertainment detection and modeling in Exergames, \gls{lma} had been reported as useful in fostering emotion recognition in states like: concentration, meditation, excitement and frustration~\citep{zacharatos_emotion_2013}.
 
-Here, we hypothesize that, on average, a player will display his/her game-intrinsic motion style and convey some information about his/her interest in/motivation to play. Discovering which coherent groups of motion style exist in a dataset allows us to estimate to what extent an unknown player relates in terms of his/her own motion profile to known groups. This may ultimately support the design of \gls{pirg}s able to adapt in order to offer a better play experience.
+Here, we hypothesize that, on average, a player will display his/her game-intrinsic motion style and convey some information about his/her interest in/motivation to play. Discovering which coherent groups of motion style exist in a dataset allows us to estimate to what extent an unknown player relates in terms of his/her own motion profile to known groups. This may ultimately support the design of~\gls{pirg}s able to adapt in order to offer a better play experience.
 
-Following this, in this manuscript, a player representation is addressed as how much of each discovered motion types to which we are confident to say a given player is mostly related. %ANDY To be rephrased, it is so involute that I can hardly understand, and I do not touch it
-We call this representation a {mixture proportion of motion types} (similar to topics in the~\gls{lda} perspective). 
+In summary, in our methodology a player is represented by how much of each discovered motion groups (called motion \textit{topics}) his/her data is likely to be generated from. Such representation is called the player's \textit{mixture proportion} of motion types and is akin to the mixture proportion of documents in topic modeling applications~\citep{blei_latent_2003}. We expect to see similar players grouped together in a coherent collection, enabling to distinguish among them and their motion types. The results obtained using the dataset detailed in section~\ref{sec:data_collection} are validated with human supervision, suggesting the applicability of our method to future mechanisms for designing auto-adapting agents.
 
-In summary, we expect to see that similar players are grouped together in a coherent collection, enabling to distinguish among motion types. The results obtained are validated with human supervision, suggesting the applicability of our method to future mechanisms for designing auto-adapting agents.
-
-\subsection{Mathematical Preliminaries}
-This section presents the basic concepts and principles behind~\gls{gaf}, autoencoders and~\gls{lda}, which are important to understand our modeling procedure. %ANDY Again, this would call for distributing the state of art section. 
-
-\subsubsection{\glsdesc{gaf} Images}
-
-The results obtained in this work rely on the transformation of the time series data generated by the player motion into images that can then be processed and understood in terms of emergent patterns that can, in turn, be discovered by state-of-the-art machine learning algorithms. The types of image we have chosen are~\gls{gasf} and~\gls{gadf}. Such images had been proposed in the field of time series classification~\citep{wang_imaging_2015}, where the authors evaluated the efficacy of representing time series in a polar coordinate system instead of the typical Cartesian coordinates. For a deep understanding of the method, we suggest reading the original paper, where the authors did not only present the idea of~\gls{gasf}/\gls{gadf}, but also reported experimental results comparing them with other time series imagery techniques. Here, we present an overview of the technique in order to familiarize the reader with such a method and to point out its role in our proposal.
-
-In general, in order to obtain a~\gls{gasf}/\gls{gadf} representation for a time series $\mathcal{X}=\{x_{1}, x_{2}, ... x_{n}\}$ of size $n \in \mathbb{N}_{>0}$, rescaling is first performed in order to put the time series in the interval $[\,-1,1] \,$ or $[\,0,1]\,$. The second step is to represent the rescaled time series $\widetilde{\mathcal{X}}$ in polar coordinates, where each sample value is now mapped into the angular cosine and the time stamp information is represented as the radius. 
-The formula for this step is as follows:
-
-\begin{equation}
-\begin{dcases}
-  \phi = \arccos(\widetilde{x}_{i}) \quad -1 \leq \widetilde{x}_{i} \leq 1, \widetilde{x}_{i} \in \widetilde{\mathcal{X}} \\
-  r = \frac{t_{i}}{N} \quad \quad t_{i} \in \mathbb{N}_{>0},
-\end{dcases}
-\label{equation:GAF}
-\end{equation} 
-where $t_{i}$ is the time stamp and $N$ plays the role of a normalizer for the span of the polar coordinate system. Some properties of this transformation are known:
-
-\begin{itemize}[leftmargin=*,labelsep=5.8mm]
-\item {Property \#1}: The encoding map of Equation~(\ref{equation:GAF}) is bijective as $\cos(\phi)$ is monotonic when $\phi \in [\,0,\pi]\,$. Given a time series, the proposed map produces a unique result in the polar coordinate system together with a unique inverse map. 
-\item {Property \#2}: As opposed to Cartesian coordinates, polar coordinates preserve absolute temporal~relations.
-\item {Property \#3}: Rescaled data in different intervals have different angular bounds. That is, $[\,0,1]\,$ corresponds to the cosine function in $[\,0,\frac{\pi}{2}]\,$, while cosine values in the interval $[\,-1,1]\,$ fall into the angular bounds $[\,0,\pi]\,$. These intervals are known to produce different information granularity in the Gramian angular field, especially for classification tasks~\citep{wang_imaging_2015}.
-\end{itemize}
-
-The third step in completing the transformation is to exploit the angular perspective by considering the trigonometric sum/difference between each point. This allows for the identification of the temporal correlation within different time intervals. The two types of~\gls{gaf}, namely~\gls{gasf} and~\gls{gadf}, are obtained as follows:
-
-\begin{equation}
-\begin{aligned}
-\gls{gasf} &= [\,\cos(\phi_{i} + \phi{j}]\, \\
-	 &= \widetilde{\mathcal{X}}' \cdot \widetilde{\mathcal{X}} - \sqrt{I-\widetilde{\mathcal{X}}^2}' \cdot \sqrt{I-\widetilde{\mathcal{X}}^2}
-\end{aligned}
-\end{equation}
-\\
-\begin{equation}
-\begin{aligned}
-\gls{gadf} &= [\,\sin(\phi_{i} + \phi{j}]\, \\
-	 &= \sqrt{I-\widetilde{\mathcal{X}}^2}' \cdot \widetilde{\mathcal{X}} - \widetilde{\mathcal{X}}' \cdot \sqrt{I-\widetilde{\mathcal{X}}^2}\\
-\end{aligned}
-\end{equation}
-
-$I$ is the unit row vector. After translating the time series from the Cartesian to polar coordinate system, each time step in it is taken as a 1D metric space. By defining the inner product as $<x,y> = x \cdot y - \sqrt{1-x^2} \cdot \sqrt{1-y^2}$ and $<x,y> = \sqrt{1-x^2} \cdot y - x \cdot \sqrt{1-y^2}$,
-respectively, the~\gls{gaf}s become {quasi-Gramian} matrices, since the defined $<x,y>$ do not satisfy the property of linearity in inner-product space.
-
-Still, according to~\cite{wang_imaging_2015}, the~\gls{gaf}s have several advantages:
-
-\begin{itemize}[leftmargin=*,labelsep=5.8mm]
-\item {Advantage \#1}: They provide a way to preserve temporal information. The temporal correlation is present because $G_{(i,j||i-j|=k)}$ represents the relative correlation by the superposition/difference of directions with respect to time interval $k$. The main diagonal $G_{i,i}$ is the special case when $k = 0$, which contains the original value/angular information. 
-\item {Advantage \#2:} From the main diagonal, it is possible to reconstruct the time series back into the original Cartesian space. This is useful especially in a classification task, where we can convert the time series back to numerical Cartesian space from the high level features learned by, for instance, a deep neural network.
-\end{itemize}
-
-However, the size of the Gramian matrix $G$ is $n \times n$, for $n$ being the length of the raw time series. The authors propose a solution for this issue by attempting to reduce the size of the produced~\gls{gaf} using, for instance, Piecewise Aggregation Approximation (PAA)~\cite{keogh_scaling_2000} to smooth the time series while preserving the trends. An example of the conversion from time series to~\gls{gasf} image is shown in Figure~\ref{figure:gasf_example}.
-
-\begin{figure} [H]
-\centering
-\includegraphics[width=.88\textwidth]{images/05-modeling/gasfpipeline.eps} 
- \caption{Conversion of time series into a~\gls{gasf} image and then back into its original space.}
- \label{figure:gasf_example}
-\end{figure}
-
-\subsubsection{Latent Dirichlet Allocation}
-\glsdesc{lda} is one of the most simple and influential topic models. {A topic model is a formal statistical relationship between a group of observed and latent (unknown) random variables, which specifies a probabilistic procedure to generate topics. The latter, in turn, is defined as a probability distribution over a collection of words}~\citep{reed_latent_2012}.
-
-The graphical model shown in Figure~\ref{fig:graphical-model} presents the structure of the~\gls{lda} model~\cite{blei_latent_2003}. Here, as in~\cite{smith_mining_2016}, the \textit{K}-th probability distribution over input words $\beta$ (called topics) is representative of the $K$ groups (types) of player motion styles in which we are interested. In turn, each document $d$ corresponds to a {game play} session for the game. We had to deal with the deterioration of model accuracy when considering the whole game section as a single document. Our solution for the problem was to segment each game section into subsets based on duration in seconds. %ANDY I cannot understand why couldn't be partitioned in subsets corresponding to the motion primitive, which already solved the problem. I'm losing my mind.
-This approach raises several issues that are going to be properly addressed in a future work, but still allow one to obtain interesting~results. %ANDY This cannot be left like this. It is too open and undefined.
-
-%\input{lda_graph.tex}
-%ANDY All the terms have to be defined. What is d? What are mixture proportions? What is D?
-In these terms, a document may present multiple types $\beta_{k}$ with mixture proportions $\theta_{d}$ The mixture of proportions defines a player at each instant of time. The choice of the $N_{D}$ words comes from $\overline{\beta}_{d}$, which acts as the weighted average of the game play types for a given document. This average is defined as follows~\cite{blei_latent_2003,smith_mining_2016}:
-
-\begin{equation}
-\overline{\beta}_{d} = \sum_{n=1}^{K} \theta_{d}(k) \cdot \beta_{k}
-\end{equation}
-
-The \textit{n}-th word $w_{d,n}$ of document \textit{d} is, in our case, the~\gls{gasf} encoding obtained, as we will explain later. $z_{d,n} \in \{1:K\}$ refers to the random type from which a word is drawn. Following the standard \gls{lda} model, $\alpha$ and $\eta$ are hyperparameters that control the sparsity in the mixture proportions and word distributions~\cite{smith_mining_2016}.
-
-\subsubsection{Autoencoder}\label{section:autoencoder}
-
-In many problems, we may have to deal with highly dimensional data that represent the situation of the world as captured by the sensors. Given that the raw data dimensionality could be practically intractable, the common procedure in these cases is to reduce the dimensionality possibly keeping only the important features of the input data.
-
-In image processing, for instance, understanding which pieces of an image represent a significant aspect for the task ahead is not a trivial issue. Significance may be related to specific parts of the image and may depend on many aspects. A common technique to face this issue is {autoencoder}.
-Autoencoder is an unsupervised learning technique that learns a representation of the input data, usually derived by means of non-linear transformations of the input~\cite{goodfellow_deep_2016}.
-A typical implementation of autoencoder consists of a feedforward neural network that first encodes the input into a code, the representation, and then reconstructs the input from it by means of a decoder (see Figure~\ref{fig:autoencoder_architecture}).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=.9\columnwidth]{images/05-modeling/autoencoder_architecture}
-\caption[Autoencoder general architecture]{General architecture of an autoencoder; the input layer is processed by an encoder that transforms it. The derived representation is then decoded by a decoder that yields a reconstruction.}
-\label{fig:autoencoder_architecture}
-\end{figure}
-
-In general, autoencoders are good at capturing the structure of the input and tend to represent it well~\cite{goodfellow_deep_2016}. We can represent an autoencoder as a neural network that tries to copy its input to its output. We can represent its general architecture with the following terminology:
-\begin{itemize}[leftmargin=*,labelsep=5.8mm]
-	\item the input $x$,
-  \item the {encoder function}, $f(x)$, composed of some hidden layers,
-  \item the {code}, or internal representation, of the input $h$,
-  \item the {decoder function}, $g(x)$, composed of other hidden layers,
-  \item the reconstruction obtained from the decoder, $r$.
-\end{itemize}
-
-A {loss function}, $L(x, r)$, should also be defined to evaluate how close the reconstruction is with respect to the input.
-A simple loss function is shown as Equation \eqref{eq:loss_autoencoder}.
-
-\begin{equation} \label{eq:loss_autoencoder}
-L(x,r) = \sum_{i} (x_i - r_i)^2
-\end{equation}
-
-However, if we do not impose any restriction, the transformation it learns would be an identity, since this would perfectly reconstruct the input. To prevent this transformation, two approaches have been devised~\cite{goodfellow_deep_2016}.
-The first, called {undercomplete autoencoder}, adopts a representation smaller than the input (see Figure \ref{fig:under_over_autoencoder}a),
-while the latter, {overcomplete autoencoder}, uses a representation with a dimension larger than the input (see Figure \ref{fig:under_over_autoencoder}b).
-Although increasing the representation size is counterintuitive in order to sparsely represent the input, this technique has proven its effectiveness.
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[H]{0.3\textwidth}
-\centering
-\includegraphics[width=0.9\textwidth]{images/05-modeling/undercomplete_autoencoder}
-\caption{}
-\label{figure:undercomplete}
-\end{subfigure}
-\begin{subfigure}[H]{0.3\textwidth}
-\centering
-\includegraphics[width=0.9\textwidth]{images/05-modeling/overcomplete_autoencoder}
-\caption{}
-\label{figure:overcomplete}
-\end{subfigure}  \vspace{-6pt}
-\caption{(\textbf{a}) Representation of an undercomplete autoencoder, where the representation has a lower dimension with respect to the input. (\textbf{b}) Representation of an overcomplete autoencoder, which uses a larger space to represent the input.}
-\label{fig:under_over_autoencoder}
-\end{figure}
-
-The undercomplete autoencoder is the oldest and best known architecture for the autoencoder and also the one we use in our work. The code the autoencoder derives is smaller than the input: it learns how to combine the input so that the relevant information is retained in a lower dimensional space. The combination is often non-linear due to a non-linear activation function of the neurons. On~the other hand, the decoder function learns how to unroll such compressed code in order to obtain an extended representation. This architecture could be trained using the classic back-propagation approach, although different methods are available~\cite{goodfellow_deep_2016}.
-
-The overcomplete autoencoder, instead, increases the dimension of the representation; however, as already mentioned, the model could easily learn the identity transformation. In order to tackle this issue, the common approach is to apply a regularization term over the weights of the network. In general, a $l_1$ penalization is added to the loss function.
-In this way, the representation will be sparse since some of the dimensions are set to zero.
-However, this new architecture would be more complex to train since the model would be larger than the previous one, although still providing a sparse representation.
-Despite its sparsity, this architecture is able to extract more information from the input, and it is often used to capture also the input distribution and not just the structure of $x$. It is not possible to estimate such a distribution with an undercomplete autoencoder since such a task would require a higher representation capacity.
-
-In this work, we adopt an undercomplete autoencoder, since our goal is to represent an image in a lower dimensional space. 
-Our architecture has multiple layers: the first layer takes only the input, while the following ones decrease in size with the power of two.
-We represent the input with a code having 64 dimensions; thus, from an input of 1024 features, we derive a representation of 64 components using an autoencoder.
-
-The reconstruction of the input by the decoder function has a very low loss, below 0.05$\%$. The~layers obtained by the encoder are often difficult to understand by people; for instance, in Figure~\ref{fig:levels_autoencoder}a--c, we can observe the first layer, and we cannot derive any structure or meaning from it.
-However, looking at deeper levels, the layers show a clear structure; in Figure~\ref{fig:levels_autoencoder}g--i, we can observe that the filters are extracting horizontal and vertical patterns. Indeed, most of the original images show a cross pattern, or multiple crosses; therefore, this representation seems to be able to represent the input data with a lower dimension.
-
-\begin{figure}[H]
-\centering
-\begin{tabular}{ccc}
-\includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_2_0} &
-\includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_2_1} &
-\includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_2_2} \\
-(\textbf{a}) & (\textbf{b}) & (\textbf{c}) \\
-\includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_4_0} &
-\includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_4_1} &
-\includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_4_2} \\
-(\textbf{d}) & (\textbf{e}) & (\textbf{f}) \\
-\includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_7_0} &
-\includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_7_1} &
-\includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_7_2} \\
-(\textbf{g}) & (\textbf{h}) & (\textbf{i}) \\
-\end{tabular}
-\caption{Example layers from the trained autoencoder. (\textbf{a}--\textbf{c}) represent the information extracted by the first layer of the autoencoder. It is hard to grasp the meaning of the representation derived. Going deeper, in (\textbf{d}--\textbf{f}), the representation seems to become more clear and with a structure. Indeed going directly to the obtained code, in (\textbf{g}--\textbf{i}), we can see a more accentuate structure composed mainly of horizontal or vertical lines.}
-\label{fig:levels_autoencoder}
-\end{figure}
-
-\subsection{Problem Statement} %ANDY this section seems fundational, an probably should stay at the beginning ofthe chapter. Frmulating a problem is typically done before than proposing solutions.
-This section formulates the problem of modeling the player as a probabilistic mixture of player styles derived from data. There are at least three basic dimensions (or problems) of interest that must be considered when building a model of this kind for \gls{pirg}s. Such dimensions are related to the specific capabilities of a mobile robot to achieve a suitable in-game performance. We delineate such dimensions as follows:
-
-\begin{itemize}[leftmargin=*,labelsep=5.8mm]
-\item {Dimension \#1: Fundamental robot behavior}, which concerns the fundamental aspects of the robot locomotion, timing of actions, localization and other abilities to keep it alive and well-functioning during the game play.
-\item {Dimension \#2: In-game competitive capabilities}, which are more related to the intelligent selection of actions aimed at achieving in-game goals. In other words, this dimension captures the intricacies of planning and rational behavior, using solutions developed for Dimension \#1.
-\item {Dimension \#3: Adaptive power}, which is a higher level dimension concerned with how and when during the game to adjust the robot performance to match that of the current player.
-\end{itemize}
-
-Dimension \#1 concerns the setup of an appropriate robotic platform, including aspects like: electrical disturbances, power consumption, kinematic constraints, processing capabilities, sensing and safety. These are recurrent issues that must be appropriately dealt with. 
-
-Dimension \#2 encompasses the problem of finding a plan or strategy to achieve the robot goals. This is the problem most related to the competitive behavior the robot can impose on the human player, since action selection is driven by the tendency to maximize the robot's own pay-off. After all, the robot has to give the idea that it is at best trying to beat/help its opponent(s)/companion(s).
-
-Dimension \#3, based on \#1 and \#2, defines constraints on the robot behavior such that the action selection is not longer just governed by the tendency to be competitive/helpful, but is also driven by the compelling necessity to support the player interaction, in real time, as robustly as possible.
-
-One can see that the present work as a step towards advancements in Dimension \#3.
-%ANDY All this would be nice in the introduction of this thesis, and could drive the presentation, showing as you have faced all these aspects, producing innovative results in some of them. Player modeling is missing here, and could go in \#3, being \#1 dedicated to development of a fully funcyional body, \#2 to the ability to play, and act according the rules, including the ability to aim at winning, descpite the player, while \#3 considers also the player, models it, and try to optimize entertainment more than performance in the game, eventually reducing the robot's abilities. Your main contribution is, of course on \#3, but you had to face also the other two, and, actually, you have to describe them UP to now you haeve described \#1 and part of \#3. #2 is missing at this point, but surely will be in the following.
+\subsection{Problem Statement}
+This section formulates the problem of modeling the player as a probabilistic mixture of player styles derived from data.  One can see that it is a step towards advancements in Dimension \#3, as discussed in section~\ref{sec:dimensions}.
 
 Here, we exploit data coming from a single accelerometer placed on the human player's body; thus, player movement is our primary source of information for describing the playing style and engagement. 
 %ANDY However you have also mentioned IC, and other image-based features. You should take a definite line, putting in evidence clearly what you have explored and then left and whatis teh content of the final proposal, which, BTW, seemed to be based on lasers only, losing the richness provided by the other data sources (accelerometer and Kinect) and the possibility to explore and exploit data fusion.
@@ -323,6 +140,167 @@ In summary, we are interested in investigating time series data, especially acce
 \end{figure}
 
 
+\subsection{Mathematical Preliminaries}
+This section presents the basic concepts and principles behind~\gls{gaf}, autoencoders and~\gls{lda}, which are important to understand our modeling procedure.
+
+\subsubsection{\glsdesc{gaf} Images}
+
+The results obtained in this work rely on the transformation of the acceleration time series generated by the player into images that are then processed and understood in terms of emergent patterns. The types of image we have chosen are~\gls{gasf} and~\gls{gadf}. Such images had been proposed in the field of time series classification~\citep{wang_imaging_2015}, where the authors evaluated the efficacy of representing time series in a polar coordinate system instead of the typical Cartesian coordinates. For a deep understanding of the method, we suggest reading the work of~\cite{wang_imaging_2015} since the authors did not only present the idea of~\gls{gasf}/\gls{gadf}, but also reported experimental results comparing them with other time series techniques. Here, we present an overview of the idea behind the method in order to familiarize the reader and to point out its role in our proposal.
+
+In general, in order to obtain a~\gls{gasf}/\gls{gadf} representation for a time series $\mathcal{X}=\{x_{1}, x_{2}, ... x_{n}\}$ of size $n \in \mathbb{N}_{>0}$, rescaling is first performed in order to put the time series in the interval $[\,-1,1] \,$ or $[\,0,1]\,$. The second step is to represent the rescaled time series $\widetilde{\mathcal{X}}$ in polar coordinates, where each sample value is now mapped into the angular cosine and the time stamp information is represented as the radius. 
+The formula for this step is as follows:
+
+\begin{equation}
+\begin{dcases}
+  \phi = \arccos(\widetilde{x}_{i}) \quad -1 \leq \widetilde{x}_{i} \leq 1, \widetilde{x}_{i} \in \widetilde{\mathcal{X}} \\
+  r = \frac{t_{i}}{N} \quad \quad t_{i} \in \mathbb{N}_{>0},
+\end{dcases}
+\label{equation:GAF}
+\end{equation} 
+where $t_{i}$ is the time stamp and $N$ plays the role of a normalizer for the span of the polar coordinate system. Some properties of this transformation are known:
+
+\begin{itemize}[leftmargin=*,labelsep=5.8mm]
+\item \textbf{{Property \#1}}: equation~(\ref{equation:GAF}) is bijective as $\cos(\phi)$ is monotonic when $\phi \in [\,0,\pi]\,$. Given a time series, the proposed map produces a unique result in the polar coordinate system together with a unique inverse map. 
+\item \textbf{{Property \#2}}: as opposed to Cartesian coordinates, polar coordinates preserve absolute temporal~relations.
+\item \textbf{{Property \#3}}: rescaled data in different intervals have different angular bounds. That is, $[\,0,1]\,$ corresponds to the cosine function in $[\,0,\frac{\pi}{2}]\,$, while cosine values in the interval $[\,-1,1]\,$ fall into the angular bounds $[\,0,\pi]\,$. These intervals are known to produce different information granularity in the~\gls{gaf}, especially for classification tasks~\citep{wang_imaging_2015}.
+\end{itemize}
+
+The third step in completing the transformation is to exploit the angular perspective by considering the trigonometric sum/difference between each point. This allows for the identification of the temporal correlation within different time intervals. The two types of~\gls{gaf}, namely~\gls{gasf} and~\gls{gadf}, are obtained as follows:
+
+\begin{equation}
+\begin{aligned}
+\gls{gasf} &= [\,\cos(\phi_{i} + \phi{j}]\, \\
+	 &= \widetilde{\mathcal{X}}' \cdot \widetilde{\mathcal{X}} - \sqrt{I-\widetilde{\mathcal{X}}^2}' \cdot \sqrt{I-\widetilde{\mathcal{X}}^2}
+\end{aligned}
+\end{equation}
+\\
+\begin{equation}
+\begin{aligned}
+\gls{gadf} &= [\,\sin(\phi_{i} + \phi{j}]\, \\
+	 &= \sqrt{I-\widetilde{\mathcal{X}}^2}' \cdot \widetilde{\mathcal{X}} - \widetilde{\mathcal{X}}' \cdot \sqrt{I-\widetilde{\mathcal{X}}^2}\\
+\end{aligned}
+\end{equation}
+
+The symbol $I$ is the unit row vector. After translating the time series from the Cartesian to polar coordinate system, each time step in it is taken as a 1D metric space. By defining the inner product as $<x,y> = x \cdot y - \sqrt{1-x^2} \cdot \sqrt{1-y^2}$ and $<x,y> = \sqrt{1-x^2} \cdot y - x \cdot \sqrt{1-y^2}$,
+respectively,~\gls{gaf}s become {quasi-Gramian} matrices, since the defined $<x,y>$ do not satisfy the property of linearity in inner-product space.
+
+According to~\cite{wang_imaging_2015}, the~\gls{gaf}s have several advantages:
+
+\begin{itemize}[leftmargin=*,labelsep=5.8mm]
+\item \textbf{{Advantage \#1}}: they provide a way to preserve temporal information. The temporal correlation is present because $G_{(i,j||i-j|=k)}$ represents the relative correlation by the superposition/difference of directions with respect to time interval $k$. The main diagonal $G_{i,i}$ is the special case when $k = 0$, which contains the original value/angular information. 
+\item \textbf{{Advantage \#2:}} from the main diagonal, it is possible to reconstruct the time series back into the original Cartesian space. This is useful especially in a classification task, where we can convert the time series back to numerical Cartesian space from the high level features learned by, for instance, a deep neural network.
+\end{itemize}
+
+However, the size of the Gramian matrix $G$ is $n \times n$, for $n$ being the length of the raw time series. Which may produce issues regarding memory complexity. For this issue~\cite{wang_imaging_2015} propose a solution by attempting to reduce the size of the produced~\gls{gaf} using, for instance,~\gls{paa}~\citep{keogh_scaling_2000} to smooth the time series while preserving the trends. An example of the conversion from time series to~\gls{gasf} image is shown in Figure~\ref{figure:gasf_example}.
+
+\begin{figure} [h]
+\centering
+\includegraphics[width=\textwidth]{images/05-modeling/gasfpipeline.eps} 
+ \caption{Conversion of time series into a~\gls{gasf} image and then back into its original space.}
+ \label{figure:gasf_example}
+\end{figure}
+
+\subsubsection{Latent Dirichlet Allocation}
+\glsdesc{lda} is one of the most simple and influential topic models. A topic model is a formal statistical relationship between a group of observed and latent (unknown) random variables, which specifies a probabilistic procedure to generate \textit{topics}~\citep{reed_latent_2012}. The \textit{topics} are defined as a probability distribution over a collection of words and can be seen as generating mechanisms for words in a documents. The idea behind the method is that of assuming a generative procedure from which several topics are likely to have generated the words. Each document then is represented by a vector of proportion describing to which proportion each topic are estimated to have contributed to the document, \ie the presence of words in it. Such vector is called the \textit{mixture proportions}.
+
+\input{chart/lda_graph.tex}
+
+For instance, consider a text document about governmental investments in sport stadiums. It can be assumed that it is a collection of words generated from different distributions (different topics) that take into account contexts like \textit{finance}, \textit{sports}, \textit{public administration} and \textit{life quality} improvements. In such discrete word distributions (over the same vocabulary) each word is weighted by its relationship to the context its is associated to. As an example, the word \textit{stadium} would have a higher likelihood under the topic about sports than under a one representing public administration or finance. Thus, each word, yet present in all topics, is weighted different according to their relationship in the document corpus. The~\glsdesc{lda} algorithm does not provide a meaning to the topics, but the programmer can attribute a meaning to it based on the words with higher probability.
+
+The graphical model shown in Figure~\ref{fig:graphical-model} presents the basic structure of the~\gls{lda} model~\citep{blei_latent_2003}. For our purposes, as in~\cite{smith_mining_2016}, the \textit{K}-th probability distribution over input words $\beta_{k}$ (topic k) is representative of the $K$ groups (types) of player motion styles in which we are interested in. Each document $d$ corresponds to a game play session for the game and belongs to the corpus $D$ of all observed player sessions.
+
+In these terms, a document may present multiple types $\beta_{k}$ with mixture proportions $\theta_{d}$. The mixture of proportions $\theta_{d}$, as explained above, defines a player at each instant of time by describe to what proportion each discovere topic contributes to the data generated in play session $d$. The choice of the $N_{D}$ words comes from $\overline{\beta}_{d}$, which acts as the weighted average of the game play types for a given document. This average is defined as follows~\citep{blei_latent_2003,smith_mining_2016}:
+
+\begin{equation}
+\overline{\beta}_{d} = \sum_{n=1}^{K} \theta_{d}(k) \cdot \beta_{k}
+\end{equation}
+
+The \textit{n}-th word $w_{d,n}$ of document \textit{d} is, in our case, the~\gls{gasf} encoding obtained, as we will explain later. $z_{d,n} \in \{1:K\}$ refers to the random motion type from which a word is drawn from and is an auxiliary variable that makes inference easier. Following the standard~\gls{lda} model, $\alpha$ and $\eta$ are hyperparameters that control the sparsity in the mixture proportions and word distributions~\citep{smith_mining_2016}.
+
+\subsubsection{Autoencoder}\label{sec:autoencoder}
+
+In many problems, we may have to deal with highly dimensional data that represent the situation of the world as captured by the sensors. Given that the raw data dimensionality could be practically intractable, the common procedure in these cases is to reduce the dimensionality possibly keeping only the important features of the input data.
+
+In image processing, for instance, understanding which pieces of an image represent a significant aspect for the task ahead is not a trivial issue. Significance may be related to specific parts of the image and may depend on many aspects. A common technique to face this issue is autoencoder.
+Autoencoder is an unsupervised learning technique that learns a representation of the input data, usually derived by means of non-linear transformations of the input~\citep{goodfellow_deep_2016}. A typical implementation of autoencoder consists of a feedforward neural network that first encodes the input into a code, the representation, and then reconstructs the input from it by means of a decoder (see Figure~\ref{fig:autoencoder_architecture}).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.9\columnwidth]{images/05-modeling/autoencoder_architecture}
+\caption{General architecture of an autoencoder; the input layer is processed by an encoder that transforms it. The derived representation is then decoded by a decoder that yields a reconstruction.}
+\label{fig:autoencoder_architecture}
+\end{figure}
+
+In general, autoencoders are good at capturing the structure of the input and tend to represent it well~\cite{goodfellow_deep_2016}. We can understand an autoencoder as a neural network that tries to copy its input to its output. We can represent its general architecture with the following terminology:
+
+\begin{itemize}[leftmargin=*,labelsep=5.8mm]
+	\item the input $x$,
+  \item the {encoder function}, $f(x)$, composed of some hidden layers,
+  \item the {code}, or internal representation, of the input $h$,
+  \item the {decoder function}, $g(x)$, composed of other hidden layers,
+  \item the reconstruction obtained from the decoder, $r$.
+\end{itemize}
+
+A {loss function}, $L(x, r)$, should also be defined to evaluate how close the reconstruction is with respect to the input.
+A simple loss function is shown as Equation \eqref{eq:loss_autoencoder}.
+
+\begin{equation} \label{eq:loss_autoencoder}
+L(x,r) = \sum_{i} (x_i - r_i)^2
+\end{equation}
+
+However, if we do not impose any restriction, the transformation it learns would be an identity, since this would perfectly reconstruct the input. To prevent this transformation, two approaches have been devised~\citep{goodfellow_deep_2016}. The first, called \textit{undercomplete autoencoder}, adopts a representation smaller than the input (see Figure \ref{fig:under_over_autoencoder}a), while the latter, \textit{overcomplete autoencoder}, uses a representation with a dimension larger than the input (see Figure~\ref{fig:under_over_autoencoder}b). Although increasing the representation size is counterintuitive in order to sparsely represent the input, this technique has proven its effectiveness.
+
+\begin{figure}[h]
+\centering
+    \begin{subfigure}[h]{5cm}
+        \centering
+        \includegraphics[width=4cm]{images/05-modeling/undercomplete_autoencoder}
+        \caption{}
+        \label{fig:undercomplete}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[h]{5cm}
+        \centering
+        \includegraphics[width=4cm]{images/05-modeling/overcomplete_autoencoder}
+        \caption{}
+        \label{fig:overcomplete}
+    \end{subfigure}  \vspace{-6pt}
+    \caption{a) Representation of an undercomplete autoencoder, where the representation has a lower dimension with respect to the input. b) Representation of an overcomplete autoencoder, which uses a larger space to represent the input.}
+    \label{fig:under_over_autoencoder}
+\end{figure}
+
+The undercomplete autoencoder is the oldest and best known architecture for the autoencoder and also the one we use in our work. The code the autoencoder derives is smaller than the input: it learns how to combine the input so that the relevant information is retained in a lower dimensional space. The combination is often non-linear due to a non-linear activation function of the neurons. On~the other hand, the decoder function learns how to unroll such compressed code in order to obtain an extended representation. This architecture could be trained using the classic back-propagation approach, although different methods are available~\citep{goodfellow_deep_2016}.
+
+The overcomplete autoencoder, instead, increases the dimension of the representation; however, as already mentioned, the model could easily learn the identity transformation. In order to tackle this issue, the common approach is to apply a regularization term over the weights of the network. In general, a $l_1$ penalization is added to the loss function.
+In this way, the representation will be sparse since some of the dimensions are set to zero.
+However, this new architecture would be more complex to train since the model would be larger than the previous one, although still providing a sparse representation. Despite its sparsity, this architecture is able to extract more information from the input, and it is often used to capture also the input distribution and not just the structure of $x$. It is not possible to estimate such a distribution with an undercomplete autoencoder since such a task would require a higher representation capacity.
+
+\begin{figure}[h]
+    \centering
+    \begin{tabular}{ccc}
+        \includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_2_0} &
+        \includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_2_1} &
+        \includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_2_2} \\
+        (\textbf{a}) & (\textbf{b}) & (\textbf{c}) \\
+        \includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_4_0} &
+        \includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_4_1} &
+        \includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_4_2} \\
+        (\textbf{d}) & (\textbf{e}) & (\textbf{f}) \\
+        \includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_7_0} &
+        \includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_7_1} &
+        \includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_7_2} \\
+        (\textbf{g}) & (\textbf{h}) & (\textbf{i}) \\
+    \end{tabular}
+    \caption{Example layers from the trained autoencoder. (a--c) represent the information extracted by the first layer of the autoencoder. It is hard to grasp the meaning of the representation derived. Going deeper, in (d--f), the representation seems to become more clear and with a structure. Indeed going directly to the obtained code, in (g--i), we can see a more accentuate structure composed mainly of horizontal or vertical lines.}
+    \label{fig:levels_autoencoder}
+\end{figure}
+
+In this work, we adopt an undercomplete autoencoder, since our goal is to represent an image in a lower dimensional space. 
+Our architecture has multiple layers: the first layer takes only the input, while the following ones decrease in size with the power of two.
+We represent the input with a code having 64 dimensions; thus, from an input of 1024 features, we derive a representation of 64 components using an autoencoder.
+
+The reconstruction of the input by the decoder function has a very low loss, below 0.05\%. The~layers obtained by the encoder are often difficult to understand by people; for instance, in Figure~\ref{fig:levels_autoencoder}a--c, we can observe the first layer, and we cannot derive any structure or meaning from it. However, looking at deeper levels, the layers show a clear structure; in Figure~\ref{fig:levels_autoencoder}g--i, we can observe that the filters are extracting horizontal and vertical patterns. Indeed, most of the original images show a cross pattern, or multiple crosses; therefore, this representation seems to be able to represent the input data with a lower dimension.
+
 \subsection{Activity modeling}
 This section describes our approach to model the activity of the player, while emphasizing the differences and similarities with respect to existing methods. We take inspiration from approaches like~\cite{smith_mining_2016, wang_encoding_2015, wang_imaging_2015} and aim at modeling game sessions as ``documents'', where player's acceleration data are considered as ``words''. We use~\gls{lda}~\cite{blei_latent_2003} to categorize the player's motion profile as a composition or mixture of game play motion types, the latter being analogous to the ``topics'' in the general application of \gls{lda} for document modeling.
 
@@ -338,32 +316,32 @@ We have used~\gls{gasf} images instead of~\gls{gadf} because the mapping functio
 \cos(\phi)=\sqrt{\frac{G_{ii}+1}{2}} \qquad \phi \in [\,0,\frac{\pi}{2}]\,
 \end{equation}
 
-An example of signal decomposition into~\gls{gasf} images is shown in Figure~\ref{figure:acc_signal_gasfs}. Given recent advances in deep learning and pattern recognition for images, we take the route of~\cite{wang_encoding_2015} and exploit the applicability of autoencoders for extracting unsupervised features from~\gls{gasf} images (see Section~\ref{section:autoencoder}). This is relevant since the process of feature engineering is time-consuming and laborious. Moreover, unsupervised feature extraction from such methods has been proven to work well~\cite{wang_imaging_2015, wang_time_2016}.
-Sparse encoding via linear-algebra methods for dictionary learning is also a possibility. However, in our experiments, it turned out to be not as efficient as autoencoders. We present details of our experimental activity in the next section. Our methodology is summarized in figure~\ref{diagram:methodology}.
+An example of signal decomposition into~\gls{gasf} images is shown in Figure~\ref{figure:acc_signal_gasfs}. Given recent advances in deep learning and pattern recognition for images, we take the route of~\cite{wang_encoding_2015} and exploit the applicability of autoencoders for extracting unsupervised features from~\gls{gasf} images (see Section~\ref{section:autoencoder}). This is relevant since the process of feature engineering is time-consuming and laborious. Moreover, unsupervised feature extraction from such methods has been proven to work well~\citep{wang_imaging_2015, wang_time_2016}.
+Sparse encoding via linear-algebra methods for dictionary learning is also a possibility. However, in our experiments, it turned out to be not as efficient as autoencoders. We present details of our experimental activity in the next section. Our methodology is summarized in Figure~\ref{diagram:methodology}.
 
-%\begin{figure}[H]
-%	\centering
-%\begin{tikzpicture}[auto]
-%	\tikzstyle{b} = [rectangle, draw, fill=blue!20, node distance=0.5cm, text width=4em, text centered, rounded corners, minimum height=5em, thick]
-% \tikzstyle{c} = [rectangle, draw, inner sep=0.2cm, dashed]
-% \tikzstyle{l} = [draw, -latex',thick]
-%
-%  \node [b] (time series) {Game time series};
-%  \node [b, right=of time series] (segments) {Segments};
-%  \node [b, right=of segments] (gasfs) {GASFs};
-%	\node [b, right=of gasfs] (features) {GASFs features};
-%  \node [b, right=of features] (dict) {Dict. Learning};
-%  \node [b, right=of dict] (lda) {LDA};
-%
-%  \path [l] (time series) -- (segments);
-%  \path [l] (segments) -- (gasfs);
-%  \path [l] (gasfs) -- (features);
-%  \path [l] (features) -- (dict);
-%  \path [l] (dict) -- (lda);
-%\end{tikzpicture}
-%\caption{The general diagram for our methodology. At first, game time series are extracted, which are then segmented into windows (sliding windows method). Such segments are then turned into~\gls{gasf} images, whose representations are obtained using the autoencoder. Since the basic \gls{lda} method works with a multinomial distribution at the topics, we define a dictionary of visual words before feeding each~\gls{gasf} feature document representation to it.}
-%\label{diagram:methodology}
-%\end{figure}
+\begin{figure}[h]
+	\centering
+\begin{tikzpicture}[auto]
+	\tikzstyle{b} = [rectangle, draw, fill=blue!20, node distance=0.5cm, text width=4em, text centered, rounded corners, minimum height=5em, thick]
+\tikzstyle{c} = [rectangle, draw, inner sep=0.2cm, dashed]
+\tikzstyle{l} = [draw, -latex',thick]
+
+ \node [b] (time series) {Game time series};
+ \node [b, right=of time series] (segments) {Segments};
+ \node [b, right=of segments] (gasfs) {GASFs};
+	\node [b, right=of gasfs] (features) {GASFs features};
+ \node [b, right=of features] (dict) {Dict. Learning};
+ \node [b, right=of dict] (lda) {LDA};
+
+ \path [l] (time series) -- (segments);
+ \path [l] (segments) -- (gasfs);
+ \path [l] (gasfs) -- (features);
+ \path [l] (features) -- (dict);
+ \path [l] (dict) -- (lda);
+\end{tikzpicture}
+\caption{The general diagram for our methodology. At first, game time series are extracted, which are then segmented into windows (sliding windows method). Such segments are then turned into~\gls{gasf} images, whose representations are obtained using the autoencoder. Since the basic \gls{lda} method works with a multinomial distribution at the topics, we define a dictionary of visual words before feeding each~\gls{gasf} feature document representation to it.}
+\label{diagram:methodology}
+\end{figure}
 
 \subsection{Experimental Results}
 In this section, the exploration of an incomplete representation of the~\gls{gasf} images using a simple autoencoder architecture is firstly reported, then we discuss how we transform the extracted features into input words for the \gls{lda} model. Finally, we show the results when confronting the model output with human judgment. All experimental code used is available at the link in supplementary materials. %ANDY Check that this is actually available and report the link here
