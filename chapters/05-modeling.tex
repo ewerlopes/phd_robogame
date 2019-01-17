@@ -1,11 +1,7 @@
 \chapter{Player behavior modeling in~\glsdesc{pirg}}\label{ch:modeling}
 
-%ANDY This chapter contains parts that are general enough to become part of the introduction, and frame the whole thesis, other parts that are quite specific to a paper (and it is worth to state explicitly that they have been published), other parts that could be related to other parts of the thesis. I have put comments. Let's try to have something more similar to a chapter of a thesis, integrated in the thesis flow, than just a paper put here out of the blue.
-
-In this chapter we present our approach for player modeling in~\gls{pirg}, beginning from the activity recognition system described in the previous chapter.
-
-\section{A simple activity model}
-Having identified an activity system, we aimed at the definition of an approach to model user behavior that could account for the combination of the player physical effort and interaction level. The proposed model is based on the human activity recognition (see chapter~\ref{ch:activity}) and a description of interaction (proximity and body contraction index) relative to the robot co-player. %ANDY If you have described separately the activity recognition model based on the accelerometer, a separate chapter has to be dedicated also to the lasers or whatever you would like to consider for the other parameters.  All these sources are functional toprovide data for the activity model (if you like you may have all the contributions in the same chapter).
+Having identified an activity recognition system, we aimed at the definition of an approach to model user behavior that could account for the combination of the player physical effort and interaction level. The proposed model is based on the human activity recognition (chapter~\ref{ch:activity}) and a description of interaction (proximity and body contraction index) relative to the robot co-player.
+%ANDY If you have described separately the activity recognition model based on the accelerometer, a separate chapter has to be dedicated also to the lasers or whatever you would like to consider for the other parameters.  All these sources are functional to provide data for the activity model (if you like you may have all the contributions in the same chapter).
 
 \section{Relational Activity Model}\label{theModel}
 
@@ -13,7 +9,7 @@ As in~\cite{etheredge_generic_2013}, we defined as behavior a sequence of discre
 
 In the proposed model, the two dimensions (activity and interaction) are combined into a simple overall scoring system capable of describing quantitatively the player's active participation in the~\gls{pirg}. The proposed model is detailed in the next.
 
-\subsubsection{Activity}\label{activity}
+\subsection{Activity}\label{activity}
 
 Equation~\ref{eq:activity_eq} is used to compute the general amount of activity $\alpha(m)$, given the classification of primitive motions from chapter~\ref{ch:activity}:
 
@@ -23,65 +19,51 @@ Equation~\ref{eq:activity_eq} is used to compute the general amount of activity 
 \end{equation}
 , where $\mathcal{A}$ stands for the set of activities \{``running'', ``locally moving'', ``walking/dodging''\}; $\omega$ stands for the activity weight; $\varphi$ for the stochastic prediction value for the motion primitive $m$.
 
-We consider equation~\ref{eq:activity_eq} as a measure of the ``effort'' of the player. The weight $\omega$ states how much each physical activity contributes to the overall quantification and is a hyper-parameter.
+We consider equation~\ref{eq:activity_eq} as a measure of the ``effort'' of the player. The weight $\omega$ states how much each physical activity contributes to the overall quantification and is a hyper-parameter intended to capture the partial ordering among activities.
 
 \subsection{Interaction}\label{Interaction}
-In order to model the interaction we take into account the spatial relationship between the player and the robot defined as ``proximity'' and a measure of body contraction named ``contraction index'' (CI).
+In order to model the interaction we take into account the spatial relationship between the player and the robot defined as \textit{proximity} and a measure of body contraction named~\gls{ci}.
 
-Proximity is a measure defined in the interval [0, 1], computed from the data provided by the Microsoft Kinect\textsuperscript{\textregistered}, normalized given the sensor specifications (see section~\ref{sec:kinectsec}). CI is also in [0 , 1] and it is calculated using a technique related to the bounding region, i.e., the minimum rectangle surrounding the body: the algorithm compares the area covered by this rectangle with the area currently covered by the player's silhouette~\cite{castellano_recognising_2007}.
+Proximity is a measure defined in the interval [0, 1], computed from the data provided by the Microsoft Kinect\textsuperscript{\textregistered}, normalized given the sensor specifications (see section~\ref{sec:kinectsec}).~\gls{ci} is also in [0, 1] and it is calculated using a technique related to the bounding region, i.e., the minimum rectangle surrounding the body: the algorithm compares the area covered by this rectangle with the area currently covered by the player's silhouette~\citep{castellano_recognising_2007}.
 
-A high CI is associated with an intense interaction because a wide openness of the body is interpreted as a higher focus level of the player w.r.t the robot and to the game; for this reason it will boost the final outcome. Low CI, in turn, is interpreted as a lack of focus or, in general, limited motivation of the player, which penalizes the interaction. %ANDY Not providing data and analysis to support this makes this assumption quite weak
+A high~\gls{ci} is associated with an intense interaction because a wide openness of the body is interpreted as a higher focus level of the player w.r.t the robot and to the game; for this reason it will boost the final outcome. Low~\gls{ci}, in turn, is interpreted as a lack of focus or, in general, limited motivation of the player, which penalizes the interaction.%ANDY: Not providing data and analysis to support this makes this assumption quite weak.
 
 \subsection{Combined model}\label{sec:engagement}
-The model to describe the player's relational activity is a combination of the activity level and the degree of interaction, named $\epsilon$; it summarizes the player physical activity during the game, weighted by his interaction with the robotic opponent as follows: 
+The model to describe the player's relational activity is a combination of the activity level and the degree of interaction, named $\epsilon$; it summarizes the player physical activity during the game and has a linear relationship with his interaction with the robotic opponent as follows: 
 \begin{equation}
 \label{enagementeq}
-\epsilon=\kappa\alpha(m),
+\epsilon=\kappa + \alpha(m),
 \end{equation}
 
-where $\kappa= (1-\rho)$ and uses the degree of interaction $\rho$ so that when the output of the fuzzy %ANDY fuzzy? Never mentioned till now
- system is zero (meaning no interaction) the activity level is only the activity $\alpha$. In other cases, $\kappa$ is the multiplying factor that boosts the importance of the activity by putting it in relation with the amount of interaction.  %ANDY actually, if k ranges in [0 1] and multplies alpha, it will reduce alpha...
-Notice, however, that $\rho$ is an overall degree of interaction, i.e., the combination of CI and proximity. The exact procedure for the combination of the interaction signals is not bound to a specific method. In this work, we have used a fuzzy logic system to obtain the desired combination, described in a linguistic way. In principle, the combination of the signals depends on the specifics of the~\gls{pirg} environment.
-%ANDY I donot remember what mentioned above and seems to me quite confused. Let's talk about it.
+where $\kappa= (1-\rho)c$.  The $c$ in the calculation of $\kappa$ represents a constant whose function is just that of change the numerical range of the variable and is assumed greater than zero. $\kappa$ also uses the degree of interaction $\rho$ so that when the estimated interaction is zero (meaning no interaction) the activity level is only $\alpha$. In other words, $\kappa$ is the a term whose function is to boosts the importance of the activity by putting it in relation with the amount of interaction. 
 
+Notice, however, that $\rho$ is an overall degree of interaction, i.e., the combination of~\gls{ci} and proximity. The exact procedure for the combination of the interaction signals is not bound to a specific method. In this work, we have used a fuzzy logic system to obtain the desired combination, described in a linguistic way. In principle, the combination of the signals depends on the specifics of the~\gls{pirg} environment.
 
-\subsection{Evaluation}\label{sec:simple_evalution}
-\subsubsection{Data elaboration}
-We considered 29 matches involving 15 male participants of different ages. The age distribution consisted of children (7-10) and adults (26-40). This sample matches the typical user distribution for this kind of games, and arose in uncontrolled way from the presentation of the game to general public (including differently aged people, males and females) in an exhibition context. The variety of behaviors collected in these trials was high and supported our hypothesis about the need of an adapting robot. In these matches, the robot was remotely driven by a human operator. Matches had a minimum time duration of about 40 secs and a maximum of about 1 minute and 10 secs. 
-
-The collected data are the acceleration values along x, y, and z axis with a sampling frequency of 50Hz, which is five times larger than the frequency considered to be sufficient for detecting daily activities from accelerometer data (10Hz)~\cite{kikhia_analyzing_2014}. %ANDY This was already mentioned in another section
-
-In terms of dataset support, 34$\%$ of the motion primitives correspond to locally moving (LM); 25$\%$ to walking/dodging (WD) and 41$\%$ running (R). %ANDY This was already mentioned in another section
-
-We use a sliding window half a second long, with 10\% overlap, for the STD graph generation. In our experiments, the produced spikes in variance have a huge discriminative power w.r.t. activities demanding sudden changes in behavior, e. g., a ``running'' motion. We also used a positive half sine wave as windowing function in order to soften the transition between windows. As mentioned, the ``inactive'' type is not considered in the recognition task since it is directly classified by the inactive threshold line. 
-%ANDY This resembles, but adds something what was already mentioned in another section    
-
-\subsubsection{Model results}
-The model output for two different players can be seen in figure~\ref{fig:modelOutput}. In figure~\ref{fig:fun}, the player is perceived as more active than the one in fig.~\ref{fig:nofun}. The ratio between activity and inactivity exposed by the output matches the observed data and empirically confirms the model viability.
+For the evaluation of the model we have reused the same data from section~\ref{sec:data_collection}. The model output for two different players can be seen in figure~\ref{fig:model_output}. In figure~\ref{fig:fun}, the player is perceived as more active than the one in fig.~\ref{fig:nofun}, which is reflected by the difference in the inactivity time and the amplitude of the bars.
 
 \begin{figure}[h]
     \centering 
-	\begin{subfigure}[h]{\columnwidth}
+	\begin{subfigure}[h]{5cm}
 		\centering      
-		\includegraphics[draft=false, width=\columnwidth]{images/04-activity/combined.png}
+		\includegraphics[draft=false, width=5cm]{images/04-activity/combined.png}
 		\caption{}
 		\label{fig:fun}
 	\end{subfigure}
 	~
-	\begin{subfigure}[h]{\columnwidth}
+	\begin{subfigure}[h]{5cm}
 		\centering      
-      	\includegraphics[draft=false,width=\columnwidth]{images/04-activity/combined_less.png}
+      	\includegraphics[draft=false,width=5cm]{images/04-activity/combined_less.png}
       	\caption{}
       	\label{fig:nofun}
      \end{subfigure}
       \caption{a) Model results for a single match that lasted 45 secs. b) Model output for a less active player. The graph refers to 30 initial secs of activity.}		
-      \label{fig:modelOutput}
+      \label{fig:model_output}
 \end{figure}
 
 The model quantitatively describe, in a simple way, the player's relational activity by the combination of the amount of physical activity and interaction relative to the robot. This can be used as a metric expected to enable the robot to take into account the player's attitude in order to adapt its own activity to match it. Using this model, for instance, an active player could be viewed as one having a larger cumulative sum of $\epsilon$ values up to a point in time.
 
 However, this model is limited in several ways, %ANDY I cannot evaluate it since I cannot understand it
-one of which is the manual definition of weights for the activities ($\omega$). Manually selecting these weights becomes difficult as the number of activities grows. We have then worked on a definition of a more robust player model relying on latent representation. This is describe next.
+one of which is the manual definition of weights for the activities ($\omega$). Manually selecting these scaling factors becomes difficult as the number of activities grows. With this in mind, we have then worked on a definition of a more robust player model relying on latent representation which  is describe next.
 
 \section{Latent player modeling}
 
@@ -104,14 +86,13 @@ We call this representation a {mixture proportion of motion types} (similar to t
 In summary, we expect to see that similar players are grouped together in a coherent collection, enabling to distinguish among motion types. The results obtained are validated with human supervision, suggesting the applicability of our method to future mechanisms for designing auto-adapting agents.
 
 \subsection{Mathematical Preliminaries}
+This section presents the basic concepts and principles behind~\gls{gaf}, autoencoders and~\gls{lda}, which are important to understand our modeling procedure. %ANDY Again, this would call for distributing the state of art section. 
 
-This section presents the basic concepts and principles of the Gramian angular field, autoencoders and latent Dirichlet allocation, our targeted probabilistic graphical model. %ANDY Again, this would call for distributing the state of art section.
+\subsubsection{\glsdesc{gaf} Images}
 
-\subsubsection{Gramian Angular Field Images}
+The results obtained in this work rely on the transformation of the time series data generated by the player motion into images that can then be processed and understood in terms of emergent patterns that can, in turn, be discovered by state-of-the-art machine learning algorithms. The types of image we have chosen are~\gls{gasf} and~\gls{gadf}. Such images had been proposed in the field of time series classification~\citep{wang_imaging_2015}, where the authors evaluated the efficacy of representing time series in a polar coordinate system instead of the typical Cartesian coordinates. For a deep understanding of the method, we suggest reading the original paper, where the authors did not only present the idea of~\gls{gasf}/\gls{gadf}, but also reported experimental results comparing them with other time series imagery techniques. Here, we present an overview of the technique in order to familiarize the reader with such a method and to point out its role in our proposal.
 
-The results obtained in this work rely on the transformation of the time series data generated by the player motion into images that can then be processed and understood in terms of emergent patterns that can, in turn, be discovered by state-of-the-art machine learning algorithms. The type of image we have chosen is Gramian Angular Summation/Difference Field (GASF/GADF). Such images had been proposed in the field of time series classification~\cite{wang_imaging_2015}, where the authors evaluated the efficacy of representing time series in a polar coordinate system instead of the typical Cartesian coordinates. For a deep understanding of the method, we suggest reading the original paper, where the authors did not only present the idea of GASF/GADF, but also reported experimental results comparing them with other time series imagery techniques. Here, we present an overview of the technique in order to familiarize the reader with such a method and to point out its role in our proposal.
-
-In general, in order to obtain a GASF/GADF representation for a time series $\mathcal{X}=\{x_{1}, x_{2}, ... x_{n}\}$ of size $n \in \mathbb{N}_{>0}$, rescaling is first performed in order to put the time series in the interval $[\,-1,1] \,$ or $[\,0,1]\,$. The second step is to represent the rescaled time series $\widetilde{\mathcal{X}}$ in polar coordinates, where each sample value is now mapped into the angular cosine and the time stamp information is represented as the radius. 
+In general, in order to obtain a~\gls{gasf}/\gls{gadf} representation for a time series $\mathcal{X}=\{x_{1}, x_{2}, ... x_{n}\}$ of size $n \in \mathbb{N}_{>0}$, rescaling is first performed in order to put the time series in the interval $[\,-1,1] \,$ or $[\,0,1]\,$. The second step is to represent the rescaled time series $\widetilde{\mathcal{X}}$ in polar coordinates, where each sample value is now mapped into the angular cosine and the time stamp information is represented as the radius. 
 The formula for this step is as follows:
 
 \begin{equation}
@@ -126,48 +107,48 @@ where $t_{i}$ is the time stamp and $N$ plays the role of a normalizer for the s
 \begin{itemize}[leftmargin=*,labelsep=5.8mm]
 \item {Property \#1}: The encoding map of Equation~(\ref{equation:GAF}) is bijective as $\cos(\phi)$ is monotonic when $\phi \in [\,0,\pi]\,$. Given a time series, the proposed map produces a unique result in the polar coordinate system together with a unique inverse map. 
 \item {Property \#2}: As opposed to Cartesian coordinates, polar coordinates preserve absolute temporal~relations.
-\item {Property \#3}: Rescaled data in different intervals have different angular bounds. That is, $[\,0,1]\,$ corresponds to the cosine function in $[\,0,\frac{\pi}{2}]\,$, while cosine values in the interval $[\,-1,1]\,$ fall into the angular bounds $[\,0,\pi]\,$. These intervals are known to produce different information granularity in the Gramian angular field, especially for classification tasks~\cite{wang_imaging_2015}.
+\item {Property \#3}: Rescaled data in different intervals have different angular bounds. That is, $[\,0,1]\,$ corresponds to the cosine function in $[\,0,\frac{\pi}{2}]\,$, while cosine values in the interval $[\,-1,1]\,$ fall into the angular bounds $[\,0,\pi]\,$. These intervals are known to produce different information granularity in the Gramian angular field, especially for classification tasks~\citep{wang_imaging_2015}.
 \end{itemize}
 
-The third step in completing the transformation is to exploit the angular perspective by considering the trigonometric sum/difference between each point. This allows for the identification of the temporal correlation within different time intervals. The two types of GAFs, namely GASF and GADF, are obtained as follows:
+The third step in completing the transformation is to exploit the angular perspective by considering the trigonometric sum/difference between each point. This allows for the identification of the temporal correlation within different time intervals. The two types of~\gls{gaf}, namely~\gls{gasf} and~\gls{gadf}, are obtained as follows:
 
 \begin{equation}
 \begin{aligned}
-GASF &= [\,\cos(\phi_{i} + \phi{j}]\, \\
+\gls{gasf} &= [\,\cos(\phi_{i} + \phi{j}]\, \\
 	 &= \widetilde{\mathcal{X}}' \cdot \widetilde{\mathcal{X}} - \sqrt{I-\widetilde{\mathcal{X}}^2}' \cdot \sqrt{I-\widetilde{\mathcal{X}}^2}
 \end{aligned}
 \end{equation}
 \\
 \begin{equation}
 \begin{aligned}
-GADF &= [\,\sin(\phi_{i} + \phi{j}]\, \\
+\gls{gadf} &= [\,\sin(\phi_{i} + \phi{j}]\, \\
 	 &= \sqrt{I-\widetilde{\mathcal{X}}^2}' \cdot \widetilde{\mathcal{X}} - \widetilde{\mathcal{X}}' \cdot \sqrt{I-\widetilde{\mathcal{X}}^2}\\
 \end{aligned}
 \end{equation}
 
 $I$ is the unit row vector. After translating the time series from the Cartesian to polar coordinate system, each time step in it is taken as a 1D metric space. By defining the inner product as $<x,y> = x \cdot y - \sqrt{1-x^2} \cdot \sqrt{1-y^2}$ and $<x,y> = \sqrt{1-x^2} \cdot y - x \cdot \sqrt{1-y^2}$,
-respectively, the GAFs become {quasi-Gramian} matrices, since the defined $<x,y>$ do not satisfy the property of linearity in inner-product space.
+respectively, the~\gls{gaf}s become {quasi-Gramian} matrices, since the defined $<x,y>$ do not satisfy the property of linearity in inner-product space.
 
-Still, according to~\cite{wang_imaging_2015}, the GAFs have several advantages:
+Still, according to~\cite{wang_imaging_2015}, the~\gls{gaf}s have several advantages:
 
 \begin{itemize}[leftmargin=*,labelsep=5.8mm]
 \item {Advantage \#1}: They provide a way to preserve temporal information. The temporal correlation is present because $G_{(i,j||i-j|=k)}$ represents the relative correlation by the superposition/difference of directions with respect to time interval $k$. The main diagonal $G_{i,i}$ is the special case when $k = 0$, which contains the original value/angular information. 
 \item {Advantage \#2:} From the main diagonal, it is possible to reconstruct the time series back into the original Cartesian space. This is useful especially in a classification task, where we can convert the time series back to numerical Cartesian space from the high level features learned by, for instance, a deep neural network.
 \end{itemize}
 
-However, the size of the Gramian matrix $G$ is $n \times n$, for $n$ being the length of the raw time series. The authors propose a solution for this issue by attempting to reduce the size of the produced GAFs using, for instance, Piecewise Aggregation Approximation (PAA)~\cite{keogh_scaling_2000} to smooth the time series while preserving the trends. An example of the conversion from time series to GASF image is shown in Figure~\ref{figure:gasf_example}.
+However, the size of the Gramian matrix $G$ is $n \times n$, for $n$ being the length of the raw time series. The authors propose a solution for this issue by attempting to reduce the size of the produced~\gls{gaf} using, for instance, Piecewise Aggregation Approximation (PAA)~\cite{keogh_scaling_2000} to smooth the time series while preserving the trends. An example of the conversion from time series to~\gls{gasf} image is shown in Figure~\ref{figure:gasf_example}.
 
 \begin{figure} [H]
 \centering
 \includegraphics[width=.88\textwidth]{images/05-modeling/gasfpipeline.eps} 
- \caption{Conversion of time series into a Gramian Angular Summation Field (GASF) image and then back into its original space.}
+ \caption{Conversion of time series into a~\gls{gasf} image and then back into its original space.}
  \label{figure:gasf_example}
 \end{figure}
 
 \subsubsection{Latent Dirichlet Allocation}
-LDA is one of the most simple and influential topic models. {A topic model is a formal statistical relationship between a group of observed and latent (unknown) random variables, which specifies a probabilistic procedure to generate topics. The latter, in turn, is defined as a probability distribution over a collection of words}~\cite{reed_latent_2012}.
+\glsdesc{lda} is one of the most simple and influential topic models. {A topic model is a formal statistical relationship between a group of observed and latent (unknown) random variables, which specifies a probabilistic procedure to generate topics. The latter, in turn, is defined as a probability distribution over a collection of words}~\citep{reed_latent_2012}.
 
-The graphical model shown in Figure~\ref{fig:graphical-model} presents the structure of the \gls{lda} model~\cite{blei_latent_2003}. Here, as in~\cite{smith_mining_2016}, the \textit{K}-th probability distribution over input words $\beta$ (called topics) is representative of the $K$ groups (types) of player motion styles in which we are interested. In turn, each document $d$ corresponds to a {game play} session for the game. We had to deal with the deterioration of model accuracy when considering the whole game section as a single document. Our solution for the problem was to segment each game section into subsets based on duration in seconds. %ANDY I cannot understand why couldn't be partitioned in subsets corresponding to the motion primitive, which already solved the problem. I'm losing my mind.
+The graphical model shown in Figure~\ref{fig:graphical-model} presents the structure of the~\gls{lda} model~\cite{blei_latent_2003}. Here, as in~\cite{smith_mining_2016}, the \textit{K}-th probability distribution over input words $\beta$ (called topics) is representative of the $K$ groups (types) of player motion styles in which we are interested. In turn, each document $d$ corresponds to a {game play} session for the game. We had to deal with the deterioration of model accuracy when considering the whole game section as a single document. Our solution for the problem was to segment each game section into subsets based on duration in seconds. %ANDY I cannot understand why couldn't be partitioned in subsets corresponding to the motion primitive, which already solved the problem. I'm losing my mind.
 This approach raises several issues that are going to be properly addressed in a future work, but still allow one to obtain interesting~results. %ANDY This cannot be left like this. It is too open and undefined.
 
 %\input{lda_graph.tex}
@@ -178,7 +159,7 @@ In these terms, a document may present multiple types $\beta_{k}$ with mixture p
 \overline{\beta}_{d} = \sum_{n=1}^{K} \theta_{d}(k) \cdot \beta_{k}
 \end{equation}
 
-The \textit{n}-th word $w_{d,n}$ of document \textit{d} is, in our case, the GASF encoding obtained, as we will explain later. $z_{d,n} \in \{1:K\}$ refers to the random type from which a word is drawn. Following the standard \gls{lda} model, $\alpha$ and $\eta$ are hyperparameters that control the sparsity in the mixture proportions and word distributions~\cite{smith_mining_2016}.
+The \textit{n}-th word $w_{d,n}$ of document \textit{d} is, in our case, the~\gls{gasf} encoding obtained, as we will explain later. $z_{d,n} \in \{1:K\}$ refers to the random type from which a word is drawn. Following the standard \gls{lda} model, $\alpha$ and $\eta$ are hyperparameters that control the sparsity in the mixture proportions and word distributions~\cite{smith_mining_2016}.
 
 \subsubsection{Autoencoder}\label{section:autoencoder}
 
@@ -337,7 +318,7 @@ In summary, we are interested in investigating time series data, especially acce
 \includegraphics[width=0.45\textwidth]{images/05-modeling/example_gafs_seg.eps}
 \caption{}
 \end{subfigure} \vspace{-6pt}
-\caption{Example of the conversion of a time series into GASF images. (\textbf{a}) Three-axis accelerometer data (48.8 Hz) of about 30 seconds of real game play. (\textbf{b}) Thirty five GASF segments of a linear combination of the multidimensional time series. Each window comprises 0.65 seconds with 32 samples.}
+\caption{Example of the conversion of a time series into~\gls{gasf} images. (\textbf{a}) Three-axis accelerometer data (48.8 Hz) of about 30 seconds of real game play. (\textbf{b}) Thirty five~\gls{gasf} segments of a linear combination of the multidimensional time series. Each window comprises 0.65 seconds with 32 samples.}
 \label{figure:acc_signal_gasfs}
 \end{figure}
 
@@ -351,13 +332,13 @@ The method adopted for selecting the input words is based on sliding windows (ju
 
 Considering each game session as a document, the windowed segments play the role of words. Since the space is continuous, a procedure of discretization and dictionary learning for \gls{lda} had to be performed. For this, we clustered the segments and used the so-obtained cluster centroids as dictionary words.
 
-We have used GASF images instead of GADF because the mapping functions of the rescaled time series in $[\,0,1]\,$ are bijections, which allows for precise reconstruction of the original time series~\cite{wang_imaging_2015}. The reconstruction takes advantage of the the main diagonal of GASF, i.e., $\{G_{ii}\} = \{\cos{2\phi_{i}}\}$, and is performed as reported in Equation~(\ref{equation:reconstruction})~\cite{wang_imaging_2015}: 
+We have used~\gls{gasf} images instead of~\gls{gadf} because the mapping functions of the rescaled time series in $[\,0,1]\,$ are bijections, which allows for precise reconstruction of the original time series~\cite{wang_imaging_2015}. The reconstruction takes advantage of the the main diagonal of~\gls{gasf}, i.e., $\{G_{ii}\} = \{\cos{2\phi_{i}}\}$, and is performed as reported in Equation~(\ref{equation:reconstruction})~\cite{wang_imaging_2015}: 
 %%Please note that the citation of figures should be in numerical order, figure 8 appeared before figure 7, please revise.
 \begin{equation}\label{equation:reconstruction}
 \cos(\phi)=\sqrt{\frac{G_{ii}+1}{2}} \qquad \phi \in [\,0,\frac{\pi}{2}]\,
 \end{equation}
 
-An example of signal decomposition into GASF images is shown in Figure~\ref{figure:acc_signal_gasfs}. Given recent advances in deep learning and pattern recognition for images, we take the route of~\cite{wang_encoding_2015} and exploit the applicability of autoencoders for extracting unsupervised features from GASF images (see Section~\ref{section:autoencoder}). This is relevant since the process of feature engineering is time-consuming and laborious. Moreover, unsupervised feature extraction from such methods has been proven to work well~\cite{wang_imaging_2015, wang_time_2016}.
+An example of signal decomposition into~\gls{gasf} images is shown in Figure~\ref{figure:acc_signal_gasfs}. Given recent advances in deep learning and pattern recognition for images, we take the route of~\cite{wang_encoding_2015} and exploit the applicability of autoencoders for extracting unsupervised features from~\gls{gasf} images (see Section~\ref{section:autoencoder}). This is relevant since the process of feature engineering is time-consuming and laborious. Moreover, unsupervised feature extraction from such methods has been proven to work well~\cite{wang_imaging_2015, wang_time_2016}.
 Sparse encoding via linear-algebra methods for dictionary learning is also a possibility. However, in our experiments, it turned out to be not as efficient as autoencoders. We present details of our experimental activity in the next section. Our methodology is summarized in figure~\ref{diagram:methodology}.
 
 %\begin{figure}[H]
@@ -380,25 +361,25 @@ Sparse encoding via linear-algebra methods for dictionary learning is also a pos
 %  \path [l] (features) -- (dict);
 %  \path [l] (dict) -- (lda);
 %\end{tikzpicture}
-%\caption{The general diagram for our methodology. At first, game time series are extracted, which are then segmented into windows (sliding windows method). Such segments are then turned into GASF images, whose representations are obtained using the autoencoder. Since the basic \gls{lda} method works with a multinomial distribution at the topics, we define a dictionary of visual words before feeding each GASF feature document representation to it.}
+%\caption{The general diagram for our methodology. At first, game time series are extracted, which are then segmented into windows (sliding windows method). Such segments are then turned into~\gls{gasf} images, whose representations are obtained using the autoencoder. Since the basic \gls{lda} method works with a multinomial distribution at the topics, we define a dictionary of visual words before feeding each~\gls{gasf} feature document representation to it.}
 %\label{diagram:methodology}
 %\end{figure}
 
 \subsection{Experimental Results}
-In this section, the exploration of an incomplete representation of the GASF images using a simple autoencoder architecture is firstly reported, then we discuss how we transform the extracted features into input words for the \gls{lda} model. Finally, we show the results when confronting the model output with human judgment. All experimental code used is available at the link in supplementary materials. %ANDY Check that this is actually available and report the link here
+In this section, the exploration of an incomplete representation of the~\gls{gasf} images using a simple autoencoder architecture is firstly reported, then we discuss how we transform the extracted features into input words for the \gls{lda} model. Finally, we show the results when confronting the model output with human judgment. All experimental code used is available at the link in supplementary materials. %ANDY Check that this is actually available and report the link here
 
 \subsubsection{Feature Extraction}
 
-The first question we need to answer concerns the size of the sliding window. This parameter regards the definition of the GASF images used as building blocks for the dictionary learning. The~window size should be large enough to capture motion patterns relevant for the player characterization, but not so large to confound their interpretation. We tried different window sizes, and in the end, we followed~\cite{oliveira_activity_2017} and decided to consider half a second of data per window without overlap, which allows for a quite fine-grained data representation.
+The first question we need to answer concerns the size of the sliding window. This parameter regards the definition of the~\gls{gasf} images used as building blocks for the dictionary learning. The~window size should be large enough to capture motion patterns relevant for the player characterization, but not so large to confound their interpretation. We tried different window sizes, and in the end, we followed~\cite{oliveira_activity_2017} and decided to consider half a second of data per window without overlap, which allows for a quite fine-grained data representation.
 
 We applied no preprocessing to the signal, since we were interested in observing how an autoencoder would perform using the unfiltered input. The expectation was that it would naturally compensate for the differences in the images, decisively choosing to capture important features (the main signal characteristic) and disregarding non-representative ones (the small associated noise). We defined an architecture composed by dropout and dense layers where only hyperbolic tangent activation functions where used, except in the last layer, where a linear activation function was used instead. The best performing architecture was composed by the following layers: dropout (0.1 drop fraction), dense (size = 256), dropout (0.2) and dense (size = 64). The same layers (in reversed order) were used for the decoder part.
 
-A window of half a second corresponds to 32 samples given our accelerometer average frequency of 48.8 Hz. As a consequence, we obtain GASF images (without using PAA) with a total of 1024 pixels. Using the autoencoder, we manage to reduce the representation down to a 64-dimensional input, resulting in the reconstruction presented in Figure~\ref{figure:reconstruction}. The choice of a 64-dimensional representation is empirical, meaning that we were in principle searching for an incomplete representation of the data and, upon testing with different configurations, we have chosen the one with the lowest reconstruction error. As it turned out, a 64-dimensional vector representation was the best result, given our dataset. 
+A window of half a second corresponds to 32 samples given our accelerometer average frequency of 48.8 Hz. As a consequence, we obtain~\gls{gasf} images (without using PAA) with a total of 1024 pixels. Using the autoencoder, we manage to reduce the representation down to a 64-dimensional input, resulting in the reconstruction presented in Figure~\ref{figure:reconstruction}. The choice of a 64-dimensional representation is empirical, meaning that we were in principle searching for an incomplete representation of the data and, upon testing with different configurations, we have chosen the one with the lowest reconstruction error. As it turned out, a 64-dimensional vector representation was the best result, given our dataset. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.9\textwidth]{images/05-modeling/reconstructions.eps}
-	\caption{Autoencoder reconstruction for five input segments corresponding to half a second of data (linear combination of the acceleration axis). ({Top line}) Input GASF images. ({Second line}) Original time series for each GASF input. ({Third line}) The autoencoder reconstruction for the input images. ({Forth line}) Time series from the reconstructed GASF images.}
+	\caption{Autoencoder reconstruction for five input segments corresponding to half a second of data (linear combination of the acceleration axis). ({Top line}) Input~\gls{gasf} images. ({Second line}) Original time series for each~\gls{gasf} input. ({Third line}) The autoencoder reconstruction for the input images. ({Forth line}) Time series from the reconstructed~\gls{gasf} images.}
   \label{figure:reconstruction}
 \end{figure}
 
@@ -407,9 +388,9 @@ It is possible to notice from the reconstruction result that, despite such a lar
 From Figure~\ref{figure:reconstruction}, we can also see that the obtained time series reconstruction presents some holes. This seems to be caused by the information loss in the reconstruction and demands further investigation. However, in our experimentation, it did not seem to affect the learning performance. 
 
 \subsubsection{Dictionary Learning and Input Word Definition}
-Latent Dirichlet allocation works by considering the relationship among word tokens with respect to a collection of documents. Therefore, in order to use the method, we needed to come up with a way to encode the taxonomy of GASF images into a discrete set of fixed tokens describing the motion primitives appearing in each game session. We opted to follow~\cite{prince_computer_2012} and encode the features extracted from the GASF using the autoencoders as visual words, composing the game session document.
+Latent Dirichlet allocation works by considering the relationship among word tokens with respect to a collection of documents. Therefore, in order to use the method, we needed to come up with a way to encode the taxonomy of~\gls{gasf} images into a discrete set of fixed tokens describing the motion primitives appearing in each game session. We opted to follow~\cite{prince_computer_2012} and encode the features extracted from the~\gls{gasf} using the autoencoders as visual words, composing the game session document.
 
-After getting the 64-dimensional vector representation for each GASF image (see Section~\ref{section:autoencoder}), we cluster them into $V$ groups using the K-means algorithm. In this way, we define a dictionary of size $V$, with each word corresponding to a cluster centroid. Each game session is then translated into a collection of $V$ possible clusters, which can then be fed into the \gls{lda} algorithm.
+After getting the 64-dimensional vector representation for each~\gls{gasf} image (see Section~\ref{section:autoencoder}), we cluster them into $V$ groups using the K-means algorithm. In this way, we define a dictionary of size $V$, with each word corresponding to a cluster centroid. Each game session is then translated into a collection of $V$ possible clusters, which can then be fed into the \gls{lda} algorithm.
 
 From text mining and information retrieval, we know that having documents with different sizes can rise critical issues. This is because given the bag of words representation used in \gls{lda}, a small document may be included as a subset in a larger one. Additionally, it might be a problem to evaluate longer documents in our scenario, since, at least from a human perspective, it is not simple to define the overall behavior. %ANDY I'm missing this
 
@@ -451,7 +432,7 @@ Another aspect that demands further investigation is how to avoid the decrease i
 We believe that a potential way for improvements in interpretability and accuracy is that of removing the vector quantization in defining each topic. It would be interesting to remain in the continuous domain defined by our input data representation (GASF features), instead of relying on a fixed predefined vocabulary set used for training the \gls{lda}. Such vectorization is known to lead to information loss~\cite{hu_latent_2012}. To avoid such an issue, one possibility may be replacing the topic multinomial distribution by a mixture of Gaussians~\cite{hu_latent_2012}.
 
 \subsection{Discussion}
-In this work, we introduced an approach to identify the player motion styles from measurements obtained by the use of a single three-axial accelerometer sensor. Such a signal is then transformed using the Gramian angular field in an image that represents its content. The reason for such representation stems from recent publications aiming at using deep learning and state-of-the-art image processing techniques for achieving better classification results. Additionally, using the autoencoder for representing the obtained GASFs reduced the workload necessary for hand-crafting features, as often done when using machine learning classification/clustering methods with time series data.
+In this work, we introduced an approach to identify the player motion styles from measurements obtained by the use of a single three-axial accelerometer sensor. Such a signal is then transformed using the Gramian angular field in an image that represents its content. The reason for such representation stems from recent publications aiming at using deep learning and state-of-the-art image processing techniques for achieving better classification results. Additionally, using the autoencoder for representing the obtained~\gls{gasf}s reduced the workload necessary for hand-crafting features, as often done when using machine learning classification/clustering methods with time series data.
 
 By applying latent Dirichlet allocation to characterize the motion behavior of different players, we were interested in getting a description that would foster the development of self-adjusting \gls{pirg}s agents capable of improving/sustaining engagement. In this, we had shown that the model is able to capture the overall human judgment by matching reported similarities. 
 
