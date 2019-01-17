@@ -1,4 +1,4 @@
-\chapter{Player behavior modeling in~\glsdesc{pirg}}\label{ch:modeling}
+\chapter{Player behavior modeling}\label{ch:modeling}
 
 Having identified an activity recognition system, we aimed at the definition of an approach to model user behavior that could account for the combination of the player physical effort and interaction level. The proposed model is based on the human activity recognition (chapter~\ref{ch:activity}) and a description of interaction (proximity and body contraction index) relative to the robot co-player.
 %ANDY If you have described separately the activity recognition model based on the accelerometer, a separate chapter has to be dedicated also to the lasers or whatever you would like to consider for the other parameters.  All these sources are functional to provide data for the activity model (if you like you may have all the contributions in the same chapter).
@@ -82,63 +82,30 @@ Here, we hypothesize that, on average, a player will display his/her game-intrin
 In summary, in our methodology a player is represented by how much of each discovered motion groups (called motion \textit{topics}) his/her data is likely to be generated from. Such representation is called the player's \textit{mixture proportion} of motion types and is akin to the mixture proportion of documents in topic modeling applications~\citep{blei_latent_2003}. We expect to see similar players grouped together in a coherent collection, enabling to distinguish among them and their motion types. The results obtained using the dataset detailed in section~\ref{sec:data_collection} are validated with human supervision, suggesting the applicability of our method to future mechanisms for designing auto-adapting agents.
 
 \subsection{Problem Statement}
-This section formulates the problem of modeling the player as a probabilistic mixture of player styles derived from data.  One can see that it is a step towards advancements in Dimension \#3, as discussed in section~\ref{sec:dimensions}.
+This section formulates the problem of modeling the player as a probabilistic mixture of player styles derived from data. One can see that it is a step towards advancements in the dimension of design referred to the ability to play for engagement maximization, as discussed in section~\ref{sec:dimensions}.
 
-Here, we exploit data coming from a single accelerometer placed on the human player's body; thus, player movement is our primary source of information for describing the playing style and engagement. 
-%ANDY However you have also mentioned IC, and other image-based features. You should take a definite line, putting in evidence clearly what you have explored and then left and whatis teh content of the final proposal, which, BTW, seemed to be based on lasers only, losing the richness provided by the other data sources (accelerometer and Kinect) and the possibility to explore and exploit data fusion.
+Here, we use data coming from a single accelerometer placed on the human player's body as in Chapter~\ref{ch:activity}; For the current study, player movement is our primary source of information for characterizing the playing style. The basic assumption is that a highly active player would naturally express his/her status by a very turbulent motion signal, making the signal compatible with strong in-game activity. Consider, for instance, the difference in signal shapes reported in Figure~\ref{figure:acc_signal_shape}.
 
-The basic assumption is that a highly active player would naturally express his/her status by a very turbulent motion signal that is compatible with strong in-game activity. Consider, for instance, the difference in signal shapes reported in Figure~\ref{figure:acc_signal_shape}.
-
-Following this line of reasoning, we also assume players do not fake their engagement by unnecessarily performing strong activities, like running, when they are actually not engaged in the game or feel bored by the robot behavior. Therefore, we assume that a highly motivated player would act more intensively and frequently than a non-motivated one, thus showing a more turbulent acceleration signal profile.
-
-In situations like \gls{pirg}, movement information is useful and should not be disregarded. Furthermore, a model that is able to extract a description of the player's movement profile for the purpose of robot behavior adaptation would generate interesting dynamics able to hide existing platform limitations (kinematics constraints, tracking problems, etc.) and boost game experience.
-
-One important aspect not considered yet by our assumptions is the role of skill level. For example, a highly skilled player could try to minimize his/her energy expenditure by performing precise movements towards winning the game and in theory could perfectly show a low-movement profile. Moreover, these assumptions cannot directly measure player engagement in the game, given that it is also possible for a player to move not too much, but, at the same time, be highly engaged. 
-
-In summary, we are interested in investigating time series data, especially acceleration patterns as proxy and/or engagement cues (given the mentioned assumptions) towards the creation of auto-adjusting robotic companions or opponents.
-
-%ANDY The last 4 paragraphs present nice ideas, but they seem unrelated to each other, just put here as they come to the mind. These considerations are good for the introduction, and the conclusion chapters, and should be integrated with their developments throughout the text.
-
-
-
-
-\begin{figure}[H]
-\centering
-\begin{subfigure}[H]{\textwidth}
-\centering
-\includegraphics[width=0.2\textwidth]{images/05-modeling/enricorun.png} 
-\includegraphics[width=0.6\textwidth]{images/05-modeling/running_sig_profile.eps} 
-\caption{}
-\end{subfigure}
-
-\begin{subfigure}[H]{\textwidth}
-\centering
-\includegraphics[width=0.2\textwidth]{images/05-modeling/enricostill.png}
-\includegraphics[width=0.6\textwidth]{images/05-modeling/standing_sig_profile.eps} 
-\caption{}
-\end{subfigure} \vspace{-6pt}
-\caption{Three-axis accelerometer signal during game play. (\textbf{a}) A running player. (\textbf{b}) A player standing still. Notice that signal shape and amplitude are very characteristic for the respective activity.}
-\label{figure:acc_signal_shape}
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[h]{\textwidth}
+        \centering
+        \includegraphics[width=0.2\textwidth]{images/05-modeling/enricorun.png} 
+        \includegraphics[width=0.6\textwidth]{images/05-modeling/running_sig_profile.eps} 
+        \caption{}
+    \end{subfigure}\vspace{6pt}
+    ~
+    \begin{subfigure}[h]{\textwidth}
+        \centering
+        \includegraphics[width=0.2\textwidth]{images/05-modeling/enricostill.png}
+        \includegraphics[width=0.6\textwidth]{images/05-modeling/standing_sig_profile.eps} 
+        \caption{}
+    \end{subfigure} \vspace{-6pt}
+    \caption{Three-axis accelerometer signal during game play. a) A running player. b) A player standing still. Signal shape and amplitude are very characteristic for the respective activity.}
+    \label{figure:acc_signal_shape}
 \end{figure} \unskip
 
-\begin{figure}[H]
-\centering
-\begin{subfigure}[H]{\textwidth}
-\centering
-\includegraphics[width=0.6\textwidth]{images/05-modeling/example_signal.eps}
-\label{figure:accelerometer_signal}
-\caption{}
-\end{subfigure} \vspace{-6pt}
-
-\begin{subfigure}[H]{\textwidth}
-\centering
-\includegraphics[width=0.45\textwidth]{images/05-modeling/example_gafs_seg.eps}
-\caption{}
-\end{subfigure} \vspace{-6pt}
-\caption{Example of the conversion of a time series into~\gls{gasf} images. (\textbf{a}) Three-axis accelerometer data (48.8 Hz) of about 30 seconds of real game play. (\textbf{b}) Thirty five~\gls{gasf} segments of a linear combination of the multidimensional time series. Each window comprises 0.65 seconds with 32 samples.}
-\label{figure:acc_signal_gasfs}
-\end{figure}
-
+In other words, following this line of reasoning, we also assume players do not fake their engagement by unnecessarily performing strong activities, like running, when they are actually not engaged in the game or feel bored by the robot behavior. Therefore, we assume that a highly motivated player would act more intensively and frequently than a non-motivated one, thus showing a more turbulent acceleration signal profile. In situations like~\gls{pirg}, movement information is useful and should not be disregarded. Furthermore, a model that is able to extract a description of the player's movement profile for the purpose of robot behavior adaptation would generate interesting insights on the capability of the application to engage humans.
 
 \subsection{Mathematical Preliminaries}
 This section presents the basic concepts and principles behind~\gls{gaf}, autoencoders and~\gls{lda}, which are important to understand our modeling procedure.
@@ -301,78 +268,96 @@ We represent the input with a code having 64 dimensions; thus, from an input of 
 
 The reconstruction of the input by the decoder function has a very low loss, below 0.05\%. The~layers obtained by the encoder are often difficult to understand by people; for instance, in Figure~\ref{fig:levels_autoencoder}a--c, we can observe the first layer, and we cannot derive any structure or meaning from it. However, looking at deeper levels, the layers show a clear structure; in Figure~\ref{fig:levels_autoencoder}g--i, we can observe that the filters are extracting horizontal and vertical patterns. Indeed, most of the original images show a cross pattern, or multiple crosses; therefore, this representation seems to be able to represent the input data with a lower dimension.
 
-\subsection{Activity modeling}
+\subsection{Modeling}
 This section describes our approach to model the activity of the player, while emphasizing the differences and similarities with respect to existing methods. We take inspiration from approaches like~\cite{smith_mining_2016, wang_encoding_2015, wang_imaging_2015} and aim at modeling game sessions as ``documents'', where player's acceleration data are considered as ``words''. We use~\gls{lda}~\cite{blei_latent_2003} to categorize the player's motion profile as a composition or mixture of game play motion types, the latter being analogous to the ``topics'' in the general application of \gls{lda} for document modeling.
 
-Differently from~\cite{smith_mining_2016}, our input word atoms are not discrete. Instead, they are continuous (acceleration data) and also are not attached to any explicit meaning. Take, for instance, the natural interpretability of joystick input signals like ``left'' and ``right'', which convey their respective meaning when controlling a game character, and compare it with an acceleration signal that carries no obvious absolute meaning.
+Differently from~\cite{smith_mining_2016}, our input word atoms are not discrete. Instead, they are continuous (acceleration data) and also are not attached to any explicit meaning. For instance, in \cite{smith_mining_2016} the natural interpretability of joystick input signals like ``left'' and ``right'' is available: the inputs convey their respective meaning when controlling a game character. In our case the raw accelerometer data carry no obvious absolute meaning from which a discrete tag can easily describe. In other words, in our scenario tagging is difficult.
 
-The method adopted for selecting the input words is based on sliding windows (just as in~\cite{smith_mining_2016}), without overlap. %ANDY This choice should be justified, even more since few sections above you discussed the sliding window concept and adopted a different criterion.
+The method adopted for selecting the input words is based on sliding windows (just as in~\cite{smith_mining_2016}), without overlap. This means we segment the entire accelerometer signal into subsets, called windows, so as to produce words. For all effects, as mentioned above, to the context of the application of~\gls{lda}, the \textit{document} produced by a given player is the whole raw acceleration during a game session and the \textit{words} of such document are the windows extract from the acceleration.
 
-Considering each game session as a document, the windowed segments play the role of words. Since the space is continuous, a procedure of discretization and dictionary learning for \gls{lda} had to be performed. For this, we clustered the segments and used the so-obtained cluster centroids as dictionary words.
+For the job, we have used~\gls{gasf} images instead of~\gls{gadf} because the mapping functions of the re-scaled time series in $[\,0,1]\,$ are bijections, which allows for precise reconstruction of the original time series~\citep{wang_imaging_2015}. The reconstruction takes advantage of the the main diagonal of the~\gls{gasf}s, i.e., $\{G_{ii}\} = \{\cos{2\phi_{i}}\}$, and is performed as reported in Equation~(\ref{equation:reconstruction})~\cite{wang_imaging_2015}:
 
-We have used~\gls{gasf} images instead of~\gls{gadf} because the mapping functions of the rescaled time series in $[\,0,1]\,$ are bijections, which allows for precise reconstruction of the original time series~\cite{wang_imaging_2015}. The reconstruction takes advantage of the the main diagonal of~\gls{gasf}, i.e., $\{G_{ii}\} = \{\cos{2\phi_{i}}\}$, and is performed as reported in Equation~(\ref{equation:reconstruction})~\cite{wang_imaging_2015}: 
-%%Please note that the citation of figures should be in numerical order, figure 8 appeared before figure 7, please revise.
 \begin{equation}\label{equation:reconstruction}
-\cos(\phi)=\sqrt{\frac{G_{ii}+1}{2}} \qquad \phi \in [\,0,\frac{\pi}{2}]\,
+    \cos(\phi)=\sqrt{\frac{G_{ii}+1}{2}} \qquad \phi \in [\,0,\frac{\pi}{2}]\,
 \end{equation}
 
-An example of signal decomposition into~\gls{gasf} images is shown in Figure~\ref{figure:acc_signal_gasfs}. Given recent advances in deep learning and pattern recognition for images, we take the route of~\cite{wang_encoding_2015} and exploit the applicability of autoencoders for extracting unsupervised features from~\gls{gasf} images (see Section~\ref{section:autoencoder}). This is relevant since the process of feature engineering is time-consuming and laborious. Moreover, unsupervised feature extraction from such methods has been proven to work well~\citep{wang_imaging_2015, wang_time_2016}.
-Sparse encoding via linear-algebra methods for dictionary learning is also a possibility. However, in our experiments, it turned out to be not as efficient as autoencoders. We present details of our experimental activity in the next section. Our methodology is summarized in Figure~\ref{diagram:methodology}.
+An example of signal decomposition into~\gls{gasf} images is shown in Figure~\ref{fig:acc_signal_gasfs}. The figure shows data of about 30 seconds of real game play from a three-axis accelerometer (48.8 Hz). It also displays thirty five~\gls{gasf} segments of a linear combination of the multidimensional time series. The combination collapses the signal into a one dimensional one and easy the transformation into~\gls{gasf}. For this case, each image comprises 0.65 seconds with 32 samples.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[h]{\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{images/05-modeling/example_signal.eps}
+        \label{figure:accelerometer_signal}
+        \caption{}
+    \end{subfigure} \vspace{-6pt}
+    ~
+    \begin{subfigure}[h]{0.8\textwidth}
+        \centering
+        \includegraphics[width=0.8\textwidth]{images/05-modeling/example_gafs_seg.eps}
+        \caption{}
+    \end{subfigure} \vspace{-6pt}
+    \caption{Example of the conversion of a time series into~\gls{gasf} images. a) Three-axis accelerometer data (48.8 Hz) of about 30 seconds of real game play. b) Thirty five~\gls{gasf} segments of a linear combination of the multidimensional time series. Each window comprises 0.65 seconds with 32 samples.}
+    \label{fig:acc_signal_gasfs}
+\end{figure}
+
+Given recent advances in deep learning and pattern recognition for images, we take the route of~\citep{wang_encoding_2015} and exploit the applicability of autoencoders for extracting unsupervised features from~\gls{gasf} images (see Section~\ref{sec:autoencoder}). This is relevant since the process of feature engineering is time-consuming and laborious. Moreover, unsupervised feature extraction from such methods has been proven to work well~\citep{wang_imaging_2015, wang_time_2016}.
+Sparse encoding via linear-algebra methods for dictionary learning is also a possibility. However, in our experiments, it turned out to be not as efficient as autoencoders. After encoding the images using an autoencoder we are left with a continuous description of each image and a procedure of discretization and dictionary learning for~\gls{lda} had to be performed. For this, we clustered the representations and used the so-obtained cluster centroids as dictionary words.We present details of our experimental activity in the next section. Our methodology is summarized in Figure~\ref{diagram:methodology}. In summary, 
+for each available raw acceleration time series segments (windows) are extracted. Such segments are then turned into~\gls{gasf} images, whose representations (features) are obtained using an autoencoder. Since the basic \gls{lda} method works with a multinomial distribution of topics, hence a discrete distribution, we define a dictionary of visual words (through clustering) before inferring the~\gls{lda} variables. Therefore, for each~\gls{gasf} vector of representation we use its cluster centroid as a surrogate, allowing for the discretization into representative words. In the~\gls{lda} model, the latent variable of interest are the \textit{mixture proportions} and the \textit{topic} distributions, which basically estimate the participation of each uncovered topic (player types) in the generation of the player data.
 
 \begin{figure}[h]
 	\centering
-\begin{tikzpicture}[auto]
+    \begin{tikzpicture}[auto]
 	\tikzstyle{b} = [rectangle, draw, fill=blue!20, node distance=0.5cm, text width=4em, text centered, rounded corners, minimum height=5em, thick]
-\tikzstyle{c} = [rectangle, draw, inner sep=0.2cm, dashed]
-\tikzstyle{l} = [draw, -latex',thick]
-
- \node [b] (time series) {Game time series};
- \node [b, right=of time series] (segments) {Segments};
- \node [b, right=of segments] (gasfs) {GASFs};
-	\node [b, right=of gasfs] (features) {GASFs features};
- \node [b, right=of features] (dict) {Dict. Learning};
- \node [b, right=of dict] (lda) {LDA};
-
- \path [l] (time series) -- (segments);
- \path [l] (segments) -- (gasfs);
- \path [l] (gasfs) -- (features);
- \path [l] (features) -- (dict);
- \path [l] (dict) -- (lda);
-\end{tikzpicture}
-\caption{The general diagram for our methodology. At first, game time series are extracted, which are then segmented into windows (sliding windows method). Such segments are then turned into~\gls{gasf} images, whose representations are obtained using the autoencoder. Since the basic \gls{lda} method works with a multinomial distribution at the topics, we define a dictionary of visual words before feeding each~\gls{gasf} feature document representation to it.}
-\label{diagram:methodology}
+    \tikzstyle{c} = [rectangle, draw, inner sep=0.2cm, dashed]
+    \tikzstyle{l} = [draw, -latex',thick]
+    
+     \node [b] (time series) {Game time series};
+     \node [b, right=of time series] (segments) {Segments};
+     \node [b, right=of segments] (gasfs) {GASFs};
+    	\node [b, right=of gasfs] (features) {GASFs features};
+     \node [b, right=of features] (dict) {Dict. Learning};
+     \node [b, right=of dict] (lda) {LDA};
+    
+     \path [l] (time series) -- (segments);
+     \path [l] (segments) -- (gasfs);
+     \path [l] (gasfs) -- (features);
+     \path [l] (features) -- (dict);
+     \path [l] (dict) -- (lda);
+    \end{tikzpicture}
+    \caption{The pipeline of our methodology.}
+    \label{diagram:methodology}
 \end{figure}
 
 \subsection{Experimental Results}
-In this section, the exploration of an incomplete representation of the~\gls{gasf} images using a simple autoencoder architecture is firstly reported, then we discuss how we transform the extracted features into input words for the \gls{lda} model. Finally, we show the results when confronting the model output with human judgment. All experimental code used is available at the link in supplementary materials. %ANDY Check that this is actually available and report the link here
+In this section, we first report how to come up with the undercomplete representation for the~\gls{gasf} images using a simple autoencoder architecture, then we discuss how do we transform the extracted features into input words for the \gls{lda} model. Finally, we show the results when confronting the model output with human judgment. All experimental code used is available at the address ~\url{https://github.com/ewerlopes/lda-player-model.git}.
 
 \subsubsection{Feature Extraction}
+The first question we need to answer concerns the size of the windows used to segment the raw acceleration signal. This parameter regards the definition of the~\gls{gasf} images used as building blocks for the dictionary learning. The~window size should be large enough to capture motion patterns relevant for the player characterization, but not so large to confound their interpretation. We tried different window sizes and, similar to our previous experiments~\citep{oliveira_activity_2017}, decided to consider half a second of data per window without overlap, which allows for a quite fine-grained data representation.
 
-The first question we need to answer concerns the size of the sliding window. This parameter regards the definition of the~\gls{gasf} images used as building blocks for the dictionary learning. The~window size should be large enough to capture motion patterns relevant for the player characterization, but not so large to confound their interpretation. We tried different window sizes, and in the end, we followed~\cite{oliveira_activity_2017} and decided to consider half a second of data per window without overlap, which allows for a quite fine-grained data representation.
+We applied no preprocessing to the signal, since we were interested in observing how an autoencoder would perform using the unfiltered input. The expectation was that it would naturally compensate for the differences in the images, decisively choosing to capture important features (the main signal characteristic) and disregarding non-representative ones (the small associated noise). We defined an architecture composed by dropout and dense layers where only hyperbolic tangent activation functions where used, except in the last layer, where a linear activation function was used instead. The best performing architecture was composed by the following layers: dropout (0.1 drop fraction), dense (size = 256), dropout (0.2) and dense (size = 64). The same layers (in reversed order) were used for the decoder part. The decoder part is only used for accessing the quality of the representation, ~\ie in terms of the cost function define in section~\ref{sec:autoencoder} and is ignored once a good representation is acquired.
 
-We applied no preprocessing to the signal, since we were interested in observing how an autoencoder would perform using the unfiltered input. The expectation was that it would naturally compensate for the differences in the images, decisively choosing to capture important features (the main signal characteristic) and disregarding non-representative ones (the small associated noise). We defined an architecture composed by dropout and dense layers where only hyperbolic tangent activation functions where used, except in the last layer, where a linear activation function was used instead. The best performing architecture was composed by the following layers: dropout (0.1 drop fraction), dense (size = 256), dropout (0.2) and dense (size = 64). The same layers (in reversed order) were used for the decoder part.
+A window of half a second corresponds to 32 samples given our accelerometer average frequency of 48.8 Hz. As a consequence, we obtain images with a total of 1024 pixels. We did not applied~\gls{paa} for memory complexity reduction~\citep{wang_time_2016} since our computing environment was capable of handling the size of our representation well. Using the autoencoder, we manage to reduce the representation down to a 64-dimensional input, resulting in the reconstruction presented in Figure~\ref{fig:reconstruction}. The choice of a 64-dimensional representation is empirical, meaning that we were in principle searching for an undercomplete representation of the data and, upon testing with different configurations, we have chosen the one with the lowest reconstruction error. As it turned out, a 64-dimensional vector representation was the best result, given our dataset. 
 
-A window of half a second corresponds to 32 samples given our accelerometer average frequency of 48.8 Hz. As a consequence, we obtain~\gls{gasf} images (without using PAA) with a total of 1024 pixels. Using the autoencoder, we manage to reduce the representation down to a 64-dimensional input, resulting in the reconstruction presented in Figure~\ref{figure:reconstruction}. The choice of a 64-dimensional representation is empirical, meaning that we were in principle searching for an incomplete representation of the data and, upon testing with different configurations, we have chosen the one with the lowest reconstruction error. As it turned out, a 64-dimensional vector representation was the best result, given our dataset. 
-
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
-	\includegraphics[width=.9\textwidth]{images/05-modeling/reconstructions.eps}
-	\caption{Autoencoder reconstruction for five input segments corresponding to half a second of data (linear combination of the acceleration axis). ({Top line}) Input~\gls{gasf} images. ({Second line}) Original time series for each~\gls{gasf} input. ({Third line}) The autoencoder reconstruction for the input images. ({Forth line}) Time series from the reconstructed~\gls{gasf} images.}
-  \label{figure:reconstruction}
+	\includegraphics[width=\textwidth]{images/05-modeling/reconstructions.eps}
+	\caption{Autoencoder reconstruction for five input segments corresponding to half a second of data (linear combination of the acceleration axis). ({Top line}) Input~\gls{gasf} images. ({Second line}) Original time series for each~\gls{gasf} input. ({Third line}) The autoencoder reconstruction for the input images. ({Forth line}) Time series from the reconstructed~\gls{gasf} images. Holes in the reconstruction are due to the error in the reconstruction of the images using the autoencoder.}
+  \label{fig:reconstruction}
 \end{figure}
 
 It is possible to notice from the reconstruction result that, despite such a large compression (from 1024 to only 64 values), the input image relevant structure is captured. This can also be seen in the reconstructed time series. A closer look reveals that the autoencoder practically smoothed the time series while preserving the overall shape, this being a nice property that can help to prevent overfitting.
 
-From Figure~\ref{figure:reconstruction}, we can also see that the obtained time series reconstruction presents some holes. This seems to be caused by the information loss in the reconstruction and demands further investigation. However, in our experimentation, it did not seem to affect the learning performance. 
+From Figure~\ref{fig:reconstruction}, we can also see that the obtained time series reconstruction presents some holes. This seems to be caused by the information loss in the reconstruction. In our experimentation, the data is well approximated and did not seem to affect the learning performance for the parameter of the~\gls{lda}. 
 
-\subsubsection{Dictionary Learning and Input Word Definition}
-Latent Dirichlet allocation works by considering the relationship among word tokens with respect to a collection of documents. Therefore, in order to use the method, we needed to come up with a way to encode the taxonomy of~\gls{gasf} images into a discrete set of fixed tokens describing the motion primitives appearing in each game session. We opted to follow~\cite{prince_computer_2012} and encode the features extracted from the~\gls{gasf} using the autoencoders as visual words, composing the game session document.
+\subsubsection{Dictionary Learning and input word definition}
+\glsdesc{lda} works by considering the relationship among word tokens with respect to a collection of documents. Therefore, in order to use the method, we needed to come up with a way to encode the diversity of~\gls{gasf} images into a discrete set of fixed tokens describing the motion primitives appearing in each game session. We opted to follow a similar approach to~\cite{prince_computer_2012} and further encode each extracted vector of feature as \textit{visual words}, finally composing the game session document. 
 
-After getting the 64-dimensional vector representation for each~\gls{gasf} image (see Section~\ref{section:autoencoder}), we cluster them into $V$ groups using the K-means algorithm. In this way, we define a dictionary of size $V$, with each word corresponding to a cluster centroid. Each game session is then translated into a collection of $V$ possible clusters, which can then be fed into the \gls{lda} algorithm.
+Here is how we proceeded: after getting the 64-dimensional vector representation for each~\gls{gasf} image, we cluster them into $V$ groups using the K-means algorithm. In this way, we define a dictionary of size $V$, with each word corresponding to a cluster centroid. Each game session is then translated into a collection of $V$ possible clusters, which can then be fed into the \gls{lda} algorithm.
 
-From text mining and information retrieval, we know that having documents with different sizes can rise critical issues. This is because given the bag of words representation used in \gls{lda}, a small document may be included as a subset in a larger one. Additionally, it might be a problem to evaluate longer documents in our scenario, since, at least from a human perspective, it is not simple to define the overall behavior. %ANDY I'm missing this
+From text mining and information retrieval, we know that having documents with different sizes can lead to some issues. In special, when using he bag of words assumption, \ie when not considering the ordering of words, as does~\gls{lda}, a small document may be included as in a larger one. This can lead to accuracy problems and misleading interpretation of performance. Additionally, in our scenario, it is problematic to have to evaluate long play session given that multiple interpretation about the player behavior can be assigned to the same session depending on the evaluator. Such ambiguity can definitely worsen the estimation of the model parameters.
 
-In text mining, this issue is handled by imposing a weight based on the length of the document; in our case, instead, we decided to split each session into smaller segments of 15 s each. In this setting, the evaluation is more consistent, and it is possible that the behavior of a player will be maintained within segments. We decided this length for each document both for convenience with respect to the window length and from the assumption that in each fraction of 15 s, the player can show a consistent behavior, which can be somehow easily identifiable. In the next section, we present the results achieved with the approach we just presented.
+In text mining, this issue is handled by imposing a weight based on the length of the document; in our case, instead, we decided to split each session into smaller segments of 15 s each. In this setting, the evaluation is more consistent, and it is possible that the behavior of a player will be maintained within segments. We decided this length for each document both for convenience with respect to the window length and from the empirical assumption that in each fraction of 15 seconds, the player can show a consistent behavior and that it can be somehow easily identifiable. In the next section, we present the results achieved.
 
 \subsection{Validation}
 
@@ -425,3 +410,11 @@ Another means for improvements, and one that we are currently working on, is tha
 Finally, we are working to redesign the experiments in order to allow for collecting user survey data, which comprise a valuable resource regarding player style and engagement levels. This is all in order to increase our understanding of the obtained results. We plan to collect self-reported engagement levels when comparing with different robot behavior configuration while allowing for adaptation. Regarding such adaptation, we currently are investigating how to relate the robot game's difficult settings (such as velocity, tower LED control rules, among others) and the mixture proportion of motion types discovered by our reported method. One alternative is to design a utility function that would describe what is the pay-off in facing a certain player given a certain difficult setting, therefore turning the adaptation problem into a full on-line optimization procedure where we try to match player motion types with robot behavior implied by difficulty settings.
 
 %ANDY Future work has to be cited, however, this is not a paper, but a PhD thesis. Future work related to other parts of the thesis (such as experiments on different behaviors) should take them into account, and experimens should (have) consider(ed) all the aspects to be investigated.
+
+
+\section{Considerations}
+One important aspect not considered yet by our assumptions is the role of skill level. For example, a highly skilled player could try to minimize his/her energy expenditure by performing precise movements towards winning the game and in theory could perfectly show a low-movement profile. Moreover, these assumptions cannot directly measure player engagement in the game, given that it is also possible for a player to move not too much, but, at the same time, be highly engaged. 
+
+In summary, we are interested in investigating time series data, especially acceleration patterns as proxy and/or engagement cues (given the mentioned assumptions) towards the creation of auto-adjusting robotic companions or opponents.
+
+%ANDY The last 4 paragraphs present nice ideas, but they seem unrelated to each other, just put here as they come to the mind. These considerations are good for the introduction, and the conclusion chapters, and should be integrated with their developments throughout the text.
