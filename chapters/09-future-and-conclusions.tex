@@ -1,1 +1,21 @@
 \chapter{Future work and conclusion}\label{ch:future}
+
+There is a series of future developments for the work we have conducted. In this chapter we try do give an extensive road-map of activities considered worthwhile trying and which are estimated to improve upon the work done. We begin by the futures works related to the~\gls{lda} based approach in chapter~\ref{ch:modeling}.
+
+\section{Latent modeling with~\gls{lda}}
+As future work, one alternative could be the incorporation of \textit{proximity} information in order to capture how distance patterns relate to playing style and interest. This measure, similar to what has been done in section~\ref{sec:simple_model}, would them add up to the physical activity description and allow for a fine-grained topic description.
+
+Another opportunity for improvements is in the incorporation of time dependency between the extracted windows. In other words, one would go beyond the \textit{bag-of-words} representation explored by the basic~\gls{lda}. We believe the incorporation of time dependencies would help to describe variations in playing style during play, given the opportunity to detect change points in styles and favor game personalization though robot behavior adaptation. This also may help to avoid the~\gls{rbe}, which is defined as the oscillatory system instability often present when designing auto-adjusting game systems and translates to making the game too easy when too hard and making the game too hard when too easy. This oscillation is a concern since the player would perceive the game as trying to explicitly adjust to his behavior and, thus, have a large impact in player engagement~\citep{martinoia_physically_2013}.
+
+Vector quantization is an standard practice and is used across different applications,~\eg acoustic topic models~\citep{kim_acoustic_2009,kim_audio_2009} and scene understanding~\citep{cao_spatially_2007,li_towards_2009,niu_context_2012}. Here, it is necessary for the definition of the multinomial distribution of words that defines each topic. Despite all, vector quantization for obtaining clusters as word-like units has some drawbacks. Among these are the loss of information and the difficulty in clustering the quantization results coherently, mostly in presence of closely spaced elements in the vector space~\citep{hu_latent_2012}.
+
+We believe that it would be interesting to remain in the continuous domain defined by the feature data, instead of relying on a fixed predefined set of tokens, i.e., the vocabulary set used for training the~\gls{lda}. This open new ways to experiment with the model definition.
+
+One important aspect not considered by our model is the role of skill. For example, a highly skilled player could try to minimize his/her energy expenditure by performing precise movements towards winning the game and in theory could perfectly show a low-movement profile.  The incorporation of such notion can occur by imposing new variables and dependencies between them. 
+
+To the best of our knowledge, our work is the first one to model the motion behavior of the player using raw accelerometer signal in conjunction with~\gls{lda} in a~\gls{pirg} scenario. We have demonstrated that the proposed approach is able to cluster and represent different play types learned from data. Our results indicate the approach is able to approximate well human similarity and is believed to be useful to support player modeling in such situation. We hope further research in the direction of what has been exposed above will provide a definitive proof of the method and better quantify its efficacy. 
+
+\section{Deception}
+
+
+\section{Skill adaption}

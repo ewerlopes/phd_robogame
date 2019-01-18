@@ -3,7 +3,7 @@
 Having identified an activity recognition system, we aimed at the definition of an approach to model user behavior that could account for the combination of the player physical effort and interaction level. The proposed model is based on the human activity recognition (chapter~\ref{ch:activity}) and a description of interaction (proximity and body contraction index) relative to the robot co-player.
 %ANDY If you have described separately the activity recognition model based on the accelerometer, a separate chapter has to be dedicated also to the lasers or whatever you would like to consider for the other parameters.  All these sources are functional to provide data for the activity model (if you like you may have all the contributions in the same chapter).
 
-\section{Relational Activity Model}\label{theModel}
+\section{Relational Activity Model}\label{sec:simple_model}
 
 As in~\cite{etheredge_generic_2013}, we defined as behavior a sequence of discrete time-bounded actions performed by the player. Since we are dealing with a physically interactive scenario, these time-bounded actions have strong relation with the amount of physical activity spent, hereby considered as the human ``activity effort''. The relationship with the robot, on the other hand, is considered the ``relative interaction''. 
 
@@ -107,7 +107,7 @@ Here, we use data coming from a single accelerometer placed on the human player'
 
 In other words, following this line of reasoning, we also assume players do not fake their engagement by unnecessarily performing strong activities, like running, when they are actually not engaged in the game or feel bored by the robot behavior. Therefore, we assume that a highly motivated player would act more intensively and frequently than a non-motivated one, thus showing a more turbulent acceleration signal profile. In situations like~\gls{pirg}, movement information is useful and should not be disregarded. Furthermore, a model that is able to extract a description of the player's movement profile for the purpose of robot behavior adaptation would generate interesting insights on the capability of the application to engage humans.
 
-\subsection{Mathematical Preliminaries}
+\subsection{Mathematical background}
 This section presents the basic concepts and principles behind~\gls{gaf}, autoencoders and~\gls{lda}, which are important to understand our modeling procedure.
 
 \subsubsection{\glsdesc{gaf} Images}
@@ -361,18 +361,19 @@ In text mining, this issue is handled by imposing a weight based on the length o
 
 \subsection{Validation}
 
-Our ultimate objective is to represent the player motion style by a mixture of topic proportions following the \gls{lda} framework. Unfortunately, the method by itself demands the programmer to initialize the desired number of topics. Thus, we had to perform a search for the optimal value given our dataset.
+Our ultimate objective is to represent the player motion style by a mixture of topic proportions following the \gls{lda} framework. The method by itself demands the programmer to initialize the desired number of topics. Thus, we had to perform a search for the optimal value for our dataset.
 
 By performing grid search, we selected a range of values for the two main hyperparameters, namely dictionary size, for the input word definition, and number of topics. We would like to keep the number of topics low, preferably less than 10, since by observing our dataset, it is not possible to distinguish many groups of different motion styles; this suggests that a coarse-grained definition would be better. Choosing the number of topics to be at most 10, as in~\cite{smith_mining_2016}, the evaluation of the uncovered topics remains manageable, while maintaining a certain degree of freedom for the existing motion diversity.
 
-The distribution of cluster centroids (words) given topics (our player motion types) is shown in Figure~\ref{overallgame}.
-Each line represents a topic, while each column represents a word. As one can see, there are no topics represented by the same distribution over the same word. Figure \ref{overallgame} shows how much each word is important for the specific topic.
+The distribution of cluster centroids (words) given topics (our player motion types) is shown in Figure~\ref{fig:overall_game}.
+Each line represents a topic, while each column represents a word. As one can see, there are no topics represented by the same distribution over the same word. Figure \ref{fig:overall_game} shows how much each word is important for the specific topic.
 
-\begin{figure}[H]
+\begin{figure}[h]
+    % TODO: fix the typo in the xlabel.
 	\centering
 	\includegraphics[width=\textwidth]{images/05-modeling/lda_heatmap.eps}
 	\caption{Schematic representation of the game: each line represents a topic, while each column represents a word that is representative of the specific topic.}
-  \label{overallgame}
+  \label{fig:overall_game}
 \end{figure}
 
 In order to validate the discovered topics, we use human judgment. We invited volunteers to watch a set of pairs of recorded game segments (15 s each) and point out the similarities between players in their motivation as perceived by their motion. Subjects had to judge how similar, on a scale from 0--5, the movements of two players were. With this, we generated a similarity matrix to be used as the ground truth and main guide for deciding which hyper-parameter value to use and to check whether the proposed method could achieve reasonable results.
@@ -381,10 +382,10 @@ The similarity matrix was composed of $406$ independent evaluations from six dif
 
 We used this information to define the number of topics and the number of words. The best set of parameters is the one that presents a higher similarity compared to the one expressing human judgment, thus the smallest Mean Squared Error (MSE). The graph in Figure~\ref{hyperparameter_results} shows the results obtained varying the size of the dictionary (number of cluster centroids) and the number or topics. From it, we have decided to pick 100 as the number of visual words and 10 for the topics present in our dataset.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.6]{images/05-modeling/mse_dictsize-50_100_10.png}
-	\caption{The figure shows the hyperparameter tuning results. The Mean Squared Error (MSE) is estimated with respect to the similarity expressed in the matrix containing the human judgment. The different lines represent the MSE obtained for different dictionary sizes and number of topics.}
+	\caption{The figure shows the hyperparameter tuning results. The~\gls{mse} is estimated with respect to the similarity expressed in the matrix containing the human judgment. The different lines represent the~\gls{mse} obtained for different dictionary sizes and number of topics.}
   \label{hyperparameter_results}
 \end{figure}
 
@@ -392,29 +393,39 @@ The observed similarity results were verified by visual inspection of video logs
 
 Another aspect that demands further investigation is how to avoid the decrease in accuracy when considering variable-sized game sessions. As mentioned before, game sessions with different sizes may artificially increase similarity in case one is a subset of another. The solution to this problem provides only a baseline, and much more sophisticated approaches to the problem should be~devised.
 
-We believe that a potential way for improvements in interpretability and accuracy is that of removing the vector quantization in defining each topic. It would be interesting to remain in the continuous domain defined by our input data representation (GASF features), instead of relying on a fixed predefined vocabulary set used for training the \gls{lda}. Such vectorization is known to lead to information loss~\cite{hu_latent_2012}. To avoid such an issue, one possibility may be replacing the topic multinomial distribution by a mixture of Gaussians~\cite{hu_latent_2012}.
+We believe that a potential way for improvements in interpretability and accuracy is that of removing the vector quantization in defining each topic. It would be interesting to remain in the continuous domain defined by our input data representation (GASF features), instead of relying on a fixed predefined vocabulary set used for training the \gls{lda}. Such vectorization is known to lead to information loss~\cite{hu_latent_2012}. To avoid such an issue, one possibility may be replacing the topic multinomial distribution by a mixture of continuous distributions such as Gaussians. This is akin to consider a word as a multidimensional point generated from the continuous mixture. Regarding this, we ackownledge the work of~\cite{hu_latent_2012} in which the authors propose the use of a continuous admixture model, named Gaussian-LDA, as an alternative to model a corpus of audio data. 
 
 \subsection{Discussion}
-In this work, we introduced an approach to identify the player motion styles from measurements obtained by the use of a single three-axial accelerometer sensor. Such a signal is then transformed using the Gramian angular field in an image that represents its content. The reason for such representation stems from recent publications aiming at using deep learning and state-of-the-art image processing techniques for achieving better classification results. Additionally, using the autoencoder for representing the obtained~\gls{gasf}s reduced the workload necessary for hand-crafting features, as often done when using machine learning classification/clustering methods with time series data.
+The main advantage in using this approach, that can be used for clustering players into coherent groups based on the activity level, is that by using a autoencoder for representing the obtained~\gls{gasf}s the workload necessary for hand-crafting features is reduced. Also, one may play with other methods for image classification  as well as explore results from other clustering methods.
 
-By applying latent Dirichlet allocation to characterize the motion behavior of different players, we were interested in getting a description that would foster the development of self-adjusting \gls{pirg}s agents capable of improving/sustaining engagement. In this, we had shown that the model is able to capture the overall human judgment by matching reported similarities. 
+% The primary concern shown in~\cite{smith_mining_2016} is that of encoding user controller inputs into discrete tokens (words), allowing for the unsupervised identification of types of gameplay fostered by a particular game level.
 
-This is the first work, to our knowledge, that tries to model the motion behavior of the player using this type of signal in conjunction with \gls{lda} in a robogame scenario. We have demonstrated that the proposed approach is able to cluster and represent different behaviors learned from data. We have evidence that our methodology can achieve better performance than that of relying solely on the measurements of the accelerometer as input for the dictionary learning step. We are still working to provide a fair comparison between the two approaches.%ANDY Another thing to do
+% Unfortunately, such approach poses some challenges, as reported by the authors:
+% \begin{inparaenum}
+%   \item the difficulty in finding the associated relationship between controller inputs and gameplay types; as well as  
+%   \item the difficulty to objectively define the gameplay types comprising their presence in different parts of the game.
+% \end{inparaenum}
 
-As future work, we want to test our approach with a series of different input signals in order to assess its capability. One alternative could be the incorporation of proximity information in order to capture how proximity patterns relate to a player game play style. Moreover, we are interested in measuring the player's effort expenditure in terms of difficulty of motion given a difficult setting for the robot. 
+A probabilistic graphical model, such as~\gls{lda}, offers the possibility to capture players' style as a composition of multiple existing player profiles, which makes the model robust in capturing the high diversity of acceleration signals in our scenario. The basic assumptions are~\citep{smith_mining_2016}:
 
-In our method, we also wish to incorporate time dependency. We believe such information would help to describe variations in playing style during play, given the opportunity to detect change points in styles and favor game (robot behavior) personalization. This also may help to avoid the rubber-band effect, a system instability concern often present when designing auto-adjusting game systems.
+\begin{enumerate}[label=\Alph*.]
+\item The ``input words'' (gameplay types, in our case) are assumed to occur in a document (session play-through) and describe a game session, allowing the categorization of types of gameplay;
+\item A game setting (level, or in our case robot parameters related to difficulty) is assumed to foster and be represented as a mixture of several gameplay types;
+\item Similar gameplay types can co-occur;
+\item Similar players tend to produce similar gameplay types.
+\end{enumerate}
 
-Another means for improvements, and one that we are currently working on, is that of removing the vector quantization step necessary for the definition of the multinomial distribution of words that defines each topic. We believe that it would be interesting to remain in the continuous domain defined by our input data, instead of relying on a fixed predefined set of tokens, i.e., the vocabulary set used for training the \gls{lda}. Our current experimentation goes along the lines of testing how a Gaussian version of \gls{lda} would work in our domain and whether that could give better results. Additionally, comparing our results with a continuous version of \gls{lda} would help to answer questions regarding {stop word} filtering, such as: To what extent removing certain common segments would improve or worsen accuracy?
+While being able to quantify the extent to which each gameplay type is present in a game level, the related approach in~\cite{smith_mining_2016} has several limitations that prevent its direct use in~\gls{pirg}s, including:
 
-Finally, we are working to redesign the experiments in order to allow for collecting user survey data, which comprise a valuable resource regarding player style and engagement levels. This is all in order to increase our understanding of the obtained results. We plan to collect self-reported engagement levels when comparing with different robot behavior configuration while allowing for adaptation. Regarding such adaptation, we currently are investigating how to relate the robot game's difficult settings (such as velocity, tower LED control rules, among others) and the mixture proportion of motion types discovered by our reported method. One alternative is to design a utility function that would describe what is the pay-off in facing a certain player given a certain difficult setting, therefore turning the adaptation problem into a full on-line optimization procedure where we try to match player motion types with robot behavior implied by difficulty settings.
+\begin{enumerate}[label=\Roman*.]
+    \item In a~\gls{pirg} game, like RoboTower v2, the human player is not likely to use controller inputs and, therefore, the structured information present in controller inputs is not well-defined;
+    \item In~\gls{pirg}s, we often have a continuous stream of data coming from multi-channel sources %and we would like to have an on-line processing instead than a batch analysis of texts;
+    \item In~\gls{pirg}s the difficulty to assign semantic meaning to some of the discovered gameplay types is high, since the source of information is a time series of data (e.g., player's quantity of motion, physiological signals), rather than controller inputs such as ``move left'', ``move right'', ``jump'', etc.;
+    %\item The model inclusion of additional factors that affect the player's play style, such as in-game events or player skill attributes, is necessary.
+\end{enumerate}
 
-%ANDY Future work has to be cited, however, this is not a paper, but a PhD thesis. Future work related to other parts of the thesis (such as experiments on different behaviors) should take them into account, and experimens should (have) consider(ed) all the aspects to be investigated.
+Our approach addresses the problem in the points I and II by giving means to process the continuous data available. In fact, the use of~\gls{gaf} images can be further exploited in multi-channel sources by putting together different sources in the same image similar to what it done in standard RGB image -- one color for each channel. 
 
 
 \section{Considerations}
-One important aspect not considered yet by our assumptions is the role of skill level. For example, a highly skilled player could try to minimize his/her energy expenditure by performing precise movements towards winning the game and in theory could perfectly show a low-movement profile. Moreover, these assumptions cannot directly measure player engagement in the game, given that it is also possible for a player to move not too much, but, at the same time, be highly engaged. 
-
-In summary, we are interested in investigating time series data, especially acceleration patterns as proxy and/or engagement cues (given the mentioned assumptions) towards the creation of auto-adjusting robotic companions or opponents.
-
-%ANDY The last 4 paragraphs present nice ideas, but they seem unrelated to each other, just put here as they come to the mind. These considerations are good for the introduction, and the conclusion chapters, and should be integrated with their developments throughout the text.
+In this chapter we have proposed some ideas for player modeling in~\gls{pirg}s. The main contribution stems from the use of popular~\gls{ml} algorithms, such as~\gls{lda}, K-means and autoencoder to evaluate phenomena in our game scenario. The results show the capacity of the model in approximating the human evaluation as to what concerns the similarity among players. Further investigation can address strategies for increasing interpretability of the uncovered topics in the sense of whether each topic can confidently be associated with meaningful tags (\eg ``over excited'', ''lazy'', etc) similar to the ones given when using~\gls{lda} to text mining. We hope the experimentation detailed in this chapter will inspire further research and help to increase interest  in the design of~\gls{pirg}s.
