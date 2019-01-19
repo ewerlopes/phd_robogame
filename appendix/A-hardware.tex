@@ -4,14 +4,14 @@
 
 \begin{figure}[h]
     \centering
-    \includegraphics[draft=false, width=5cm]{images/03-foundation/node_mcu_pinout}
+    \includegraphics[width=5cm]{images/03-foundation/node_mcu_pinout}
   \caption{The pinout of the NodeMCU V3 ESP8266 ESP-12E WiFi module used for data transmission.}
   \label{fig:tower_board}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[draft=false, width=5cm]{images/03-foundation/tilt_sensor_circuit}
+	\includegraphics[width=5cm]{images/03-foundation/tilt_sensor_circuit}
 	\caption{The circuit for detecting when a tower has fallen. A tilt switch detects the inclination and the low-pass filter smooths out noise from vibrations such as those caused by the player touching the tower. The signal wire is attached to a pin on the NodeMCU V3 ESP8266 ESP-12E WiFi Module, which allows communication with the robot's onboard computer.}
     \label{fig:tilt_circuit} 
 \end{figure}
@@ -31,7 +31,7 @@
 % float32 press_accuracy
 % \caption{Data package structure transmitted from the tower to the robot. The code sintax is that of  }
 
-\section{Kinematics of a 3-wheeled omni-directional robot}
+\section{Kinematics of a 3-wheeled omni-directional robot}\label{sec:kinematics}
 The pose of a rigid mobile robot is commonly described by six variables, its three-dimensional Cartesian coordinates and its three Euler angles (roll, pitch, yaw) relative to an external coordinate frame~\citep{thrun_probabilistic_2005}. If the robot is considered as moving on a planar surface, this reduces to two Cartesian coordinates and an orientation angle.
 The kinematic model of an omni-directional base consists of an equation of motion of the robot in function of wheels velocity without considering the forces acting on the system. In this section, a kinematic model for a 3-wheeled omni-directional robot will be derived.
 
@@ -39,13 +39,13 @@ The kinematic model of an omni-directional base consists of an equation of motio
   \centering
   \begin{subfigure}[b]{0.4\textwidth}
      \centering
-      \includegraphics[draft=false,width=4cm, height=3.5cm]{images/03-foundation/triskarbase1}
+      \includegraphics[width=4cm, height=3.5cm]{images/03-foundation/triskarbase1}
 	\caption{}
 	\label{triskar1} 
   \end{subfigure}
   \begin{subfigure}[b]{0.4\textwidth}
   \centering
-      \includegraphics[draft=false,width=4cm, height=3.5cm]{images/03-foundation/triskarbase2}
+      \includegraphics[width=4cm, height=3.5cm]{images/03-foundation/triskarbase2}
 	\caption{}
 	\label{triskar2} 
   \end{subfigure}
@@ -343,7 +343,7 @@ Equation~\ref{inversekin} represents the inverse kinematic model for the conside
 \section{Microsoft Kinect\textsuperscript{\textregistered} One specifications}
 \begin{figure}[H]
 	\centering
-	\includegraphics[draft=false, width=5cm]{images/03-foundation/kinect}
+	\includegraphics[width=5cm]{images/03-foundation/kinect}
 	\caption{Microsoft Kinect\textsuperscript{\textregistered} for Xbox ONE.}
 	\label{kinect} 
 \end{figure}
@@ -375,7 +375,7 @@ The three motors are MAXON 118798 DC motor RE36 GB 70W KL 2WE, whose characteris
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[draft=false, width=\textwidth]{images/03-foundation/motor}
+	\includegraphics[width=\textwidth]{images/03-foundation/motor}
 	\caption{MAXON 118798 DC motor schematic. Three units were used in our platform.}
 	\label{motor} 
 \end{figure}
@@ -423,7 +423,7 @@ On each motor a 110513 tacho ENCODER HEDS 5540 500IMP 3K is mounted to get the s
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[draft=false,width=\textwidth]{images/03-foundation/enc}
+	\includegraphics[width=\textwidth]{images/03-foundation/enc}
 	\caption{Motor encoders deployed for motion sensing and control.}
 	\label{enc} 
 \end{figure}
@@ -458,7 +458,7 @@ We have used a rapid discharging lead-acid battery FIAMM 12FGHL34 12V 9Ah. This 
 \section{Additional tower navigation details}
 Recall that the equation~\ref{eq:rotation} allows us to perform the transformation from reference frames. The $x$ and $y$ robot position in robot frame is defined as $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, respectively. Another problem that must be considered at this point is to guarantee the decoupling between robot rotations and translations (the control of the robot orientation must be completely independent from the xy-translation, since this will enable the robot to track the movement of the human player while navigating during the game). 
 
-Let us consider again the equation~\ref{model2} introduced in section~\ref{kinematics}
+Let us consider again the equation~\ref{model2} introduced in section~\ref{sec:kinematics}
 \begin{equation*}
 	\begin{bmatrix}
 		\dot{x}_R\\
@@ -490,7 +490,7 @@ For the high-level control laws without considering the wheel velocities, the ki
 \dot{\bar{x}}_R^m\\
 \dot{\omega}
 \end{bmatrix}
-\label{controllaw}
+\label{eq:control_law}
 \end{equation}
 where:
 
@@ -504,19 +504,22 @@ G=\begin{bmatrix}
 \sin(\theta) & \cos(\theta)\\
 \end{bmatrix}
 \end{equation}
-As already stated in section~\ref{kinematics}, $^wR_m(\theta)$ is the transformation matrix from the robot coordinate system to the world coordinate system. Since G is full rank, the characteristics of decoupled movements are also kept in equation~\ref{controllaw}.\\
-As anticipated, it is now necessary to transform the velocities from world frame to robot body frame, the trigonometric functions of angle $\theta$ in the transformation matrix $G$ determine the nonlinearities of the kinematic model. Since the matrix G is full rank, this nonlinear model can be exactly linearized by introducing a simple compensator~\cite{li2009motion}.\\
+
+As already stated in section~\ref{sec:kinematics}, $^wR_m(\theta)$ is the transformation matrix from the robot coordinate system to the world coordinate system. Since G is full rank, the characteristics of decoupled movements are also kept in equation~\ref{eq:control_law}.
+
+As anticipated, it is now necessary to transform the velocities from world frame to robot body frame, the trigonometric functions of angle $\theta$ in the transformation matrix $G$ determine the non-linearities of the model. Since the matrix G is full rank, this nonlinear model can be exactly linearized by introducing a simple compensator~\citep{li_motion_2009}.
+
 We define an \textit{Inverse Input-Output Linearization} based control approach where:
+
 \begin{equation}
-C = G^{-1},
+    C = G^{-1},
 \end{equation} 
-denotes that the translation and rotation of the robot are decoupled, and guarantees the separate control of these two movements.
-The linearized system becomes $\mathbf{\dot{x}} = \mathbf{u}$ with a new input vector \textbf{u} = [$u_1,u_2,u_3$]$^T$.
+
+denotes that the translation and rotation of the robot are decoupled, and guarantees the separate control of these two movements. The linearized system becomes $\mathbf{\dot{x}} = \mathbf{u}$ with a new input vector \textbf{u} = [$u_1,u_2,u_3$]$^T$.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=10cm]{Chapter5/Figs/comp1}
-	\rule{35em}{0.5pt}
+	\includegraphics[width=10cm]{images/03-foundation/comp1}
 	\caption{Linearized system by the component C.} 
 	\label{comp1}
 \end{figure}
@@ -526,16 +529,17 @@ When a controller $K$ is designed based on this simple linear system, the contro
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=12cm]{Chapter5/Figs/comp2}
-	\rule{35em}{0.5pt}
+	\includegraphics[width=12cm]{images/03-foundation/comp2}
 	\caption{Closed-loop control system.} 
 	\label{comp2}
 \end{figure}
-Considering figure~\ref{comp2}, $\mathbf{x_d}$ is a vector of desired positions to reach, or waypoints.
-Based on this input-output linearized system, path following and orientation tracking problems can be analyzed with respect to the robot translation and rotation control.\\
-The outputs of algorithm~\ref{pointopoint} will then be the input of the compensator shown in figure~\ref{comp1}, and its outputs will be $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, which are the required velocity set points of the robot considering the robot reference frame.
 
-\begin{algorithm}[H]
+Considering figure~\ref{comp2}, $\mathbf{x_d}$ is a vector of desired positions to reach, or way-points.
+Based on this input-output linearized system, path following and orientation tracking problems can be analyzed with respect to the robot translation and rotation control.
+
+The outputs of algorithm~\ref{alg:pointopoint} will then be the input of the compensator shown in figure~\ref{comp1}, and its outputs will be $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, which are the required velocity set points of the robot considering the robot reference frame.
+
+\begin{algorithm}[h]
 	\# Transform the un-smoothed velocity set-points [$\dot{\bar{x}}_R$, $\dot{\bar{y}}_R$] from world frame to robot reference frame, while keeping linear and angular movements of the robot decoupled.\;
 	$G=\begin{bmatrix}
 	^wR_m(\theta) & 0\\
@@ -556,15 +560,15 @@ The outputs of algorithm~\ref{pointopoint} will then be the input of the compens
 	$\;
 	\Return $\dot{\bar{x}}_R^m$, $\dot{\bar{y}}_R^m$
 	\caption{Linear compensation and world-to-body transformation of the velocity set-point} 
-	\label{compensator}
+	\label{alg:compensator}
 \end{algorithm}
 
-With this approach, the velocity set-points $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, returned from the algorithm~\ref{compensator}, dynamically change during the game and often the variation has a step-function shaped form that causes the low level actuation to react violently to make the robot reaching the desired velocity, especially when starting from the initial position with 0-velocity (see figures~\ref{vel14} and~\ref{wheel14}).
-This will result in the robot wheels undergoing in slippage due to the too sharp acceleration required to reach the velocity set-point. As explained in paragraph~\ref{slippage}, this is an undesired effect that is source of non-systematic odometry errors that may lead to instability and loss of localization. A number of tests have been performed to quantify the effect of the wheel slippage during the initial robot acceleration phase. In these tests the robot linearly translates along $x$ and $y$ axis and receives the initial velocity set-point at $1m/s$ or $1.4m/s$. In figures~\ref{opti14},~\ref{amcl14},~\ref{poserror14},~\ref{opti14y},~\ref{amcl14y}, and~\ref{poserror14y} we can see the localization error introduced during the xy-translation.
+With this approach, the velocity set-points $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, returned from the algorithm~\ref{alg:compensator}, dynamically change during the game and often the variation has a step-function shaped form that causes the low level actuation to react violently to make the robot reaching the desired velocity, especially when starting from the initial position with 0-velocity (see figures~\ref{vel14} and~\ref{wheel14}).
+This will result in the robot wheels undergoing in slippage due to the too sharp acceleration required to reach the velocity set-point. This is an undesired effect that is source of non-systematic odometry errors that may lead to instability and loss of localization. A number of tests have been performed to quantify the effect of the wheel slippage during the initial robot acceleration phase. In these tests the robot linearly translates along $x$ and $y$ axis and receives the initial velocity set-point at $1m/s$ or $1.4m/s$. In figures~\ref{opti14},~\ref{amcl14},~\ref{poserror14},~\ref{opti14y},~\ref{amcl14y}, and~\ref{poserror14y} we can see the localization error introduced during the xy-translation.
 
 To avoid this effect, a velocity smoother has been introduced in order to obtain a smooth velocity set-point control signal to be sent to the robot low level actuation to avoid wheels slippage during the  acceleration phase. The inputs of the velocity smoother are the un-smoothed velocity set-points [$\dot{\bar{x}}_R^m$, $\dot{\bar{y}}_R^m$], some of the internal parameters such as maximum allowed velocity and maximum allowed acceleration can be changed online to modify the final response of the robot, t. The output are the final xy-velocity control signals [$\dot{x}_R^m$, $\dot{y}_R^m$] in robot reference frame that will be sent to the low level actuation.
 
-\begin{algorithm}[H]
+\begin{algorithm}[h]
 	\# define initial velocity\;
 	$\dot{x}_{(t-1)}$ = $\left[{\dot{\bar{x}}_R^m}_{(t-1)},\quad {\dot{\bar{y}}_R^m}_{(t-1)}\right]$\;
 	\# Define accelerations\;
@@ -610,7 +614,7 @@ The velocity smoother runs together with the Point-to-Point Navigation algorithm
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[ width=7cm]{images/03-foundation/controlsweep}
+	\includegraphics[width=7cm]{images/03-foundation/controlsweep}
 	\caption{Smoothing of a step-shaped unsmoothed velocity set-point, at $t=1\text{sec}$ a sweep of 10 step transition set-points is fed as input of the velocity smoother, in the image are shown the smoothed values for each test case} 
 	\label{controlsweep}
 \end{figure}
@@ -647,47 +651,41 @@ The velocity smoother runs together with the Point-to-Point Navigation algorithm
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=12cm]{images/03-foundation/opti14}
-	\rule{35em}{0.5pt}
-	\caption{GroundTruth Robot Position - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing)} 
+	\caption{GroundTruth Robot Position - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing).} 
 	\label{opti14}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=12cm]{images/03-foundation/amcl14}
-	\rule{35em}{0.5pt}
-	\caption{AMCL map position - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing)} 
+	\caption{AMCL map position - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing).} 
 	\label{amcl14}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=12cm]{images/03-foundation/poserror14}
-	\rule{35em}{0.5pt}
-	\caption{Position error - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing)} 
+	\caption{Position error - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing).} 
 	\label{poserror14}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=12cm]{images/03-foundation/opti14y}
-	\rule{35em}{0.5pt}
-	\caption{GroundTruth Robot Position - 1.4m/s y-velocity setpoint (slipping / no velocity smoothing)} 
+	\caption{GroundTruth Robot Position - 1.4m/s y-velocity setpoint (slipping / no velocity smoothing).} 
 	\label{opti14y}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=12cm]{images/03-foundation/amcl14y}
-	\rule{35em}{0.5pt}
-	\caption{AMCL map position - 1.4m/s y-velocity setpoint (slipping / no velocity smoothing)} 
+	\caption{AMCL map position - 1.4m/s y-velocity setpoint (slipping / no velocity smoothing).} 
 	\label{amcl14y}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=12cm]{images/03-foundation/poserror14y}
-	\rule{35em}{0.5pt}
 	\caption{Position error - 1.4m/s y-velocity setpoint (slipping / no velocity smoothing)} 
 	\label{poserror14y}
 \end{figure}
@@ -695,7 +693,6 @@ The velocity smoother runs together with the Point-to-Point Navigation algorithm
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=12cm]{images/03-foundation/vel14}
-	\rule{35em}{0.5pt}
 	\caption{Robot measured linear velocity - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing)} 
 	\label{vel14}
 \end{figure}
@@ -703,12 +700,10 @@ The velocity smoother runs together with the Point-to-Point Navigation algorithm
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=12cm]{images/03-foundation/wheel14}
-	\rule{35em}{0.5pt}
 	\caption{wheels measured angular velocity - 1.4m/s x-velocity setpoint (slipping / no velocity smoothing)} 
 	\label{wheel14}
 \end{figure}
 
-% ******************************* Thesis Appendix A ********************************
 \section{Fuzzy Rules} 
 \subsection{Repulsive behavior if obstacles are encountered}
 
@@ -716,7 +711,7 @@ The velocity smoother runs together with the Point-to-Point Navigation algorithm
 	\item \textbf{IF} $\left[\left( \text{min\_front\_left} == \textsf{close}\right) \textbf{ OR } \left(\text{min\_front\_right} == \textsf{close}\right)\right]$\\ 
 	\textbf{THEN} $\Rightarrow\left[\left( V_x = \textsf{stop} \right) \textbf{AND} \left(V_y = -0.5\right)\right]$
 	
-	\item \textbf{IF} $\left[\left( \text{min\_front\_left} == \textsf{far}\right) \textbf{ AND } \left(\text{min\_front\_right} == \textsf{far}\right) \textbf{AND} \left(\text{near\_goal} == \textsf{false}\right)
+	\item \textbf{IF} $ \left[\left( \text{min\_front\_left} == \textsf{far}\right) \textbf{ AND } \left(\text{min\_front\_right} == \textsf{far}\right) \textbf{AND} \left(\text{near\_goal} == \textsf{false}\right)
 	\right]$\\ 
 	\textbf{THEN} $\Rightarrow\left[\left( V_x = \textsf{stop} \right) \textbf{AND} \left(V_y = -0.4\right)\right]$
 	
@@ -868,8 +863,7 @@ The velocity smoother runs together with the Point-to-Point Navigation algorithm
 	\textbf{AND} ($\text{index\_front\_right}$ == $\textsf{is\_front\_right}$)
 	\textbf{AND} (near\_goal == \textsf{false})]\\
 	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{stop}) \textbf{AND} ($V_y$ = \textsf{-0.3})]
-	
-	\newpage
+
 	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
 	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
 	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)

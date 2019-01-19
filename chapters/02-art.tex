@@ -28,7 +28,7 @@ Another example is RoboTower. It is inspired by the videogame Rock of Ages. In t
 \begin{figure}[htp]
   \centering  
   \framebox{\parbox{4cm}{\includegraphics[width=4cm]{images/02-art/robotower}}}
-  \caption{The robot, the cards and the towers used in RoboTower~\citep{bonarini_timing_2014}.}
+  \caption{A view of the robot, the cards and the towers used in the RoboTower~\citep{bonarini_timing_2014}.}
     \label{fig:robo_tower}
 \end{figure}
 
@@ -43,6 +43,31 @@ The necessity of investing on the research and implementation of intelligent alg
 Also, it is important to focus on the exploration of mobile robot bases with cheap sensors and algorithms requiring little power to be executed in real time (``green algorithms") in non-structured environments, since these are constraints currently addressed in robogames, and in the whole Robotics community, in order to make robots reach a wide market. 
 
 Properly exploiting cognitive abilities in robogames may increase the player's engagement since any apparently rational behavior of the robot may bring to accept it as a robotic companion (or opponent) ``while random actions or too complex strategies for the cognitive or perception levels of the players are perceived as not purposeful''~\citep{martinoia_physically_2013}. Due to the inherent complexity involved in the typical scenario, it is not possible to entirely rely on ``hard-coded'' abilities that are static across time and once learned by the human player tend to decrease interest. The problem of designing new interesting~\gls{pirg}s calls for the massive use of~\gls{ml}-based techniques to make sense of the obtained interaction information, thus presenting itself a new field of research.
+
+
+%////////////// SEE WHETHER YOU CAN INCORPORATE SOME OF THE CITATIONS BELOW IN THE TEXT ABOVE /////////////
+
+% Robot toys are presently the largest amount of robots delivered in our homes, at a rate of millions every year. In almost all the cases, the interaction is limited to stimulus-response reactions, but the introduction of low-cost sensors and computer power are making it possible to introduce a richer interaction and games specifically designed for mobile robots. In a~\gls{pirg}, physical autonomous (often mobile) agents are actively engaged in a game that creates some sort of interaction, either competitive or cooperative, between humans and robots, moving in the physical world. Robogames will be one of the next robotic products for the mass technological market, thus demanding a large exploration of new methodologies and applications, especially for what concerns methods for enabling high autonomy, intelligence, and adaptive behavior, in order to respond to demands in engagement support like the ones expressed in~\cite{yannakakis_entertainment_2008,yannakakis_how_2008,yannakakis_real-time_2009}. 
+% Being able to evaluate how people play is crucial for an adaptive game. In the virtual game industry, several studies have been published, most of them using artificial intelligence and machine learning algorithms. For instance,~\cite{drachen_player_2009} reports about emergent self-organizing maps for grouping types of players. 
+
+% There have been attempts for presenting robots as toys over the years, where, in most cases, the robot acts more or less like a mobile pet (e.g.,~\cite{fujita_open_1997, brooks_robots_2004}). In these cases, interaction is often seen as limited to almost static positions, not exploiting rich movement, nor high level of autonomy; the credibility of these toys to lively engage people, such as kids, are said to be constrained~\cite{martinoia_physically_2013, bonarini_timing_2014}. 
+
+% Some~\gls{pirg}s have been reported over the last few years. Jedi Trainer 3.0.~\cite{martinoia_physically_2013} was a~\gls{pirg} mimicking a situation of the first Star Wars saga movie ``Episode IV - A New Hope'': it was able to show some apparent adaptation to the player's playing style as well as some realism of the drone's behavior, which could be understood as some kind of rational behavior by the human player.
+
+% Queball~\cite{salter_designing_2014} was a robotic ball proposed to engage autistic children in games that could have therapeutic goals.
+
+% Teo~\cite{bonarini_huggable_2016} is a huggable, mobile robot designed to play games with autistic children, and to provide the possibility to make free play as well as structuered play experiences.
+
+% RoboTower~\cite{oliveira_learning_2018, oliveira_activity_2017, oliveira_modeling_2017}, where humans physically interact with an omni-directional robot by trying to protect towers while avoiding letting the robot pushing them down.
+% Despite being examples of successful applications, only~\cite{oliveira_modeling_2017} and~\cite{oliveira_learning_2018} present an attempt to quantify the human behavior during gameplay.%for anonymization, while~\cite{oliveira_learning_2017} is the background work for the experiments presented in this paper.
+
+% An approach based on genetic algorithms for capturing and modeling individual entertainment is given in~\cite{yannakakis_entertainment_2008}, where the main goal is to construct a player model, in this case a child playing a Playware game. ``Playware is the use of intelligent technology to create the kind of leisure activity we normally label play''%TODO Should this be quoted as it is from the paper?
+% % [EWERTON] --> Jawohl!
+% ~\cite{lund_playware_2005}. The system can predict the answers to a question asking which variants of the game are more or less ``fun''. In that work, the model is constructed from physiological signals measured during play. 
+
+% In summary, pretty much all the related works agree that being able to label player's behavior in a game environment can enable the robotic agent to modify its interactions and playing-style in order to adapt to the skills of its human counterpart. This is a general statement shared with most human-robot interaction applications. On this work, we go further and investigate the introduction of deceptive behavior as another factor for supporting engagement.
+
+
 
 \section{Overall design guidelines}\label{sec:dimensions}
 From our experience, we have identified at least three dimension in which one must pay attention to when designing a new~\gls{pirg}. Each dimension presents its own set of utilities/challengers some of which are summarized in Figure~\ref{graph:PIRG_design_structure}. 

@@ -90,15 +90,15 @@ Here, we use data coming from a single accelerometer placed on the human player'
     \centering
     \begin{subfigure}[h]{\textwidth}
         \centering
-        \includegraphics[width=0.2\textwidth]{images/05-modeling/enricorun.png} 
-        \includegraphics[width=0.6\textwidth]{images/05-modeling/running_sig_profile.eps} 
+        \includegraphics[width=0.2\textwidth]{images/05-modeling/enricorun} 
+        \includegraphics[width=0.6\textwidth]{images/05-modeling/running_sig_profile} 
         \caption{}
     \end{subfigure}\vspace{6pt}
     ~
     \begin{subfigure}[h]{\textwidth}
         \centering
-        \includegraphics[width=0.2\textwidth]{images/05-modeling/enricostill.png}
-        \includegraphics[width=0.6\textwidth]{images/05-modeling/standing_sig_profile.eps} 
+        \includegraphics[width=0.2\textwidth]{images/05-modeling/enricostill}
+        \includegraphics[width=0.6\textwidth]{images/05-modeling/standing_sig_profile} 
         \caption{}
     \end{subfigure} \vspace{-6pt}
     \caption{Three-axis accelerometer signal during game play. a) A running player. b) A player standing still. Signal shape and amplitude are very characteristic for the respective activity.}
@@ -162,7 +162,7 @@ However, the size of the Gramian matrix $G$ is $n \times n$, for $n$ being the l
 
 \begin{figure} [h]
 \centering
-\includegraphics[width=\textwidth]{images/05-modeling/gasfpipeline.eps} 
+\includegraphics[width=\textwidth]{images/05-modeling/gasfpipeline} 
  \caption{Conversion of time series into a~\gls{gasf} image and then back into its original space.}
  \label{figure:gasf_example}
 \end{figure}
@@ -287,14 +287,14 @@ An example of signal decomposition into~\gls{gasf} images is shown in Figure~\re
     \centering
     \begin{subfigure}[h]{\textwidth}
         \centering
-        \includegraphics[width=0.9\textwidth]{images/05-modeling/example_signal.eps}
+        \includegraphics[width=0.9\textwidth]{images/05-modeling/example_signal}
         \label{figure:accelerometer_signal}
         \caption{}
     \end{subfigure} \vspace{-6pt}
     ~
     \begin{subfigure}[h]{0.8\textwidth}
         \centering
-        \includegraphics[width=0.8\textwidth]{images/05-modeling/example_gafs_seg.eps}
+        \includegraphics[width=0.8\textwidth]{images/05-modeling/example_gafs_seg}
         \caption{}
     \end{subfigure} \vspace{-6pt}
     \caption{Example of the conversion of a time series into~\gls{gasf} images. a) Three-axis accelerometer data (48.8 Hz) of about 30 seconds of real game play. b) Thirty five~\gls{gasf} segments of a linear combination of the multidimensional time series. Each window comprises 0.65 seconds with 32 samples.}
@@ -341,7 +341,7 @@ A window of half a second corresponds to 32 samples given our accelerometer aver
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\textwidth]{images/05-modeling/reconstructions.eps}
+	\includegraphics[width=\textwidth]{images/05-modeling/reconstructions}
 	\caption{Autoencoder reconstruction for five input segments corresponding to half a second of data (linear combination of the acceleration axis). ({Top line}) Input~\gls{gasf} images. ({Second line}) Original time series for each~\gls{gasf} input. ({Third line}) The autoencoder reconstruction for the input images. ({Forth line}) Time series from the reconstructed~\gls{gasf} images. Holes in the reconstruction are due to the error in the reconstruction of the images using the autoencoder.}
   \label{fig:reconstruction}
 \end{figure}
@@ -371,21 +371,21 @@ Each line represents a topic, while each column represents a word. As one can se
 \begin{figure}[h]
     % TODO: fix the typo in the xlabel.
 	\centering
-	\includegraphics[width=\textwidth]{images/05-modeling/lda_heatmap.eps}
+	\includegraphics[width=\textwidth]{images/05-modeling/lda_heatmap}
 	\caption{Schematic representation of the game: each line represents a topic, while each column represents a word that is representative of the specific topic.}
   \label{fig:overall_game}
 \end{figure}
 
 In order to validate the discovered topics, we use human judgment. We invited volunteers to watch a set of pairs of recorded game segments (15 s each) and point out the similarities between players in their motivation as perceived by their motion. Subjects had to judge how similar, on a scale from 0--5, the movements of two players were. With this, we generated a similarity matrix to be used as the ground truth and main guide for deciding which hyper-parameter value to use and to check whether the proposed method could achieve reasonable results.
 
-The similarity matrix was composed of $406$ independent evaluations from six different human subjects. The generated evaluation matrix was then compared with a cosine similarity matrix generated after training the \gls{lda} in our dataset. The similarity, in this case, is based on the mixture proportions among the discovered topics. 
+The similarity matrix was composed of $406$ independent evaluations from six different human subjects. The generated evaluation matrix was then compared with a cosine similarity matrix generated after training the~\gls{lda} in our dataset. The similarity, in this case, is based on the mixture proportions among the discovered topics. 
 
-We used this information to define the number of topics and the number of words. The best set of parameters is the one that presents a higher similarity compared to the one expressing human judgment, thus the smallest Mean Squared Error (MSE). The graph in Figure~\ref{hyperparameter_results} shows the results obtained varying the size of the dictionary (number of cluster centroids) and the number or topics. From it, we have decided to pick 100 as the number of visual words and 10 for the topics present in our dataset.
+We used this information to define the number of topics and the number of words. The best set of parameters is the one that presents a higher similarity compared to the one expressing human judgment. The metric used for evaluation was the~\gls{mse}. The graph in Figure~\ref{hyperparameter_results} shows the results obtained varying the size of the dictionary (number of cluster centroids) and the number or topics. From it, we have decided to pick 100 as the number of visual words and 10 for the topics present in our dataset.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.6]{images/05-modeling/mse_dictsize-50_100_10.png}
-	\caption{The figure shows the hyperparameter tuning results. The~\gls{mse} is estimated with respect to the similarity expressed in the matrix containing the human judgment. The different lines represent the~\gls{mse} obtained for different dictionary sizes and number of topics.}
+	\caption{Different lines represent the~\gls{mse} obtained for different dictionary sizes and number of topics. The~\gls{mse} is estimated with respect to the similarity expressed in the matrix containing human similarity judgment.}
   \label{hyperparameter_results}
 \end{figure}
 
