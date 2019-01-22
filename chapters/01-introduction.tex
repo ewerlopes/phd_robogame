@@ -10,13 +10,6 @@ When it comes to extract useful information from agent's behavior, one can see a
 
 The focus on modeling behavior for experience optimization, is much related to the idea of extracting useful features from users in order to adjust parameters that are correlated with their experience in the activity, for the sake of offering a better product or helping the user to achieve some particular goals. In a gaming scenario, this notion is commonly applied when designers attempt to define a mechanism capable of adjusting the difficulty or general appearance of the game in the expectation of rising the player's entertainment. Very traditionally, the sense of game difficulty is designed to increase along the course of the experience, and it can either happen in a linear fashion or through steps represented by the levels or phases, where a player is forced to select the difficulty level through a set of discrete options (easy, medium, hard, very hard). However, given the observation that very often this ``static'' way of setting up a difficulty curve is not accurate enough and it may not account for the difference between players or even the different learning rates of each of them. In principle, it turns out useful and natural to think about coming up with modeling techniques that may empower the play experience. 
 
-%The complexity of designing such models is greatly impacted by the type of game they are applied to. For instance, in a computer game scenario a computer-controlled agent may receive noise-free sensory data about the player's activity, which may reduce complexity in modeling the overall user behavior model. This is to be contrasted with~\gls{pirg}, where its real-world scenario does not allow a complete observation of the player's behavior.
-% EWERTON: I think this paragraph can be omitted.
-
-%ANDY: I really cannot understand the meaning of the next sentence. What solutions? Most computer games are quite well designed, and design is reflected in the implementation.
-%EWERTON: Let's ignore that paragraph since in recent years there has been a lot of new approaches for DDA in the literature, which demonstrates the interest on such methodologies and a reduction of suspicion about it. 
-    %The general suspicion about a full spread of such solutions, mainly in virtual game development, is that they ultimately take the control away from the design and put it basically in the code, which has obvious drawbacks, ranging from high-demand for computational resources and storage to general game behavior~\cite{hunicke_ai_2004}. 
-
 In summary, it would be important to have an autonomous robot playing in a~\gls{pirg} and able to automatically adjust its behavior such that it may likely match the user's skill and, by doing so, maintain the user engaged and entertained. Also, it is important to make this robot appear rational, possibly smart. 
 
 In this thesis work, after providing a panorama of approaches that take inspiration from \textit{artificial intelligence} (AI) and \textit{machine learning} (ML) techniques in order to tackle the problem of modeling co-existing agent's behavior and activity in games and robots, we propose models and report of results showing effort in addressing the design of better agents for~\gls{pirg}.
@@ -28,11 +21,16 @@ Since in any kind of~\gls{pirg} autonomous robot are supposed to be perceived as
 
 \begin{itemize}
 \item How to discover player types and quantify player behavior in~\gls{pirg}?
-\item How it is possible to adapt the behavior of the robot to optimize the satisfaction of the human players?
+\item How is it possible to adapt the behavior of the robot to optimize the satisfaction of the human players?
 \item To what extent does adaptation impact reported entertainment?
 \end{itemize}
 
 From this, the objective of this thesis focuses on the exploitation of~\gls{ml} techniques to the design of better~\gls{pirg} robotic agents, which should lead to more engaging playmates, possibly capable of performing behavior/strategy adjustment. The hypothesis is that~\gls{ml} would help to decrease predictability in robot behavior and introduce game dynamics capable of considerably empower the user’s engagement, making so that the agents can be well accepted as game companions.
+
+%TODO Actually, the issue is a little bit more complex. If the robot behavior cannot be detected and decoded, the player would not like to play, as well as if it is to simple to understand. The equilibrium point is just on the middle, where decoding the robot behavior is challenging enough to require some effort, but not too much. A very smart robot, or a robot changing often its strategy, may be perceived as playing randomly, so not as a rational agent. The main issue is to enforce the idea that the robot is playing rationally (in the Simon's definition of having a goal).
+%EWERTON: I added the paragraph below so to describe such requirement.
+
+We emphasize that, in the process, a special attention has to be given to the behavior of the robot itself so that it is not likely to be interpreted by the player as a random one. In other words, when playing, the robot must show a level of rationality that match the expectation of the player and reduce the frequency of which the goal of its actions are not well perceived. Rationality here consists in the property of selecting actions upon the evaluation of worlds states by a \textit{performance measure}, also called \textit{utility function}~\citep{russell_artificial_2009}. In the~\gls{pirg} context, whatever performance measure is used it should drive the robot behavior towards well defined and interpretable action yet not so that the robot attitude becomes predictable. Predictability is reported to be a negative impact in the quality of engagement.   
 
 Specifically, the general goals of this thesis where:
 

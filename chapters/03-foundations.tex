@@ -361,7 +361,7 @@ Since the ultimate goal of the robot is to physically tear down one of the four 
 	\label{rulesbehavior}
 \end{figure}
 
-\subsection{Player perception \& tracking}
+\subsection{Player perception \& tracking}\label{sec:player_tracking}
 For opening the device, we have used libfreenect2\footnote{~\url{https://github.com/OpenKinect/libfreenect2} accessed on \today.}, a library for managing the Kinect\textsuperscript{\textregistered} device on Linux. We have then created a custom tracking node capable of estimating the player's position in two phases: First, color blob detection. Second, segmentation on the depth frame using \textit{region growing} algorithm for the purpose of detecting the player's body. Two features can be detected from this procedure: distance (relative to the robot) and contraction index. The first is calculated from the mean value of the depth pixels around the center of the blob. The latter is computed based on the subtraction of the occupied area with respect to the dimension of the bounding box that encompasses the segmented silhouette (see Figure~\ref{fig:segmenta}). This feature had been considered as a cue about the fact that the player was opening arms, so, possibly, actively participate to the game.
 
 \begin{figure}[h]
