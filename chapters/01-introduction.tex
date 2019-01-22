@@ -37,8 +37,6 @@ From this, the objective of this thesis focuses on the exploitation of~\gls{ml} 
 Specifically, the general goals of this thesis where:
 
 \begin{itemize}
-%\item To identify and devise~\gls{ml}-based techniques for player modeling to design~\gls{pirg} from the view of human-robot interaction. %ANDY I did not understand what you meant with this and my rewriting is a non-sense
-%EWERTON: it did not make sense even for me. =)
 \item To understand and report phenomena that impact player engagement through the use of a mobile adversarial robot in a~\gls{pirg} environment;
 \item To learn important concepts of design of mobile agents for~\gls{pirg};
 \item To implement user's behavior modeling in~\gls{pirg} robots by reasoning about data coming from player tracking in the shortest possible time, as required by the~\gls{pirg} setting;
@@ -48,17 +46,13 @@ Specifically, the general goals of this thesis where:
 It is assumed that autonomous and learning systems that encompass perception, action, and communication in a unified and principled way via~\gls{ml}-based techniques lay at the core of a new frontier for robotics, and~\gls{pirg}s in particular. During our investigation we also aimed at keeping control on technical constraints in order to enable the spread of~\gls{pirg} in the society, making them possibly reach the market in large scale. In particular, we explored the use of cheap sensors and algorithms requiring little power ("green algorithms") to be executed in real time and operating in non-structured environments, 
 
 \section{Thesis outline}
-\textcolor{red}{Update chapter descriptions.}
 The thesis is divided into the following chapters.
 
 \begin{itemize}
-\item\emph{Chapter~\ref{ch:art}:} Many approaches for modeling %ANDY Actually, "tailoring" refers to adaptation, not to modeling. Do you plan to mention also the "modeling" approaches, isn't it?
-%EWERTON: Fixed.
-game experience to players had been proposed over the years. The chapter presents an overview of such literature, placing~\gls{pirg} as a relatively new area of research.
+\item\emph{Chapter~\ref{ch:art}:} Some physically interactive games with robotic agents have been proposed in the literature. This chapter provides an introduction to such games and also presents some design guidelines. %Many approaches for modeling game experience to players had been proposed over the years. The chapter presents an overview of such literature, placing~\gls{pirg} as a relatively new area of research.
 \item\emph{Chapter~\ref{ch:foundation}:} The game environment and robot platform are at the core of a~\gls{pirg} application. In this chapter, we detail the designed environment and adopted robotic platform.
-%ISSUE: Other mathematical background are provided.
-    %ANDY what this last sentence mean? WHat kind of background on what? Please detail. I wouldn't mix mathematical details with the game description. Let's keep them in separate chapters.
-    %EWERTON: I wanted to talk about some mathematical concepts as to provide a common background and make the thesis self-contained.
+\item\emph{Chapter~\ref{ch:playing_for_advantage}:} One dimension of concern for the design of~\gls{pirg} is the ability to play for competitive advantage. In this chapter we detail some of our concerns and provide a brief overview of popular approaches.
+\item\emph{Chapter~\ref{ch:review_playing_optimization}:} In this chapter we give a structured overview of literature on the matter of player modeling as well as details regarding the position of our work on it.
 \item\emph{Chapter~\ref{ch:activity}:} One step towards allowing effective player modeling is the implementation of an activity recognition system. In this chapter we describe the efforts on exploiting a simple input data transformation for the recognition of motion primitives in acceleration patterns akin to archetypal activities in the game scenario.
 \item\emph{Chapter~\ref{ch:modeling}:} Player behavior modeling is the backbone of adaptive behavior strategy for playing robots. The chapter presents a new proposal for latent player behavior modeling.
 %\item\emph{Chapter~\ref{ch:adaptation}:} Adaption is by no means a trivial task specially in the context of~\gls{pirg}. In this chapter, we detail a system to actively select game parameters appropriate for the specific human player.
@@ -68,9 +62,19 @@ game experience to players had been proposed over the years. The chapter present
 \end{itemize}
 
 \section{Paper contributions}
-This thesis is based on expanded versions of the following publications and manuscripts:
+
+This thesis is based on expanded versions of the following publications:
+
 \begin{itemize}
-\item \cite{oliveira_learning_2018}
-\item \cite{oliveira_modeling_2017}
-\item \cite{oliveira_activity_2017}
+    \item \cite{oliveira_learning_2018}
+    \item \cite{oliveira_modeling_2017}
+    \item \cite{oliveira_activity_2017}
+\end{itemize}
+
+Work in progress:
+
+\begin{itemize}
+\item Adjusting robot playing behavior through latent skill modeling for increasing player satisfaction;
+\item Key issues in designing engaging physically interactive robogames: a developmental account;
+\item Using social interaction analysis and deception for entertainment support in a physically interactive robogame.
 \end{itemize}

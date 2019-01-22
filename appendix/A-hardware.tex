@@ -589,6 +589,9 @@ To avoid this effect, a velocity smoother has been introduced in order to obtain
 	\caption{Velocity Smoother} 
 	\label{smoother}
 \end{algorithm}
+
+With the values reported in table~\ref{parsmoother}, the behavior shown in figure~\ref{controlsweep} has been obtained. The velocity smoother runs together with the Point-to-Point Navigation algorithm to apply robot's velocity and acceleration limits to the incoming commands before resending them to the robot. It basically pre-filters any incoming command input based on some acceleration constraints. 
+
 \begin{table}[h]
 	\begin{center}
 		\begin{tabular}{|c|c|}
@@ -608,39 +611,40 @@ To avoid this effect, a velocity smoother has been introduced in order to obtain
 	\caption{Velocity Smoother parameters tuning}
 	\label{parsmoother}
 \end{table}
-With the values reported in table~\ref{parsmoother}, the behavior shown in figure~\ref{controlsweep} has been obtained. 
-
-The velocity smoother runs together with the Point-to-Point Navigation algorithm to apply robot's velocity and acceleration limits to the incoming commands before resending them to the robot. It basically pre-filters any incoming command input based on some acceleration constraints. 
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=7cm]{images/03-foundation/controlsweep}
+	\includegraphics[width=0.8\columnwidth]{images/03-foundation/controlsweep}
 	\caption{Smoothing of a step-shaped unsmoothed velocity set-point, at $t=1\text{sec}$ a sweep of 10 step transition set-points is fed as input of the velocity smoother, in the image are shown the smoothed values for each test case} 
 	\label{controlsweep}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
-	\begin{subfigure}[b]{0.6\textwidth}
-		\includegraphics[ width=6cm]{images/03-foundation/ksweep}
+	\begin{subfigure}{6cm}
+	    \centering
+		\includegraphics[width=0.95\columnwidth]{images/03-foundation/ksweep}
 		\caption{$K_s$ parameter sweep}
 		\label{sit1} 
 	\end{subfigure}
 	~
-	\begin{subfigure}[b]{0.6\textwidth}
-		\includegraphics[ width=6cm]{images/03-foundation/maxaccsweep}
+	\begin{subfigure}{6cm}
+	    \centering
+		\includegraphics[width=0.95\columnwidth]{images/03-foundation/maxaccsweep}
 		\caption{$\ddot{x}_{\text{max}}$ sweep}
 		\label{sit2}
 	\end{subfigure}
 	~
-	\begin{subfigure}[b]{0.5\textwidth}
-		\includegraphics[ width=5cm]{images/03-foundation/maxvel}
+	\begin{subfigure}{6cm}
+	    \centering
+		\includegraphics[width=0.95\columnwidth]{images/03-foundation/maxvel}
 		\caption{$\dot{x}_{\text{max}}$ parameter sweep}
 		\label{sit3} 
 	\end{subfigure}
 	~
-	\begin{subfigure}[b]{0.5\textwidth}
-		\includegraphics[width=5cm]{images/03-foundation/Tmaxsweep}
+	\begin{subfigure}{6cm}
+	    \centering
+		\includegraphics[width=0.95\columnwidth]{images/03-foundation/Tmaxsweep}
 		\caption{$T_{\text{max}}$ sweep}
 		\label{sit4}
 	\end{subfigure}
@@ -708,10 +712,11 @@ The velocity smoother runs together with the Point-to-Point Navigation algorithm
 \subsection{Repulsive behavior if obstacles are encountered}
 
 \begin{enumerate}
+    \small
 	\item \textbf{IF} $\left[\left( \text{min\_front\_left} == \textsf{close}\right) \textbf{ OR } \left(\text{min\_front\_right} == \textsf{close}\right)\right]$\\ 
 	\textbf{THEN} $\Rightarrow\left[\left( V_x = \textsf{stop} \right) \textbf{AND} \left(V_y = -0.5\right)\right]$
 	
-	\item \textbf{IF} $ \left[\left( \text{min\_front\_left} == \textsf{far}\right) \textbf{ AND } \left(\text{min\_front\_right} == \textsf{far}\right) \textbf{AND} \left(\text{near\_goal} == \textsf{false}\right)
+	\item \textbf{IF} $ \left[\left( \text{min\_front\_left} == \textsf{far}\right) \textbf{ AND} \left(\text{min\_front\_right} == \textsf{far}\right) \textbf{AND} \left(\text{near\_goal} == \textsf{false}\right)
 	\right]$\\ 
 	\textbf{THEN} $\Rightarrow\left[\left( V_x = \textsf{stop} \right) \textbf{AND} \left(V_y = -0.4\right)\right]$
 	
@@ -918,6 +923,7 @@ The velocity smoother runs together with the Point-to-Point Navigation algorithm
 \subsection{Attractive behavior if near towers}
 
 \begin{enumerate}
+    \small
 	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
 	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\
 	\textbf{AND} ($\text{min\_front\_left}$ == $\textsf{dontcare}$)
@@ -926,8 +932,6 @@ The velocity smoother runs together with the Point-to-Point Navigation algorithm
 	\textbf{AND} ($\text{min\_rear\_right}$ == $\textsf{dontcare}$) \\
 	\textbf{AND} (near\_goal == \textsf{true})]
 	\textbf{THEN} $\Rightarrow$ [( $V_x$ = \textsf{stop}) \textbf{AND} ($V_y$ = \textsf{-0.5})]
-	
-	\newpage
 	
 	\item \textbf{IF} [($\text{min\_rear\_left}$ == $\textsf{dontcare}$) 
 	\textbf{AND} ($\text{min\_left}$ == $\textsf{dontcare}$)\\

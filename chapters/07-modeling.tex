@@ -135,17 +135,17 @@ where $t_{i}$ is the time stamp and $N$ plays the role of a normalizer for the s
 The third step in completing the transformation is to exploit the angular perspective by considering the trigonometric sum/difference between each point. This allows for the identification of the temporal correlation within different time intervals. The two types of~\gls{gaf}, namely~\gls{gasf} and~\gls{gadf}, are obtained as follows:
 
 \begin{equation}
-\begin{aligned}
-\gls{gasf} &= [\,\cos(\phi_{i} + \phi{j}]\, \\
-	 &= \widetilde{\mathcal{X}}' \cdot \widetilde{\mathcal{X}} - \sqrt{I-\widetilde{\mathcal{X}}^2}' \cdot \sqrt{I-\widetilde{\mathcal{X}}^2}
-\end{aligned}
+    \begin{aligned}
+    \gls{gasf} &= [\,\cos(\phi_{i} + \phi{j}]\, \\
+    	 &= \widetilde{\mathcal{X}}' \cdot \widetilde{\mathcal{X}} - \sqrt{I-\widetilde{\mathcal{X}}^2}' \cdot \sqrt{I-\widetilde{\mathcal{X}}^2}
+    \end{aligned}
 \end{equation}
-\\
+
 \begin{equation}
-\begin{aligned}
-\gls{gadf} &= [\,\sin(\phi_{i} + \phi{j}]\, \\
-	 &= \sqrt{I-\widetilde{\mathcal{X}}^2}' \cdot \widetilde{\mathcal{X}} - \widetilde{\mathcal{X}}' \cdot \sqrt{I-\widetilde{\mathcal{X}}^2}\\
-\end{aligned}
+    \begin{aligned}
+    \gls{gadf} &= [\,\sin(\phi_{i} + \phi{j}]\, \\
+    	 &= \sqrt{I-\widetilde{\mathcal{X}}^2}' \cdot \widetilde{\mathcal{X}} - \widetilde{\mathcal{X}}' \cdot \sqrt{I-\widetilde{\mathcal{X}}^2}\\
+    \end{aligned}
 \end{equation}
 
 The symbol $I$ is the unit row vector. After translating the time series from the Cartesian to polar coordinate system, each time step in it is taken as a 1D metric space. By defining the inner product as $<x,y> = x \cdot y - \sqrt{1-x^2} \cdot \sqrt{1-y^2}$ and $<x,y> = \sqrt{1-x^2} \cdot y - x \cdot \sqrt{1-y^2}$,

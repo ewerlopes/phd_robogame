@@ -135,11 +135,9 @@ During the research progress, we have designed several versions of our robot, wh
 In some phases of our development we have used the Microsoft Kinect\textsuperscript{\textregistered} sensor. It is a 3-D camera: in addition to providing an RGB image with its 1080p color camera, it also provides a depth map,  meaning that for every pixel of the depth image provided by the sensor, Kinect\textsuperscript{\textregistered} provides the distance from the sensor (see appendix~\ref{app:hard_appendix} for sensor specifications). This makes the it suitable for a variety of computer vision problems like background removal, blob detection, and people tracking.
 
 \subsubsection{Laser scanners}\label{sec:lasers_hokuyo}
-The robot was equipped with two laser scanners Hokuyo URG-04LX\footnote{\url{https://www.hokuyo-aut.jp/search/single.php?serial=165} accessed on \today}
-%, shown in Figure~\ref{fig:hokuyo}
-. These laser sensors perceive the range of obstacles on a plan with a field of view of $240^\circ$ and a resolution of $0.36^\circ$, the maximum detectable distance is $5.6m$ and they can be connected to the computer by means of a USB interface, being operated with a nominal voltage of 5V.
+The robot was equipped with two laser scanners Hokuyo URG-04LX\footnote{\url{https://www.hokuyo-aut.jp/search/single.php?serial=165} accessed on \today.}. The sensors perceive the range of obstacles on a plan with a field of view of 240$^\circ$ and a resolution of 0.36$^\circ$, the maximum detectable distance is 5.6 m and they can be connected to the computer by means of a USB interface, being operated with a nominal voltage of 5V.
 
-The Hokuyo URG-04LX consists of a compact stacked structure with a spindle motor and the actual scanner on top of it. The motor rotates a small transmission mirror that deflects the vertical laser beam coming from the top of the sensor into horizontal direction. This allows the laser beam to scan a planar area around the sensor with an opening angle of $240^\circ$. A second mirror below, the reception mirror, deviates the horizontal laser beam captured by a lens into vertical direction again.
+The Hokuyo URG-04LX consists of a compact stacked structure with a spindle motor and the actual scanner on top of it. The motor rotates a small transmission mirror that deflects the vertical laser beam coming from the top of the sensor into horizontal direction. This allows the laser beam to scan a planar area around the sensor with an opening angle of 240$^\circ$. A second mirror below, the reception mirror, deviates the horizontal laser beam captured by a lens into vertical direction again.
 
 % \begin{figure}[H]
 % 	\centering
@@ -148,7 +146,7 @@ The Hokuyo URG-04LX consists of a compact stacked structure with a spindle motor
 % 	\label{fig:hokuyo} 
 % \end{figure}
 
-A full scan is performed every 100 ms. We mounted a laser scanner on each side of the lower chassis allowing for a $360^\circ$ coverage around the robot at a height of 30 cm from the floor.
+A full scan is performed every 100 ms. We mounted a laser scanner on each side of the lower chassis allowing for a 360$^\circ$ coverage around the robot at a height of 30 cm from the floor.
 
 \subsection{Structure \& Materials}
 \subsubsection{Chassis}
