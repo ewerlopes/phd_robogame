@@ -168,7 +168,7 @@ However, the size of the Gramian matrix $G$ is $n \times n$, for $n$ being the l
 \end{figure}
 
 \subsubsection{Latent Dirichlet Allocation}
-\glsdesc{lda} is one of the most simple and influential topic models. A topic model is a formal statistical relationship between a group of observed and latent (unknown) random variables, which specifies a probabilistic procedure to generate \textit{topics}~\citep{reed_latent_2012}. The \textit{topics} are defined as a probability distribution over a collection of words and can be seen as generating mechanisms for words in a documents. The idea behind the method is that of assuming a generative procedure from which several topics are likely to have generated the words. Each document then is represented by a vector of proportion describing to which proportion each topic are estimated to have contributed to the document, \ie the presence of words in it. Such vector is called the \textit{mixture proportions}.
+\glsdesc{lda} is one of the most simple and influential topic models. A topic model is a formal statistical relationship between a group of observed and latent (unknown) random variables, which specifies a probabilistic procedure to generate \textit{topics}. The \textit{topics} are defined as a probability distribution over a collection of words and can be seen as generating mechanisms for words in a documents. The idea behind the method is that of assuming a generative procedure from which several topics are likely to have generated the words. Each document then is represented by a vector of proportion describing to which proportion each topic are estimated to have contributed to the document, \ie the presence of words in it. Such vector is called the \textit{mixture proportions}.
 
 \input{chart/lda_graph.tex}
 
@@ -385,7 +385,7 @@ We used this information to define the number of topics and the number of words.
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.6]{images/05-modeling/mse_dictsize-50_100_10.png}
-	\caption{Different lines represent the~\gls{mse} obtained for different dictionary sizes and number of topics. The~\gls{mse} is estimated with respect to the similarity expressed in the matrix containing human similarity judgment.}
+	\caption{Different lines represent the~\gls{mse} obtained for different dictionary sizes and number of topics. The~\gls{mse} is estimated w.r.t. the similarity expressed in the matrix containing human similarity judgment.}
   \label{hyperparameter_results}
 \end{figure}
 

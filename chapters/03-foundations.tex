@@ -135,7 +135,7 @@ During the research progress, we have designed several versions of our robot, wh
 In some phases of our development we have used the Microsoft Kinect\textsuperscript{\textregistered} sensor. It is a 3-D camera: in addition to providing an RGB image with its 1080p color camera, it also provides a depth map,  meaning that for every pixel of the depth image provided by the sensor, Kinect\textsuperscript{\textregistered} provides the distance from the sensor (see appendix~\ref{app:hard_appendix} for sensor specifications). This makes the it suitable for a variety of computer vision problems like background removal, blob detection, and people tracking.
 
 \subsubsection{Laser scanners}\label{sec:lasers_hokuyo}
-The robot was equipped with two laser scanners Hokuyo URG-04LX\footnote{\url{https://www.hokuyo-aut.jp/search/single.php?serial=165} accessed on \today.}. The sensors perceive the range of obstacles on a plan with a field of view of 240$^\circ$ and a resolution of 0.36$^\circ$, the maximum detectable distance is 5.6 m and they can be connected to the computer by means of a USB interface, being operated with a nominal voltage of 5V.
+We have equipped our robot with two Hokuyo laser scanners model URG-04LX\footnote{\url{https://www.hokuyo-aut.jp/search/single.php?serial=165} accessed on \today.}. The sensors perceive the range of obstacles on a plan with a field of view of 240$^\circ$ and a resolution of 0.36$^\circ$, the maximum detectable distance is 5.6 m and they can be connected to the computer by means of a USB interface, being operated with a nominal voltage of 5V.
 
 The Hokuyo URG-04LX consists of a compact stacked structure with a spindle motor and the actual scanner on top of it. The motor rotates a small transmission mirror that deflects the vertical laser beam coming from the top of the sensor into horizontal direction. This allows the laser beam to scan a planar area around the sensor with an opening angle of 240$^\circ$. A second mirror below, the reception mirror, deviates the horizontal laser beam captured by a lens into vertical direction again.
 
@@ -192,9 +192,8 @@ Our robotic platform operated at a nominal voltage of 24V with two lead-acid 12V
 \subsubsection{Onboard computer}\label{onboard pc}
 For computing a Shuttle XPC Slim DH270 was used. The device has a $190 \times 165 \times 43$~mm steel case, and weights $1.3$~kg.  The armature presents two holes for Kensington Locks and numerous threaded holes (M3) at both sides allowing for an easy placement. The operating system used was~\textit{Ubuntu 16.04.3 LTS (64bit)}. The computer had an Intel Core i7 and a RAM DDR4 memory of 16 GB .
 
-\subsubsection{Control boards}
-\label{novacore}
-The low-level motors actuation and their interface between the ROS system have been realized with the Nova Core modules based on STM32-chip~\cite{noauthor_nova_nodate}, which implement ready to use components to fulfill robot prototyping requirements with plug \& play approach.  
+\subsubsection{Control boards}\label{novacore}
+The low-level motors actuation and their interface between the ROS system have been realized with the Nova Core modules based on STM32-chip~\footnote{\url{http://www.novalabs.io/} accessed on \today.}, which implement ready to use components to fulfill robot prototyping requirements with plug \& play approach.  
 The provided modules allow to control different type of motors that can be modeled as a second order system, where the input is the voltage applied to the motor armature and output variable is the motor angular speed. Futher details about the deployed boards are presented in figure~\ref{fig:boards}.
 
 \begin{figure}[ht]
