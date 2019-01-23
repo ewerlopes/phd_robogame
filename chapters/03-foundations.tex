@@ -12,11 +12,10 @@ The game mechanics and winning conditions were simple enough to allow for a larg
 
 The robot was able to move across the entire playground just as the human player could and it was only constrained by the fact that an already captured tower, or one whose button is currently being pressed by the player, cannot be teared down. As main interaction channel between the two players,\ie robot and human, the human player could block the robot path at any moment by staying in front of it, causing the later to likely change target tower. Therefore, as consequence of the defined rules, while the player was trying to capture a given tower, the robot could try to tear down any other one.
 
-%ANDY This would go in the robot description -> By relying on the lasers scans the robot can perceive its environment, locate itself and the human player during the game, being able to perform obstacle avoidance when appropriated.
-
 The game definition in itself is no trivial task and it is, for the case of~\gls{pirg}, limited by the constraints imposed by the mechanical platform,~\ie the robot. Other than playability and fun, safety is also an important aspect and one that impose heavy bounds to the motion of the robot: a too fast of a robot would reduce the perception of the robot been safe too play against, thus limit the interaction. Experimentally, we have evaluated that a robot with a maximum linear speed of 1.4 m/sec would be too difficulty to play against and/or invincible (which is not the behavior we were looking for). Intuitively, as we allowed an increase in speed, an impact in difficulty would be perceive. Moreover, for a mobile robot as ours, speed have some negative impact in the robot control itself, through mechanical phenomena like wheel slippage, initial control, manoeuvrability, and navigation issues (localization and obstacle avoidance). Details about the robot platform is given in section~\ref{sec:roboplat}.
 
 In summary, our game, called RoboTower v2, was designed such that we could have an environment rich enough to physically engage human players while allowing for the study of adaptive approaches towards supporting such engagement. RoboTower v2 stimulates player to maintain strong cognitive tasks, like: trajectory planning, attention and spatial reasoning and places itself as an interesting environment from which one could test~\gls{ml} approaches. Next we briefly detail the Towers used in the game in term of their properties and operating system.
+
 %ANDY Here is one of the places were the smartness of game design has to be put in evidence.
 
 %\begin{figure}[H]
@@ -132,7 +131,56 @@ During the research progress, we have designed several versions of our robot, wh
 
 \subsection{Sensing}
 \subsubsection{Microsoft Kinect\textsuperscript{\textregistered}\label{sec:kinectsec}}
-In some phases of our development we have used the Microsoft Kinect\textsuperscript{\textregistered} sensor. It is a 3-D camera: in addition to providing an RGB image with its 1080p color camera, it also provides a depth map,  meaning that for every pixel of the depth image provided by the sensor, Kinect\textsuperscript{\textregistered} provides the distance from the sensor (see appendix~\ref{app:hard_appendix} for sensor specifications). This makes the it suitable for a variety of computer vision problems like background removal, blob detection, and people tracking.
+In some phases of our development we have used the Microsoft Kinect\textsuperscript{\textregistered} sensor. It is a 3-D camera: in addition to providing an RGB image with its 1080p color camera, it also provides a depth map,  meaning that for every pixel of the depth image provided by the sensor, Kinect\textsuperscript{\textregistered} provides the distance from the sensor (see appendix~\ref{app:hard_appendix} for sensor specifications). 
+
+For opening the device, we have used libfreenect2\footnote{~\url{https://github.com/OpenKinect/libfreenect2} accessed on \today.}, a library for managing the Kinect\textsuperscript{\textregistered} device on Linux. We have then created a custom tracking node capable of estimating the player's position in two phases: First, by running color blob detection on the RGB image frame. Secondly, by segmenting the player in the depth frame using \textit{region growing} algorithm. The seed for this algorithm is is the position of the blob detected in the first phase.
+
+Two features could be extracted from the procedure: distance (relative to the robot) and contraction index. The first is calculated taking the mean value of the depth pixels around the center of the detected color blob. The latter is computed based on the subtraction of the occupied area with respect to the dimension of the bounding box that encompasses the segmented silhouette (see Figure~\ref{fig:segmenta}). The contraction index was intended as a cue about the fact that the player was opening arms, so, possibly, actively participating in the game.
+
+\begin{figure}[h]
+  \centering 
+  \begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=3cm]{images/03-foundation/point_cloud}}}
+		\caption{}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=3cm]{images/03-foundation/depth}}}
+		\caption{}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=3cm]{images/03-foundation/segmentation}}}
+		\caption{}
+  \end{subfigure}
+  \caption{Example of frames processed by our algorithm. a) Point cloud showing the center of the detected (light-purple) color blob. b) Depth frame. The number showed above the user correspond to his estimated distance relative to the robot (in meters). c) Segmentation results. The number above is the contraction index defined in the interval [0,1] and can be used as a measure of body contraction.}\label{fig:segmenta}
+   \label{segmentacao}
+\end{figure}
+
+Despite being an useful sensor, its usage in our platform had some issues. One of such was the indirect negative impact in the robot localization caused by having the sensor in a fixed position (see Figure~\ref{fig:evolution}). It occurred in our game that the player would run from any side, thus, forcing the tracking algorithms to issue in-place rotation commands to the platform in order to reacquire the player position when he goes out of the~\gls{fov}. Repeatedly rotating the platform in our environment was likely to introduce higher amount of odometry error which contributed to the lack of precision in localization, affecting the accuracy of the platform in navigating toward target towers. Figure~\ref{fig:maps} give an idea of the problem. It is possible to see a higher mismatch between the laser scan and the map of the environment in the subfigure~\ref{fig:laser_map_mismatch} which, in our context, was a consequence of repeatedly rotating the robot in order to keep the player in the~\gls{fov}. 
+
+Other than the localization issues which made the navigation inaccurate (sometimes missing the towers), the need to rotate the player so to keep it in the camera's~\gls{fov} made the interaction slow and, in some cases, clumsy. As a solution to the problem we have later replaced the Kinect\textsuperscript{\textregistered} sensor by a pair of lasers sensors such that a~\gls{fov} of 360$^\circ$ could be granted.
+
+\begin{figure}
+    \centering 
+    \begin{subfigure}[h]{0.49\columnwidth}
+        \centering 
+        \framebox{\includegraphics[width=0.95\linewidth]{images/03-foundation/map}}
+        \caption{}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[h]{0.49\columnwidth}
+        \centering 
+        \framebox{\includegraphics[width=0.95\linewidth]{images/03-foundation/map2}}
+        \caption{}
+        \label{fig:laser_map_mismatch}
+    \end{subfigure}
+    \caption{a) Example of good localization. b) Example of low-quality localization where the laser scan (yellow traces) mismatch with the map of the room.}
+    \label{fig:maps}
+\end{figure}
 
 \subsubsection{Laser scanners}\label{sec:lasers_hokuyo}
 We have equipped our robot with two Hokuyo laser scanners model URG-04LX\footnote{\url{https://www.hokuyo-aut.jp/search/single.php?serial=165} accessed on \today.}. The sensors perceive the range of obstacles on a plan with a field of view of 240$^\circ$ and a resolution of 0.36$^\circ$, the maximum detectable distance is 5.6 m and they can be connected to the computer by means of a USB interface, being operated with a nominal voltage of 5V.
@@ -217,6 +265,7 @@ The provided modules allow to control different type of motors that can be model
   \caption{a) UDC board (1 per each motor) capable of driving motors up to 70 W, with torque, speed, and position closed loop control. General attributes: 5-28V supply; 3A max (5A peak); current sense; encoder input; limit switch input; 25 x 45 mm in size. b) IO board (1 per each motor): Integrate existing hardware into the real-time Nova Core bus with analog and digital signals. General attributes: 8 digital GPIO;  4 analog inputs; 2 analog outputs; 2 UART; 1 I2C; 1 SPI; 25 x 45 mm in size. c) USB board (used for data collection) Interface the real-time Nova Core bus with a computer and logs data to microSD memory. General attributes: USB connector;  UART connector; microSD card slot; rosserial support; 25 x 45 mm in size.}
   \label{fig:boards}
 \end{figure}
+
 %ANDY all the technical details and names of devices could go in an appendix, while I'll leave here a functional description of robot and sensors, giving the characteristics that are functionally relevant, e.g., speed, omnidirectionality, range of sensors, their data rate, ...
 
 \subsection{Navigation}
@@ -362,27 +411,4 @@ Since the ultimate goal of the robot is to physically tear down one of the four 
 \end{figure}
 
 \subsection{Player perception \& tracking}\label{sec:player_tracking}
-For opening the device, we have used libfreenect2\footnote{~\url{https://github.com/OpenKinect/libfreenect2} accessed on \today.}, a library for managing the Kinect\textsuperscript{\textregistered} device on Linux. We have then created a custom tracking node capable of estimating the player's position in two phases: First, color blob detection. Second, segmentation on the depth frame using \textit{region growing} algorithm for the purpose of detecting the player's body. Two features can be detected from this procedure: distance (relative to the robot) and contraction index. The first is calculated from the mean value of the depth pixels around the center of the blob. The latter is computed based on the subtraction of the occupied area with respect to the dimension of the bounding box that encompasses the segmented silhouette (see Figure~\ref{fig:segmenta}). This feature had been considered as a cue about the fact that the player was opening arms, so, possibly, actively participate to the game.
-
-\begin{figure}[h]
-  \centering 
-  \begin{subfigure}[b]{0.3\textwidth}
-		\centering
-		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=3cm]{images/03-foundation/point_cloud}}}
-		\caption{}
-  \end{subfigure}
-  ~
-  \begin{subfigure}[b]{0.3\textwidth}
-		\centering
-		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=3cm]{images/03-foundation/depth}}}
-		\caption{}
-  \end{subfigure}
-  ~
-  \begin{subfigure}[b]{0.3\textwidth}
-		\centering
-		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=3cm]{images/03-foundation/segmentation}}}
-		\caption{}
-  \end{subfigure}
-  \caption{Example of frames processed by our algorithm. a) Point cloud showing the center of the detected (light-purple) color blob. b) Depth frame. The number showed above the user correspond to his estimated distance relative to the robot (in meters). c) Segmentation results. The number above is the contraction index defined in the interval [0,1] and can be used as a measure of body contraction.}\label{fig:segmenta}
-   \label{segmentacao}
-\end{figure}
+\textcolor{red}{Put the new tracker here}
