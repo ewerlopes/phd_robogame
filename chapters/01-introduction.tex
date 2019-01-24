@@ -17,7 +17,7 @@ In this thesis work, after providing a panorama of approaches that take inspirat
 The scope of this document is heavily centered on model proposals that can latently model player activities and general behavior. 
 
 \section{Research questions, hypothesis and objectives}\label{sec:research_question}
-Since in any kind of~\gls{pirg} autonomous robot are supposed to be perceived as smart entities, the key point for investigation deals with finding good answers to two main questions:
+Since in any kind of~\gls{pirg} autonomous robot are supposed to be perceived as smart entities, the key point for investigation deals with finding good answers to three main questions:
 
 \begin{itemize}
 \item How to discover player types and quantify player behavior in~\gls{pirg}?
@@ -25,7 +25,7 @@ Since in any kind of~\gls{pirg} autonomous robot are supposed to be perceived as
 \item To what extent does adaptation impact reported entertainment?
 \end{itemize}
 
-From this, the objective of this thesis focuses on the exploitation of~\gls{ml} techniques to the design of better~\gls{pirg} robotic agents, which should lead to more engaging playmates, possibly capable of performing behavior/strategy adjustment. The hypothesis is that~\gls{ml} would help to decrease predictability in robot behavior and introduce game dynamics capable of considerably empower the user’s engagement, making so that the agents can be well accepted as game companions.
+From this, the objective of this thesis focuses on the exploitation of~\gls{ml} techniques to the design of better~\gls{pirg} robotic agents, which should engage playmates and possibly be capable of performing behavior/strategy adjustment. The hypothesis is that~\gls{ml} would help to decrease predictability in robot behavior and introduce game dynamics capable of considerably empower the user’s engagement, making so that the agents can be well accepted as game companions.
 
 %TODO Actually, the issue is a little bit more complex. If the robot behavior cannot be detected and decoded, the player would not like to play, as well as if it is to simple to understand. The equilibrium point is just on the middle, where decoding the robot behavior is challenging enough to require some effort, but not too much. A very smart robot, or a robot changing often its strategy, may be perceived as playing randomly, so not as a rational agent. The main issue is to enforce the idea that the robot is playing rationally (in the Simon's definition of having a goal).
 %EWERTON: I added the paragraph below so to describe such requirement.
@@ -36,15 +36,15 @@ Specifically, the general goals of this thesis where:
 
 \begin{itemize}
 \item To understand and report phenomena that impact player engagement through the use of a mobile adversarial robot in a~\gls{pirg} environment;
-\item To learn important concepts of design of mobile agents for~\gls{pirg};
+\item To investigate relevant concepts of design of mobile agents for~\gls{pirg};
 \item To implement user's behavior modeling in~\gls{pirg} robots by reasoning about data coming from player tracking in the shortest possible time, as required by the~\gls{pirg} setting;
 \item To explore ways of robot behavior adjustment using information about past interactions (player's typical behaviors, preferences, etc.).
 \end{itemize}
 
-It is assumed that autonomous and learning systems that encompass perception, action, and communication in a unified and principled way via~\gls{ml}-based techniques lay at the core of a new frontier for robotics, and~\gls{pirg}s in particular. During our investigation we also aimed at keeping control on technical constraints in order to enable the spread of~\gls{pirg} in the society, making them possibly reach the market in large scale. In particular, we explored the use of cheap sensors and algorithms requiring little power ("green algorithms") to be executed in real time and operating in non-structured environments, 
+It is assumed that autonomous and learning systems that encompass perception, action, and communication in a unified and principled way via~\gls{ml}-based techniques lay at the core of a new frontier for robotics, and~\gls{pirg}s in particular. During our investigation we also aimed at keeping control on technical constraints in order to enable the spread of~\gls{pirg} in the society, making them possibly reach the large scale market. In particular, we explored the use of cheap sensors and algorithms requiring little power ("green algorithms") to be executed in real time and operating in non-structured environments, 
 
 \section{Thesis outline}
-The thesis is divided into the following chapters.
+The thesis is structured into the following chapters.
 
 \begin{itemize}
 \item\emph{Chapter~\ref{ch:art}:} Some physically interactive games with robotic agents have been proposed in the literature. This chapter provides an introduction to such games and also presents some design guidelines. %Many approaches for modeling game experience to players had been proposed over the years. The chapter presents an overview of such literature, placing~\gls{pirg} as a relatively new area of research.
