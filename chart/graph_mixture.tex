@@ -1,0 +1,37 @@
+\begin{figure}
+ \centering
+ \begin{tikzpicture}
+  [
+   observed/.style={minimum size=15pt,circle,draw=blue!50,fill=blue!20},
+   unobserved/.style={minimum size=15pt,circle,draw},
+   hyper/.style={minimum size=1pt,circle,fill=black},
+   post/.style={->,>=stealth',semithick},
+  ]
+
+  \node (w-j) [observed] at (0,0) {$x_n$};
+  \node (z-j) [unobserved] at (0,1.5) {$z_n$};
+  \node (z-prior) [unobserved] at (-1.5,1.5) {$\boldsymbol\theta$};
+  \node (z-hyper) [label=above:$\alpha$] at (-1.5,2.5) {};
+  \node (mu) [unobserved] at (1.5,0.7) {$\boldsymbol\mu$};
+  \node (lam) [unobserved] at (1.5,-0.5) {$\boldsymbol\Lambda$};
+  \filldraw [black] (-1.5,2.5) circle (3pt);
+
+  
+  \path
+  (z-j) edge [post] (w-j)
+  
+  (z-hyper) edge [post] (z-prior)
+  (z-prior) edge [post] (z-j)
+
+  (mu) edge [post] (w-j)
+  (lam) edge [post] (w-j)
+  (lam) edge [post] (mu)
+  ;
+
+  \node [draw,fit=(w-j) (z-j), inner sep=10pt] (plate-token) {};
+  \node [above right] at (plate-token.south west) {$N$};
+
+ \end{tikzpicture}
+ \caption{Standard Gaussian mixture model. In this work, $\boldsymbol\theta$ is a Dirichlet Process. $\boldsymbol\mu$ and $\boldsymbol\Lambda$ is a Gaussian-Wishart prior to $x_{n}$. $N$ represents the number of observed data points. $z_n$ is an indicator function that maps the Gaussian to the $x$.}
+ \label{graph:mixture}
+\end{figure}

@@ -50,10 +50,6 @@ During the game (see section~\ref{sec:game_environment}), the robot continuously
 \label{eq:array2}
 \end{equation}
 
-% \begin{equation}
-% target\textunderscore array_{player} = [\forall tower :\frac{1}{\delta_{tower_{i}-robot}} + \frac{1}{\delta_{tower_{i}-player}}]
-% \label{eq:array2}
-% \end{equation}
 Where $\delta(a,b)$ refers to the Euclidean distance between argument $a$ and $b$. Choosing the target tower is done by detecting the maximum value in the arrays:
 \begin{equation}
 target_{robot} = \operatorname*{arg\,max}_i \, \overrightarrow{t_{robot}}^{(i)}, 
@@ -91,7 +87,6 @@ The approach for calculating the robot's outcome matrix is the following:
 \delta(\tau_{i},robot)
 \end{equation}
 Where $\gamma_r$ is a tuning constant. In the robot's outcome matrix, $\gamma_r$ has been used to weight the values of the non-diagonal values, equation~\ref{for:Non-diagonal}, while in the player's matrix, another tuning constant has been used for the diagonal values, equation~\ref{for:Diagonal}. Tuning the values of the outcome matrices is needed since the two players win with opposite actions, since the robot would like to go to a tower alone, while the player would like to stay on a tower together with the robot, so that it would not go to another tower. Giving the right value to $\gamma$ is necessary for having balanced values for the correspondence-interdependence value.
-%[LAURA]: tuning is needed for highlighting the fact that the two players win in different situations or it would best saying that the two win with opposite actions (the robot wants to run 'alone' to the tower while the player prefers to have the robot next to him/her so the robot cannot run and win another tower. 
 The second term in~\ref{for:Non-diagonal} has been used for giving a weight to the payoff: the more an individual is interested in a given target (supposed that this is a consequence of rational~/~maximizer thinking), the higher the payoff is if the player can obtain it.
 The third and last term in~\ref{for:Non-diagonal} expresses how much advantage the player has on the other one.
 %TODO This explanation is not clear at all. What are the first, second and third terms? It is hard to understand what they are, both because they are in two different equations (numbers could be used to select them
@@ -281,15 +276,14 @@ In this section, we describe the acceptability of our strategy within the mentio
 \subsubsection{Factors}
 During our experiments we have kept the parameters that control the general game difficulty discrete such as: maximum speed and maximum acceleration. It was part of our project decision to limit the effect of such variables in this study, while, at the same time, improve safety (since a possible collision against a fast robot is dangerous) and reduce the risk of mechanical problems, since frequent, abrupt acceleration/deceleration might damage the wheel-motor joints.
 
-Speed and acceleration values define two different levels: easy (speed = $0.5m/sec$ and acceleration = $0.1m/sec^2$) and medium (speed = $0.7m/sec$ and acceleration = $0.5m/sec^2$).
+%TODO I would not say this, which is irrelevant here ----> Speed and acceleration values define two different levels: easy (speed = $0.5m/sec$ and acceleration = $0.1m/sec^2$) and medium (speed = $0.7m/sec$ and acceleration = $0.5m/sec^2$).
+%However, in the trials we have noticed that the easy setting turned out to be too slow. Therefore, in order to maintain consistency in the analysis, while also improving fun we have decided to keep the difficulty fixed at the medium level for all the subjects. 
 
-However, in teh trial we have noticed that the difficulty level set to easy turned out to be too slow. Therefore, in order to maintain consistency in the analysis while also improving fun we have decided to keep the difficulty fixed at the medium level for all the subjects.
-
-In summary, the only varying factors were the approaches for communicating false goals, i.e., the static trajectory and dynamic steering behavior.
+%In summary, the only varying factors were the approaches for communicating false goals, i.e., the static trajectory and dynamic steering behavior.
 
 \subsection{Post-Match Survey}
 
-After every match, a questionnaire was administered to each player. It included few questions about the subject (including age and gender) and eleven questions about the game. In this paper, we present results about only four of them, relevant to evaluate the specific hypotheses.
+After every match, a questionnaire was administered to each player. It included few questions about the subject (including age and gender) and eleven questions about the game. In this paper, we present results about only four of them, relevant to evaluate the specific hypotheses. %TODO Either put all of them in the thesis, or say that there were only 4 questions.
 
 \subsection{Participants}
 We recruited 91 participants among the visitors of a science fair in Milan held between September 28th and 29th, 2018. Most of the experiments were conducted with children, spanning from 5 to 15 years old, while some adults from 16 to 54 years old also accepted to play the game. The distribution of subjects is reported in table~\ref{table::subjectDistribution}. Data collection was performed with subjects being sampled on different times of the day in the attempt to randomize the subjects as best as possible. 
@@ -411,12 +405,15 @@ We designed a game that obtained a good acceptance by all the participants, most
 
 %The length of the game was considered differently by the two classes of players with no big differences w.r.t. the different playing algorithms. It seems that adults had liked a longer play time, while children almost evenly distributed their answers among the five options.
 
-The robot was generally perceived as a rational agent, aiming at winning the game. So we can consider hypothesis H2 as satisfied. This is a good result since the implemented strategies purposefully reduced the capabilities of the robot to adapt its behavior to match those of the players.
+The robot was generally perceived as a rational agent, aiming at winning the game. So, we can consider hypothesis H2 as satisfied. This is a good result since the implemented strategies purposefully reduced the capabilities of the robot to adapt its behavior to match those of the players.
 
 Furthermore, deception was perceived by most of the players, with a slightly higher number of subjects among the children strongly agreeing on the fact that the robot was actually deceiving. Hypothesis H3 can also be considered as satisfied.
 
 No significant difference can be detected between the two algorithms in the children population, where it is possible to compare the data, so hypothesis H4 has to be rejected for this sample. Possibly, the difference between the trajectories has been washed out by the quick dynamics of the game, and the high requirement of attention to many different aspects such as the robot movement and position, the position w.r.t. the towers, and the~\gls{led}s on the towers.
 
-Among the limiting conditions of our work in this chapter is the lack of a player model that can be used to tailor the deceptive motion on line. For instance, Machine Learning algorithms can be used to model the player's actions and try to maximize the level of surprise~\citep{baldi_bits_2010} regarding tower attack.
 
-Another limitation comes from constraints that prevent quick changes in motion direction, imposed for safety reasons, which, in turn, may produce negative impacts on the perception of the deceptive movements.
+%TODO Put here also results showing that H5 has to be rejected, which would support the position that deceptive behavior should be well designed, and perceived as such.
+
+%Among the limiting conditions of our work in this chapter is the lack of a player model that can be used to tailor the deceptive motion on line. For instance, Machine Learning algorithms can be used to model the player's actions and try to maximize the level of surprise~\citep{baldi_bits_2010} regarding tower attack.
+
+%Another limitation comes from constraints that prevent quick changes in motion direction, imposed for safety reasons, which, in turn, may produce negative impacts on the perception of the deceptive movements.

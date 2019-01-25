@@ -1,0 +1,115 @@
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+    [
+      observed/.style={minimum size=15pt,circle,draw=blue!50,fill=blue!20},
+      unobserved/.style={minimum size=15pt,circle,draw},
+      hyper/.style={minimum size=1pt,circle,fill=black},
+      post/.style={->,>=stealth',semithick},
+      bend_left/.style={->,>=stealth',semithick, left=30},
+      bend_right/.style={->,>=stealth',semithick, right=20},
+    ]
+
+	% mixture proportions
+    \node (theta) [unobserved] at (-3.5,2.5) {$\theta_s$};
+    \node (pi) [unobserved] at (2,2.5) {$\pi_{p}$};
+    
+    \node (theta-hyper) [label=above:$\alpha$, left of=theta]{};
+    \filldraw [black, left of=theta] (-3.5,2.5) circle (3pt);
+    
+    \node (pi-hyper) [label=above:$\lambda$] at (3,2.5) {};
+    \filldraw [black] (3,2.5) circle (3pt);
+
+	% features lda variables
+    \node (f_d_n) [observed] at (0,0) {$f_{d,n}$};
+    \node (zf_d_n) [unobserved] at (-1.5,0) {$z^{(f)}_{d,n}$};
+    
+    % actions lda variables
+    \node (za_d_n) [unobserved] at (-1.5,3.5) {$z^{(a)}_{d,m}$};
+    
+    % topics
+    \node (effort_topic) [unobserved] at (2, 4.5) {$\beta_k$};
+    
+    \node (mu) [unobserved] at (2,0.7) {$\boldsymbol{\mu}_{k}$};
+  	\node (lam) [unobserved] at (2,-0.7) {$\boldsymbol{\Lambda}_{k}$};
+    
+    \node (lambda-hyper) [label=above:$\mathcal{W}_{0}\nu_{0}$] at (3.5,-0.7) {};
+    \filldraw [black] (3.5,-0.7) circle (3pt);
+    
+    \node (mu-hyper) [label=above:$\mu_{0}$] at (3.5,0.7) {};
+    \filldraw [black] (3.5,0.7) circle (3pt);
+    
+    \node (effort_topic-hyper) [label=above:$\eta$, right of=effort_topic] {};
+    \filldraw [black] (3, 4.5) circle (3pt);  %%%% <<<<<<<<<<
+    
+    % additional
+    %\node (U) [unobserved] at (0.7, 1.5) {$\boldsymbol{U}$};
+    %\node (V) [unobserved] at (-2,1.5) {$\boldsymbol{V}$};
+    
+    % Progress and effort
+    \node (effort) [observed] at (0,3.5) {$\xi_{d,m}$};
+    \node (progress) [observed] at (-0.7,1.7) {$\psi_{d}$};
+    
+    % indicators
+    
+    \node (sigma) [observed] at (-1.5,-2) {$\sigma_{d}$};
+    \node (rho) [observed] at (0,-2) {$\rho_{d}$};
+    
+    \node (sigmaa) [observed] at (-1.5,5.5) {$\sigma_{d}$};
+    \node (rhoa) [observed] at (0,5.5) {$\rho_{d}$};
+ 
+%     \node (filter) [label=above:$\Phi$] at (-1.5,3) {};
+%     \filldraw [black] (-1.5,3) circle (3pt);
+    
+    \path
+    (zf_d_n) edge [post] (f_d_n)
+    (theta-hyper) edge [post] (theta)
+    (theta) edge [bend right=15,->,>=stealth',semithick] (zf_d_n)
+    (mu) edge [post] (f_d_n)
+%     (filter) edge [post] (effort)
+    (lambda-hyper) edge [post] (lam)
+    (mu-hyper) edge [post] (mu)
+    (pi) edge [bend left=20,->,>=stealth',semithick] (f_d_n)
+    (pi-hyper) edge [post] (pi)
+    (sigma) edge [post] (zf_d_n)
+    (rho) edge [post] (f_d_n)
+    (sigmaa) edge [post] (za_d_n)
+    (rhoa) edge [post] (effort)
+    (theta) edge [bend left=15,->,>=stealth',semithick] (za_d_n)
+    (pi) edge [bend right=15,->,>=stealth',semithick] (effort)
+    (theta) edge [bend right=15,->,>=stealth',semithick] (progress)
+    (pi) edge [bend left=15,->,>=stealth',semithick] (progress)
+    (lam) edge [post] (f_d_n)
+  	(lam) edge [post] (mu)
+    (za_d_n) edge [post] (effort)
+    (effort_topic) edge [post] (effort)
+    (effort_topic-hyper) edge [post] (effort_topic)
+    ;
+
+	\node [draw,fit=(theta) (theta), inner sep=10pt] (plate-prior){};
+    \node [above right] at (plate-prior.south west) {$S$};
+    
+    \node [draw,fit=(f_d_n) (za_d_n) (zf_d_n) (sigma) (rho) (sigmaa) (rhoa) (effort) (progress), inner sep=15pt] (plate-context) {};
+    \node [above right] at (plate-context.south west) {$D$};
+    
+    \node [draw,fit=(f_d_n) (zf_d_n), inner sep=10pt] (plate-token) {};
+    \node [above right] at (plate-token.south west) {$N$};
+    
+     \node [draw,fit=(effort) (za_d_n), inner sep=10pt] (plate-actions) {};
+    \node [above right] at (plate-actions.south west) {$M$};
+    
+    \node [draw,fit=(mu) (lam), inner sep=10pt] (plate-topic) {};
+    \node [above right] at (plate-topic.south west) {$K_f$};
+    
+    \node [draw,fit=(pi), inner sep=10pt] (plate-pi) {};
+    \node [above right] at (plate-pi.south west) {$P$};
+    
+    \node [draw,fit=(effort_topic), inner sep=10pt] (plate-action_topic) {};
+    \node [above right] at (plate-action_topic.south west) {$K_a$};
+
+  \end{tikzpicture}
+  \caption{Graphical model for the~\gls{pepga} model. One should notice that it extends the~\gls{pga} model~\cite{smith_mining_2016} by jointly incorporating effort, $\xi$, and progress, $\psi$ variables. In order to model the effort, the model includes the hyper-parameter $\boldsymbol\Phi$ acting as a filter on what to consider. 
+% Each document $d$ is a gameplay session for a particular player $p$ as indicated by $d$ and a particular section of the game $s$ as indicated by $\sigma_{d}$. $\theta_{s}$ are the gameplay type proportions for section $s$ of the game. $z_{d,n}$ is the gameplay type assignment for word $w_{d,n}$, the nth word in document $d$. $\beta_{1:K}$ are the gameplay types and $\pi_{1:P}$ are the players' play styles.
+}
+  \label{fig:graphical-model}
+\end{figure}

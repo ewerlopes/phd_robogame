@@ -1,0 +1,55 @@
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+    [
+      observed/.style={minimum size=15pt,circle,draw=blue!50,fill=blue!20},
+      unobserved/.style={minimum size=15pt,circle,draw},
+      hyper/.style={minimum size=1pt,circle,fill=black},
+      post/.style={->,>=stealth',semithick},
+      bend_left/.style={->,>=stealth',semithick, left=30},
+      bend_right/.style={->,>=stealth',semithick, right=20},
+    ]
+
+	% mixture proportions
+    \node (theta) [unobserved] at (-3.5,2.5) {$\boldsymbol{\theta}_s$};
+    \node (pi) [unobserved] at (2,2.5) {$\boldsymbol{\pi}_{p}$};
+    
+    \node (theta-hyper) [label=above:$\alpha$, left of=theta]{};
+    \filldraw [black, left of=theta] (-3.5,2.5) circle (3pt);
+    
+    \node (pi-hyper) [label=above:$\lambda$] at (3,2.5) {};
+    \filldraw [black] (3,2.5) circle (3pt);
+    
+    % Progress and effort
+    \node (effort) [observed] at (-0.7,3.7) {$\boldsymbol{\xi}_{d,m}$};
+    \node (progress) [observed] at (-0.7,1.7) {$\psi_{d}$};
+    
+    % indicators
+    \node (rho) [observed] at (-0.7,5.5) {$\rho_{d}$};
+    
+    \path
+    (theta-hyper) edge [post] (theta)
+    (pi-hyper) edge [post] (pi)
+    (rho) edge [post] (effort)
+    (pi) edge [bend right=15,->,>=stealth',semithick] (effort)
+    (theta) edge [bend right=15,->,>=stealth',semithick] (progress)
+    (theta) edge [bend left=15,->,>=stealth',semithick] (effort)
+    (pi) edge [bend left=15,->,>=stealth',semithick] (progress)
+    ;
+
+	\node [draw,fit=(theta) (theta), inner sep=10pt] (plate-prior){};
+    \node [above right] at (plate-prior.south west) {$S$};
+    
+    \node [draw,fit= (rho) (effort) (progress), inner sep=15pt] (plate-context) {};
+    \node [above right] at (plate-context.south west) {$D$};
+    
+     \node [draw,fit=(effort), inner sep=10pt] (plate-actions) {};
+    \node [above right] at (plate-actions.south west) {$M$};
+    
+    \node [draw,fit=(pi), inner sep=10pt] (plate-pi) {};
+    \node [below right=0.05cm and 0.01cm of pi]{$P$};
+
+  \end{tikzpicture}
+  \caption{Graphical model for the progress-effort difficult model. Effort is represented with $\xi$, while progress by $\psi$.}
+  \label{gph:pe_graph}
+\end{figure}

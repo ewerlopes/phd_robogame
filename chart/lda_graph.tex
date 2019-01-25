@@ -34,7 +34,8 @@
     \node [above right] at (plate-token.south west) {$N$};
     \node [draw,fit=(w-hyper), inner sep=10pt] (plate-topic) {};
     \node [above right] at (plate-topic.south west) {$K$};
+
   \end{tikzpicture}
-  \caption{LDA model diagram~\citep{blei_latent_2003}. In our context, each word $w_{d,n}$ corresponds to a window of data from the accelerometer attached to the player during play. In turn, a gameplay is interpreted as a document d (set of player generated words). $z_{d,n}$, represents the type (topic) assignment for a given word $w_{d,n}$ and $\theta_{d}$ is the mixture proportions representing the game session. In this work we are interested in representing the player game session by $\theta_{d}$.}
+  \caption{LDA model diagram~\cite{blei_latent_2003}. Each word $w_{d,n}$ corresponds to a window of data from the accelerometer attached to the player during gameplay. In turn, a gameplay is interpreted as a document d (set of player generated words). $z_{d,n}$, represents the type (topic) assignment for a given word $w_{d,n}$ and $\theta_{d}$ is the mixture proportions representing the game session. In this work we are interested in representing the player game session by $\theta_{d}$.}
   \label{fig:graphical-model}
 \end{figure}

@@ -1,0 +1,60 @@
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+    [
+      observed/.style={minimum size=15pt,circle,draw=blue!50,fill=blue!20},
+      unobserved/.style={minimum size=15pt,circle,draw},
+      hyper/.style={minimum size=1pt,circle,fill=black},
+      post/.style={->,>=stealth',semithick},
+    ]
+
+    \node (w-j) [observed] at (0,0) {$w_{d,n}$};
+    \node (z-j) [unobserved] at (-1.5,0) {$z_{d,n}$};
+    \node (z-prior) [unobserved] at (-3.5,0) {$\theta_s$};
+    \node (w-hyper) [unobserved] at (2,0) {$\beta_k$};
+    \node (pi) [unobserved] at (0,2) {$\pi_{p}$};
+    \node (sigma) [observed] at (-1.5,-2) {$\sigma_{d}$};
+    \node (rho) [observed] at (0,-2) {$\rho_{d}$};
+    
+    \node (z-hyper) [label=above:$\alpha$] at (-4.5,0) {};
+    \filldraw [black] (-4.5,0) circle (3pt);
+    
+    \node (eta-hyper) [label=above:$\eta$] at (3,0) {};
+    \filldraw [black] (3,0) circle (3pt);
+    
+    \node (pi-hyper) [label=above:$\lambda$] at (-1,2) {};
+    \filldraw [black] (-1,2) circle (3pt);
+    
+    \path
+    (z-j) edge [post] (w-j)
+    
+    (z-hyper) edge [post] (z-prior)
+    (z-prior) edge [post] (z-j)
+
+    (w-hyper) edge [post] (w-j)
+    (eta-hyper) edge [post] (w-hyper)
+    (pi) edge [post] (w-j)
+    (pi-hyper) edge [post] (pi)
+    (sigma) edge [post] (z-j)
+    (rho) edge [post] (w-j)
+    ;
+
+	\node [draw,fit=(z-prior) (z-prior), inner sep=10pt] (plate-prior){};
+    \node [above right] at (plate-prior.south west) {$S$};
+    
+    \node [draw,fit=(w-j) (z-j) (sigma) (rho), inner sep=15pt] (plate-context) {};
+    \node [above right] at (plate-context.south west) {$D$};
+    
+    \node [draw,fit=(w-j) (z-j), inner sep=10pt] (plate-token) {};
+    \node [above right] at (plate-token.south west) {$N$};
+    
+    \node [draw,fit=(w-hyper), inner sep=10pt] (plate-topic) {};
+    \node [above right] at (plate-topic.south west) {$K$};
+    
+    \node [draw,fit=(pi), inner sep=10pt] (plate-pi) {};
+    \node [above right] at (plate-pi.south west) {$P$};
+
+  \end{tikzpicture}
+  \caption{Graphical model for the~\gls{pga} model. Each document $d$ is a gameplay session for a particular player $p$ as indicated by $d$ and a particular section of the game $s$ as indicated by $\sigma_{d}$. $\theta_{s}$ are the gameplay type proportions for section $s$ of the game. $z_{d,n}$ is the gameplay type assignment for word $w_{d,n}$, the nth word in document $d$. $\beta_{1:K}$ are the gameplay types and $\pi_{1:P}$ are the players' play styles~\citep{smith_mining_2016}.}
+  \label{gph:pga}
+\end{figure}

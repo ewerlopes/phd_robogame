@@ -25,7 +25,29 @@ In order to model the interaction we take into account the spatial relationship 
 
 Proximity is a measure defined in the interval [0, 1], computed from the data provided by Microsoft Kinect\textsuperscript{\textregistered}, normalized according to the sensor specifications (see section~\ref{sec:kinectsec}).~\gls{ci} is also in [0, 1] and it is calculated using a technique related to the bounding region, i.e., the minimum rectangle surrounding the body: the algorithm compares the area covered by this rectangle with the area currently covered by the player's silhouette~\citep{castellano_recognising_2007}.
 
-A high~\gls{ci} is associated with an intense interaction because a wide openness of the body is interpreted as a higher focus level of the player w.r.t the robot and the game; for this reason it will boost the final outcome. Low~\gls{ci}, in turn, is interpreted as a lack of focus or, in general, limited motivation of the player, which penalizes the interaction.%TODO: Not providing data and analysis to support this makes this assumption quite weak.
+
+%EWERTON: I have red
+%ISSUE: Not providing data and analysis to support this makes this assumption quite weak.
+    %PROBLEMATIC PARAGRAPH: A high~\gls{ci} is associated with an intense interaction because a wide openness of the body is interpreted as a higher focus level of the player w.r.t the robot and the game; for this reason it will boost the final outcome. Low~\gls{ci}, in turn, is interpreted as a lack of focus or, in general, limited motivation of the player, which penalizes the interaction.
+% REWRITTEN: (BELOW)
+The~\glsdesc{ci} can be viewed as a measure of focus and in our application it tries to capture, via body contraction, the amount of attention in the robot movement. It is so because~\glsdesc{ci} can be seen as correlated with situations demanding high attention in other physical games. For example, highly concentrated players in a soccer game tend to keep their arms opened when dealing with a situation demanding high attention, like and attack or penalty. To us,~\gls{ci} tends to be high when players are expecting a response by the robot and tends to be low when situations are not risky. Figure~\ref{fig:low_high_CI} depicts two situations where the~\gls{ci} is different and show different level of attention.
+
+\begin{figure}[h]
+    \centering 
+	\begin{subfigure}[h]{0.48\textwidth}
+		\centering      
+		\framebox{\includegraphics[width=5cm]{images/07-modeling/lowCI.jpg}}
+		\caption{}
+	\end{subfigure}
+	~
+	\begin{subfigure}[h]{0.48\textwidth}
+		\centering      
+      	\framebox{\includegraphics[width=5cm]{images/07-modeling/highCI.png}}
+      	\caption{}
+     \end{subfigure}
+      \caption{Example of situations with different CI values. a) Situation with low CI were the player has a more contracted body. b) Situation with a higher~\gls{ci} compared to the situation in the left. Here the player has a larger body aperture.}
+      \label{fig:low_high_CI}
+\end{figure}
 
 \subsection{Combined model}\label{sec:engagement}
 The model to describe the player relational activity is a combination of the activity level and the degree of interaction, named $\epsilon$; it summarizes the player physical activity during the game and has a linear relationship with his interaction with the robotic opponent as follows: 
@@ -45,14 +67,14 @@ For the evaluation of the model we have reused the same data from section~\ref{s
     \centering 
 	\begin{subfigure}[h]{5cm}
 		\centering      
-		\includegraphics[draft=false, width=5cm]{images/04-activity/combined.png}
+		\includegraphics[width=5cm]{images/04-activity/combined.png}
 		\caption{}
 		\label{fig:fun}
 	\end{subfigure}
 	~
 	\begin{subfigure}[h]{5cm}
 		\centering      
-      	\includegraphics[draft=false,width=5cm]{images/04-activity/combined_less.png}
+      	\includegraphics[width=5cm]{images/04-activity/combined_less.png}
       	\caption{}
       	\label{fig:nofun}
      \end{subfigure}
@@ -348,7 +370,7 @@ A window of half a second corresponds to 32 samples given our accelerometer aver
 
 It is possible to notice from the reconstruction result that, despite such a large compression (from 1024 to only 64 values), the input image relevant structure is captured. This can also be seen in the reconstructed time series. A closer look reveals that the autoencoder practically smoothed the time series while preserving the overall shape, this being a nice property that can help to prevent overfitting.
 
-From Figure~\ref{fig:reconstruction}, we can also see that the obtained time series reconstruction presents some holes. This seems to be caused by the information loss in the reconstruction. In our experimentation, the data is well approximated and did not seem to affect the learning performance.% for the parameter of the~\gls{lda}. 
+From Figure~\ref{fig:reconstruction}, we can also see that the obtained time series reconstruction presents some holes. This seems to be caused by the information loss in the reconstruction. In our experimentation, the data is well approximated and did not seem to affect the learning performance.
 
 \subsubsection{Dictionary Learning and input word definition}
 \glsdesc{lda} works by considering the relationship among word tokens with respect to a collection of documents. Therefore, in order to use the method, we needed to come up with a way to encode the diversity of~\gls{gasf} images into a discrete set of fixed tokens describing the motion primitives appearing in each game session. We opted to follow an approach similar to~\cite{prince_computer_2012} and further encode each extracted vector of feature as \textit{visual words}, finally composing the game session document. 
@@ -397,14 +419,6 @@ We believe that a potential way for improvements in interpretability and accurac
 \subsection{Discussion}
 The main advantage in using this approach, which can be used for clustering players into coherent groups based on the activity level, is that by using an autoencoder for representing the obtained~\gls{gasf}s the workload necessary for hand-crafting features is reduced. Also, one may play with other methods for image classification  as well as explore results from other clustering methods.
 
-% The primary concern shown in~\cite{smith_mining_2016} is that of encoding user controller inputs into discrete tokens (words), allowing for the unsupervised identification of types of gameplay fostered by a particular game level.
-
-% Unfortunately, such approach poses some challenges, as reported by the authors:
-% \begin{inparaenum}
-%   \item the difficulty in finding the associated relationship between controller inputs and gameplay types; as well as  
-%   \item the difficulty to objectively define the gameplay types comprising their presence in different parts of the game.
-% \end{inparaenum}
-
 A probabilistic graphical model, such as~\gls{lda}, offers the possibility to capture players' style as a composition of multiple existing player profiles, which makes the model robust in capturing the high diversity of acceleration signals in our scenario. The basic assumptions are~\citep{smith_mining_2016}:
 
 \begin{enumerate}[label=\Alph*.]
@@ -418,7 +432,7 @@ While being able to quantify the extent to which each gameplay type is present i
 
 \begin{enumerate}[label=\Roman*.]
     \item In a~\gls{pirg}, like RoboTower 2.0, the human player is not likely to use controller inputs and, therefore, the structured information, present in controller inputs, is not well-defined in~\gls{pirg}s ;
-    \item In~\gls{pirg}s, we often have a continuous stream of data coming from multi-channel sources %and we would like to have an on-line processing instead than a batch analysis of texts;
+    \item In~\gls{pirg}s, we often have a continuous stream of data coming from multi-channel sources;
     \item In~\gls{pirg}s the difficulty to assign semantic meaning to some of the discovered gameplay types is high, since the source of information is a time series of data (e.g., player's quantity of motion, physiological signals), rather than controller inputs such as ``move left'', ``move right'', ``jump'', etc.;
 
 \end{enumerate}
