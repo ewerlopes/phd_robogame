@@ -53,13 +53,9 @@ The~\glsdesc{ci} can be viewed as a measure of focus and in our application it t
 The model to describe the player relational activity is a combination of the activity level and the degree of interaction, named $\epsilon$; it summarizes the player physical activity during the game and has a linear relationship with his interaction with the robotic opponent as follows: 
 \begin{equation}
 \label{enagementeq}
-\epsilon=\kappa + \alpha(m),
+\epsilon=\rho\alpha(m),
 \end{equation}
-
-where $\kappa= (1-\rho)c$. The constant $c$ is needed to modify the range of the variable and it is greater than zero. When the estimated interaction $\rho$ is zero (meaning no interaction) the activity level is only $\alpha$. %TODO Actually, it is $\alpha$*c... Why 1-$rho$?
-In other words, the function of $\kappa$ is to boosts the importance of the activity by putting it in relation with the amount of interaction. 
-
-Notice, however, that $\rho$ is an overall degree of interaction, i.e., the combination of~\gls{ci} and proximity. The combination of the interaction signals is not bound to a specific method. In this work, we have used a fuzzy logic system to obtain the desired combination, described in a linguistic way. In principle, the combination of the signals depends on the specifics of the~\gls{pirg} environment.
+, where $\rho$ is the estimated amount of interaction between the players. The variable $\epsilon$ is a simple linear relation that puts in relation interaction and physical activity. Here $\rho$ is an overall degree of interaction, i.e., the combination of~\gls{ci} and proximity and should not be zero. The combination of the interaction signals is not bound to a specific method. In this work, we have used a fuzzy logic system to obtain the desired combination, described in a linguistic way. In principle, the combination of the signals depends on the specifics of the~\gls{pirg} environment.
 
 For the evaluation of the model we have reused the same data from section~\ref{sec:data_collection}. The model output for two different players can be seen in Figure~\ref{fig:model_output}. In Figure~\ref{fig:fun}, the player is perceived as more active than the one in fig.~\ref{fig:nofun}, which is reflected by the difference in the inactivity time and the amplitude of the bars.
 

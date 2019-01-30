@@ -266,7 +266,7 @@ The provided modules allow to control different type of motors that can be model
 
 %ANDY all the technical details and names of devices could go in an appendix, while I'll leave here a functional description of robot and sensors, giving the characteristics that are functionally relevant, e.g., speed, omnidirectionality, range of sensors, their data rate, ...
 
-\subsection{Navigation}
+\subsection{Navigation}\label{sec:navigation}
 \subsubsection{\glsdesc{slam}}\label{gmapping}
 To create a map of the environment, our system used \textit{gmapping}\footnote{http://wiki.ros.org/gmapping accessed on \today}, a ROS package used for~\gls{slam} that estimates the map of the environment and the trajectory of the robot using a technique known as~\gls{rbpf}~\citep{grisettiyz_improving_2005} and the provided odometry and laser measurements. The procedure in\textit{gmapping} can be decomposed in two phases: \begin{inparaenum}[\itshape a\upshape)]\item update the robot's state using all available positioning related data. In our case, odometry and laser measurements was used; \item update the map of the environment using~\gls{rbpf}.\end{inparaenum}
 
