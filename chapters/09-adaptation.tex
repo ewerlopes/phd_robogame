@@ -11,18 +11,18 @@ Specially, in our approach, the effective game difficulty encountered by players
 \section{Problem definition}
 We want to exploit past interaction in order to select an ideal robot behavior to be used against the user at hand, thus, hopefully increasing his entertainment. The selected behavior is intended to be one maximizing the entropy of a distribution representing the probability of victory for the player. For this probability mass function, which can be thought of as a Bernoulli distribution, the probability $\rho$ indicates the chances of victory for the player and, conversely, $1-\rho$ indicates the ones for the robot. We hypothesize that the entropy of such binary distribution can be used as a criteria for the task of selecting a balanced behavior, and that occurs when we are not sure which sides are expected to win. In other words, when the entropy is high.
 
-In the process of selecting the appropriated behavior, we assume the game designer has defined a number $|\mathcal{S}|$ of distinct robot parameters which the system can choose from. These parameters are supposed to be related to the game difficulty so as to allow some control over it. In particular, we assume the designer has divided the range of each parameter values into meaningful discrete values, such that it is possible to obtain a finite set of difficulty-related parameters, henceforth called~\gls{ds}. For instance, in RoboTower 2.0, a parameter related to the difficulty of the game is velocity of the robot, which can be used to control the amount of physical activity the human player will engage against. Another parameter is the blocking factor, which essentially defines the tolerance of the robot when competing for a tower. A joint assignment of such variables makes up for a~\gls{ds}. 
+In the process of selecting the appropriated behavior, we assume the game designer has defined a number of distinct robot parameters which the system can choose from. These parameters are supposed to be related to the game difficulty so as to allow some control over it. In particular, we assume the designer has divided the range of each parameter values into meaningful discrete values, such that it is possible to obtain a finite set $M$ of difficulty-related parameters, henceforth called~\gls{ds}. For instance, in RoboTower 2.0, a parameter related to the difficulty of the game is velocity of the robot, which can be used to control the amount of physical activity the human player will engage against. Another parameter is the blocking factor, which essentially defines the tolerance of the robot when competing for a tower. A joint assignment of such variables makes up for a~\gls{ds}. 
 
 One perspective for solving the problem is to take advantage from parametric modeling ideas regarding latent skill modeling. In special, we tackle the problem from the perspective of jointly modeling players and difficulty parameters into a latent space such that it makes it easy to search for balanced settings. This characteristics make our methodology bear some similarity with recommender systems where the item being recommended, in this case, is a game level configuration such that the estimated fun is maximized. 
 
 This way of posing the problem,\ie by having discrete behaviors and appealing for some mechanism for selecting them, had been proposed before in the work of~\cite{sejrsgaard-jacobsen_dynamic_2011}, and can be motivated by the fact that we can separate behavior definition from adaptation. This can also favor other aspects system development, like modularity and maintenance.
 
-Formally, for a player $p$ and a set of~\gls{ds} $\{\mathcal{S}\}^{s=|S|}_{s=1}$ we aim at choosing a setting $s^{\star}$ such that:
+Formally, for a player $p$ and a set of $M$ distinct~\gls{ds} $\{m_{j}\}^{j=M}_{j=1}$ we aim at choosing a setting $m^{\star}$ such that:
 
 \begin{equation}
-s^{\star} = \argmax_{s \in \mathcal{S}} \mathcal{G}(s,p, \varphi(p))
+m^{\star} = \argmax_{m \in \mathcal{M}} \mathcal{G}(m, p, \varphi(p))
 \end{equation}
-, where $\mathcal{G}$ represents the game and $s^{\star}$ the best game~\gls{ds} $s$ according to a given measure function, $\varphi(p)$. In the next section we discuss our proposal to solve for $s^{\star}$.
+, where $\mathcal{G}$ represents the game and $m^{\star}$ the best game~\gls{ds} $m$ according to a given measure function, $\varphi(p)$. In the next section we discuss our proposal to solve for $m^{\star}$.
 
 \section{Quantifying difficulty}\label{sec:quant_difficulty}
 The notion of difficulty is related to several variables. To the extend of a game, it is mostly related to factors like: game controllability, motor coordination, cognitive load management, memory, reasoning, and several others. Although difficulty in itself accounts for all such aspects at once, one usually considers a particular subset of variables under his control and try to understand up to which point their correlation may alter the perceived entertainment.
@@ -36,7 +36,22 @@ Nonetheless, it is reasonable to assume that players do not conscientiously obta
 
 Among the most successful techniques for recommender system is~\gls{cl}. This technique is able to make automatic predictions about the interests of a user by collecting preferences from many others. The underlying assumption of the method is that if a user X has the same opinion as a user Y on an issue, X is more likely to have Y's opinion on a different issue than that of a randomly chosen user. Since it glean information from many users exploiting their similarities, and from many it differs from the simpler approach of giving an average (non-specific) score for each item of interest for each user.
 
-From the class of~\gls{cl} approaches, one may observe the potential advantage of~\gls{pmf}~\citep{mnih_probabilistic_2008}. This approach was invented as a type of matrix factorization method. Essentially, it models the user's preference matrix (a matrix of scores, votes, etc.) as a product of two lower-rank user and item matrices. Mathematical details regarding the standard~\gls{pmf} is given in appendix~\ref{app:pmf}.
+From the class of~\gls{cl} approaches, one may observe the potential advantage of~\gls{pmf}~\citep{mnih_probabilistic_2008}. This approach was invented as a type of matrix factorization method. Essentially, it models the user's preference matrix (a matrix of scores, votes, etc.) as a product of two lower-rank user and item matrices. Mathematical details regarding the standard~\gls{pmf} is given in appendix~\ref{app:pmf}. 
+
+In general, in the recommendation by matrix factorization, one represents the users and the items being recommended in a shared latent space of dimension K, where a user $i$ is represented by a latent vector $u_{i}$ defined in this space, \ie $u_{i} \in \mathbb{R}_{K}$ and a item $j$, in turn, by its own vector $v_{j} \in \mathbb{R}_{K}$. The predictions of whether the user $i$ is going to like item $j$ is them modeled by the inner product of their latent vector.
+
+\begin{equation}
+    s_{ij} = u_{i}^{T}v_{j}
+\end{equation}
+
+The common approach to estimate the latent vectors is to minimize the regularized squared error loss with respect to all users $U=(u_{i})_{i=1}^{I}$ and $V=(v_{i})_{j=1}^{J}$, with $\lambda_{u}$ and $\lambda_{v}$ as regularized terms (appendix~\ref{app:pmf}). For the probabilistic version of matrix factorization it is assumed the following generative process~\citep{wang_collaborative_2011}.
+
+\begin{enumerate}
+    \item For each user $i$, draw user latent vector $u_{i} \sim \mathcal{N}(0,\lambda_{u}^{-1}I_{K})$.
+    \item For each item $j$, draw user latent vector $v_{j} \sim \mathcal{N}(0,\lambda_{v}^{-1}I_{K})$.
+    \item For each user-item ($i$, $j$), draw the response $s_{ij} \sim \mathcal{N}(u_{i}^{T}v_{j}, c_{ij}^{-1})$
+\end{enumerate}
+, where $I_{K}$ is a K-dimensional identity matrix.
 
 Relative to our scenario of interest, one can conveniently arrange the score data from players in a matrix form, with rows indicating the player and columns the score when playing against a particular~\gls{ds}. The objective is then to estimate a low-rank matrix associated with each user and another low-rank matrix associated with each~\gls{ds} in way to probabilistic model the score matrix. Following the standard approach in~\gls{pmf}, the modeling can be achieved by a linear model with Gaussian observation noise. 
 
@@ -44,8 +59,32 @@ The~\gls{pmf} model, in its standard form, cannot incorporate the role of effort
 
 It turns out a model of such type was proposed in~\cite{wang_collaborative_2011} and was named as~\gls{ctr}. It combines collaborative filtering and topic modeling in order to fit a model that uses the latent topic space to explain both the observed ratings (votes for an item) and the observed words from the item descriptions. 
 
-The~\gls{ctr} represents users with topic interests and assumes that item description are generated by a topic model. The model additionally includes a latent variable that offsets the topic proportions when modeling the user ratings. As more users rates are available, the more the offset becomes important in explaining preference nuances.
+The~\gls{ctr} represents users with topic interests and assumes that item description are generated by a topic model. The model additionally includes a latent variable, $\epsilon$, that offsets the topic proportions when modeling the user ratings. As more users rates are available, the more the offset becomes important in explaining preference nuances.
 
 Below we present the derivation of important variables of this model in our domain, here termed~\gls{cer}. Details regarding the general applicability of~\gls{ctr} can be viewed in~\cite{wang_collaborative_2011}.
 
-%I will put the math here tomorrow.
+For the $M$ robot difficulty settings, $N$ players, and score signals in $\mathbb{R}$. Let $S_{ij}$ represent the score of player $i$ when playing against a~\gls{ds} $m_{j}$, $U \in \mathbb{R}^{D\times N}$ and $V \in \mathbb{R}^{D\times M}$ be latent player and~\gls{ds} feature matrices, with column vectors $U_i$ and $V_j$ representing player-specific and~\gls{ds}-specific latent feature vectors respectively. Let we also consider a variable $E$ representing all players effort. Since the model reuses the context of~\gls{lda}, the variable $\xi$ represents the observed player action. The joint likelihood of variables in~\gls{cer} can then be divided in two parts: the~\gls{lda} and the~\gls{pmf}.
+
+\begin{equation}
+    p(U,V,\Theta|S,\xi,\sigma^{2},\sigma_{U}^{2},\sigma_{V}^{2}) = \underbrace{p(Z,B, \Theta | \xi)}_{\gls{lda}} \underbrace{p(U,V|S,\Theta)}_{\gls{pmf}}
+\end{equation}
+, where $\Theta$ represents the players effort mixture proportions, $B$ the effort topics and $Z$ the topic index variable. 
+
+Given topic parameters $\beta$, the full posterior of the variables $u_{i}$, $v_{j}$ and $\theta_{j}$ is intractable. A~\gls{map} estimate can be learned using a~\gls{em}-based algorithm for the maximization of the log likelihood of U, V, $\Theta$ and S given $\lambda_{u}$, $\lambda_{v}$ and $\beta$. The algorithm proposed in~\cite{wang_collaborative_2011} can be reused here observing the redefinition of variables. 
+
+The key aspect we would like to explore from the~\gls{ctr} model is how the latent vector of the user is taken to be $u_{i} \sim \mathcal{N}(\theta_{i}, \lambda_{u}^{-1}I_{K})$ and it is assumed such vector is close to the topic proportions $\theta_{i}$, which for us represents the proportion of effort topics. The expectation of the score signal, $s_{ij}$, under the model is a linear function of the $\theta_{i}$.
+
+\begin{equation}
+    \mathbb{E}[s_{ij}|u_{i}, \theta_{i}, \epsilon_{i}] = (\theta_{i} + \epsilon)v^{T}
+    \label{eq:expect_ctr}
+\end{equation}
+, where $\epsilon_{i}$ is the offset associated with the mixture proportion of efforts $\theta_{i}$ and it is distributed according to a zero-mean Gaussian with variance equal to $\lambda_{v}^{-1}$. For the effective selection of the new~\gls{ds}, one may estimate appropriet criterion's from the expectation in equation~\ref{eq:expect_ctr}.
+
+%EWERTON: I think that putting the derivation of the equations here is going to make the chapter too heavy. After all, the algorithm is the same with the variables changed for our context. My proposal to reuse this algorithm, however, inverts the role of the LDA: While the CTR uses a LDA for the recommended items, I propose to use it on the user description. However, the algorithm has minor changes and one can fully understand it by reading the original CTR in~\cite{wang_collaborative_2011}.
+
+\section{Considerations}
+Although in this chapter we do not provide any experimental result, we intended to give an overview of our current modeling assumption and thought process on how to adapt the robot behavior toward increasing the player entertainment.
+
+We have framed our problem as a recommendation process into which the items being recommended are the possible robot~\glsdesc{ds}s and we ideally search for the one that is expected to be balanced w.r.t the chances of winning by both players, \ie human and robot alike. The score signal modeled is not limited to a scalar score, but can be redefined as a much general utility function that can map the game and player behavioral features to a scalar. 
+
+The model presented above can also be seen from the perspective of putting together ideas from our previous experiments (such as those from chapter~\ref{ch:modeling}) in a much more scenario, extending further the contribution of our research.

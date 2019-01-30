@@ -88,3 +88,24 @@ p(\boldsymbol\theta, \boldsymbol\pi, \boldsymbol\xi, \psi \, | \, \alpha, \lambd
 \input{chart/pga.tex}
 \input{chart/my_graph_continuous.tex}
 
+For simplification we collect all observed variables by $\Phi$.
+
+Taking the logarithm of this joint and expanding term we arrive at the 
+
+% prod over player --> \prod_{i=1}^{N}
+% prod over ds     --> \prod_{j=1}^{M}
+% Sum over player  --> \sum_{i=1}^{N}
+% prod over ds     --> \sum_{j=1}^{M}
+
+\begin{align*}
+\ln{p(U,V,\Theta|\Phi)} &= \Bigg[\prod_{i=1}^{N}\prod_{j=1}^{M}\mathcal{N}(S_{ij}|u_{i}^{t}v_{j}, \sigma^2)^{I_{ij}} \Bigg] \\
+&=\Bigg[\prod_{i=1}^{N} \mathcal{N}(u_{i}|0,\sigma^{2}_{U}I) \Bigg] \Bigg[\prod_{j=1}^{M} \mathcal{N}(v_{i}|0,\sigma^{2}_{V}I) \Bigg] \\
+&=\underbrace{\Bigg[\prod_{i=1}^{N} p(\theta|\alpha) \prod_{e=1}^{E}  p(z_{e}|\theta)p(\xi_{e}|Z_{n},B)\Bigg]}_{\gls{lda}}
+\end{align*}
+
+Separating the terms containing $\theta_{i}$
+
+\begin{align*}
+    \mathcal{L}(\theta) &= -\frac{\lambda v}{2} (v_{i} - \theta_{j})^{t}(v_{i} - \theta_{j}) + \sum_{j}\sum_{n}log(\sum_{k}\theta_{jk}\beta_{k},w_{jn}) \\
+    &= -\frac{\lambda v}{2} (v_{i} - \theta_{j})^{t}(v_{i} - \theta_{j}) + \sum_{j}\sum_{n}log(\sum_{k}\theta_{jk}\beta_{k},w_{jn})
+\end{align*}
