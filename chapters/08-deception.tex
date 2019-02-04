@@ -1,11 +1,12 @@
 \chapter{Supporting entertainment using deception in RoboTower 2.0}\label{ch:deception}
 
-In this chapter, we report our effort in investigating the quality of interaction between a human player and a mobile robot in our game environment (see section~\ref{sec:game_environment}). We apply previous development in social interaction analysis and, in particular, we focus on the applicability of deception as a mean to support engagement. By analyzing the social situation between the players, identifying the need for deception, and acting upon it, we aim at decreasing robot movement predictability by the human while increasing engagement and amusement. Being able to do so, we tackle the human perception of the robot as being an opponent smart enough to compete. Experiments have been conducted on a population of human players which have been asked to play the game and answer a post-game questionnaire. The majority of the participants enjoyed the game and agreed in perceiving the robot as a rational agent whose aim is to win the game. Deception was also perceived by most of the players, but main conclusions about its effect demands further careful investigation in order to better estimate its causal effects in entertainment.
+In this chapter, we report our effort in investigating the quality of interaction between a human player and a mobile robot in our game environment. %TODO This sentence is too general for the content of the chapter (which in turn matches the title). Let's find a more appropriate way to introduce THIS chapter   %EWERTON: suggestion?
+We apply previous development in social interaction analysis and, in particular, we focus on the applicability of deception as a mean to support engagement. By analyzing the social situation between the players, identifying the need for deception, and acting upon it, we aim at decreasing robot movement predictability by the human while increasing engagement and amusement. Being able to do so, we tackle the human perception of the robot as being an opponent smart enough to compete. Experiments have been conducted on a population of human players which have been asked to play the game and answer a post-game questionnaire. The large majority of the participants enjoyed the game and agreed in perceiving the robot as a rational agent whose aim was to win the game. Deception was also perceived by most of the players, but main conclusions about its effect demands further careful investigation in order to better estimate its causal effects in entertainment.
 
 The present chapter is organized as follows: In section~\ref{sec:deception_main_objectives}, we point out the main experiment detailed in the chapter. Section~\ref{sec:deception_related_works} introduces related works. Section~\ref{sec:deception_detecting_it}, the method for detecting the need of deception% and how to translate it into robot movement (section~\ref{sec:deception_communicate}).
 Experiments and validation of the proposed method are presented in section~\ref{sec:deception_validation}. Discussions and conclusions, in turn, are presented in section~\ref{sec:deception_discussion}.
 
-\section{Main objective}\label{sec:deception_main_objectives}
+\section{Main objective} \label{sec:deception_main_objectives}
 
 Past studies have demonstrated that the use of some deceptive ability has been recognized as a way to increase attributions of mental states to the robot~\citep{shim_taxonomy_2013}. In a game situation, we try to improve the study of adversarial interactions between the human player and the robotic agent using motion strategies as a mean of support interaction and increase fun. In special, we use \textit{deception} as one of such strategies and we show that the effective communication of deception by robot motion is by no means a trivial task. Our work gives a baseline for detecting the appropriateness of, and communicating deception in~\gls{pirg} applications and points out further research directions towards mitigating reported issues. To the best of our knowledge, this is the first research work that applies deception theory to obtain engagement in a~\gls{pirg} with a mobile robotic platform.
 
@@ -29,11 +30,11 @@ Differently, the robot presented in~\cite{vazquez_deceptive_2011} has been progr
 The most important part in a deceiving algorithm, however, is the proper transmission of the false communication. This is a not a trivial task because the deceived should not understand it is under deception. In~\cite{dragan_analysis_2014} the authors propose a way to study the communication of false information (deception) using a robotic arm. In the work, the authors reinforce the applicability of robot deception in making games against robot more engaging. All the work is concentrated on robot deception in goal-directed motion, by learning deceptive trajectories in which the robot is concealing its actual goal. Our work can be viewed as similar to~\cite{dragan_analysis_2014} in the sense that it also explores goal-directed motion by following trajectories. However, we differ on using a full mobile robot in a real game scenario, which as to decide if and when to deceive. 
 
 \section{Situation analysis}\label{sec:deception_detecting_it}
-When playing (see game description in section~\ref{sec:game_environment}), the robot continuously (re)calculates the payoff of attacking (aiming at) a given tower. For that, it uses two arrays, $\overrightarrow{t_{robot}}$ and $\overrightarrow{t_{player}}$. The former quantifies the robot's own payoff and the later quantifies the player's one. Both payoffs are defined by spatial relation. Considering the set of tower positions $\mathcal{T} = \{\tau_{i}\}_{i=1}^{N=4}$, the arrays are defined as in~\ref{eq:array1} and ~\ref{eq:array2}.
+When playing, the robot continuously (re)calculates the payoff of attacking a given tower. For this, it uses two arrays, $\overrightarrow{t}_{robot}$ and $\overrightarrow{t}_{player}$. The former quantifies the robot's own payoff and the later quantifies the player's one. Both payoffs are defined by spatial relation. Considering the set of tower positions $\mathcal{T} = \{\tau_{i}\}_{i=1}^{N=4}$, the arrays are defined as in~\ref{eq:array1} and ~\ref{eq:array2}.
 
 % elements in this vector captures how is closer, player or robot
 \begin{equation}
-    \overrightarrow{t_{robot}} = \begin{bmatrix}
+    \overrightarrow{t}_{robot} = \begin{bmatrix}
     \delta(\tau_{1},player) -\delta(\tau_{1},robot)  \\ 
     \delta(\tau_{2},player) - \delta(\tau_{2},robot)  \\
     \delta(\tau_{3},player) - \delta(\tau_{3},robot) \\
@@ -43,22 +44,22 @@ When playing (see game description in section~\ref{sec:game_environment}), the r
 \end{equation}
 
 \begin{equation}
-\overrightarrow{t_{player}} = \begin{bmatrix}
+\overrightarrow{t}_{player} = \begin{bmatrix}
 \frac{1}{\delta(\tau_{1},robot)} + \frac{1}{\delta(\tau_{1},player)} \\ 
 \frac{1}{\delta(\tau_{2},robot)} + \frac{1}{\delta(\tau_{2},player)}  \\
 \frac{1}{\delta(\tau_{3},robot)} + \frac{1}{\delta(\tau_{3},player)}  \\
 \frac{1}{\delta(\tau_{4},robot)} + \frac{1}{\delta(\tau_{4},player)} 
-\end{bmatrix}
+\end{bmatrix},
 \label{eq:array2}
 \end{equation}
-, where $\delta(a,b)$ refers to the Euclidean distance between argument $a$ and $b$. The choice of target tower by players is modeled by the maximum value in the arrays:
+where $\delta(a,b)$ refers to the Euclidean distance between argument $a$ and $b$. The choice of target tower by players is modeled by the maximum value in the arrays:
 
 \begin{equation} \label{eq:best_t_robot}
-    target_{robot} = \operatorname*{arg\,max}_i \, \overrightarrow{t_{robot}}^{(i)}, 
+    target_{robot} = \operatorname*{arg\,max}_i \, \overrightarrow{t}^{(i)}_{robot} 
 \end{equation}
 
 \begin{equation} \label{eq:best_t_player}
-target_{player} = \operatorname*{arg\,max}_i \, \overrightarrow{t_{player}}^{(i)}
+target_{player} = \operatorname*{arg\,max}_i \, \overrightarrow{t}^{(i)}_{player}
 \end{equation}
 
 In equations~\ref{eq:best_t_robot} and~\ref{eq:best_t_player}, the vector components are indexed by the superscript and we use $i$ as index variable. The robot calculates the target preferences for the human in order to anticipate his move. This is an example of using player modeling for competitive advantage in a scenario where the main objective is to play for entertainment maximization, emphasizing the interconnection between such macro goals of playing.
@@ -72,7 +73,7 @@ For recognizing the particular moment in time where deception may be needed, a s
     \label{fig:matrix}
 \end{figure}
 
-As the game is a conflicting game, the two players benefit themselves in each other's loss: the robot earns a higher payoff when it chooses a different target w.r.t. the one chosen by its opponent. From a matrix point of view, this is seen as a lower payoff in the diagonal elements, because it refers to when the two opponents choose the same action. On the other hand, the player's outcome matrix is constructed in the opposite way, \ie the values of the diagonal elements are defined in a way to be greater than the non-diagonal ones. The reason for that is on the fact that players benefit from choosing to go to the same towers the robot are going to because, while blocking the robot, they can progress by pushing the button, thus, attacking the tower at the same time they are defending it. This strategy was verified upon close observation and from the report of players after the play. The approach for calculating the robot's outcome matrix is the following:
+As the game is a conflicting game, the two players benefit of each other's loss: the robot earns a higher payoff when it chooses a different target w.r.t. the one chosen by its opponent. From a matrix point of view, this is seen as a lower payoff in the diagonal elements, because it refers to the case when the two opponents choose the same action. On the other hand, the player's outcome matrix is composed in the opposite way, \ie the values of the diagonal elements are defined in a way to be greater than the non-diagonal ones. The reason for this is that players benefit from choosing to go to the same towers the robot are going to because, while blocking the robot, they can progress by pushing the button, thus, attacking the tower at the same time they are defending it. This strategy was verified upon close observation and from the report of players after the play. The approach to calculate the robot's outcome matrix is the following:
 
 \begin{itemize}
 \item \textit{For non-diagonal elements:}\\
@@ -81,15 +82,16 @@ As the game is a conflicting game, the two players benefit themselves in each ot
     \label{eq:Non-diagonal}
     \gamma_r \cdot \frac{\overrightarrow{t_{robot}}^{(i)}}{\sum_{i}{\overrightarrow{t_{robot}}^{(i)}}} \cdot \frac{\delta(\tau_{i},player)}{\sum{\delta(\tau_{i},player)}}, \forall\tau_{i} \in \mathcal{T}\\ 
 \end{equation}
-, where $\overrightarrow{t_{robot}}^{(i)}$ refers to the component $i$ on the vector $t_{robot}$. $\gamma_r$ is a tuning constant whose function is to scale values adequately. The second term in the multiplication is used to weight the calculation the more the individuals are far from each other (which favors the game towards the robot since it is less blocked). Recall that the interest in a tower is measure via proximity and we assume the more close to a tower a given player is, the more interested he/it is in it. This is aligned with the~\gls{meu} principle since we view the agents as utility maximizers, each one trying to maximize their respective chances of winning the game. The last term in the multiplication weights everything by how far away the player is from the considered target and expresses the advantage the robot has over the opponent to reach the given target. This last term provides a metric of the reachability of the target considering the opponent.
+where $\overrightarrow{t}^{(i)}_{robot}$ refers to the component $i$ on the vector $t_{robot}$. $\gamma_r$ is a tuning constant whose function is to scale values adequately. The second term in the multiplication is used to weight the calculation %TODO Something missing in this sentence? % EWERTON: I don't think so. Can you be more specific?
+the more the individuals are far away from each other (which favors the game towards the robot since it is less blocked). Recall that the interest in a tower is measured by proximity, and we assume the more close to a tower a player is, the more interested (s)he/it is in it. This is aligned with the~\gls{meu} principle since we view the agents as utility maximizers, each one trying to maximize their respective chances of winning the game. The last term in the multiplication weights everything by how far away the player is from the considered target and expresses the advantage the robot has over the opponent to reach the given target. This last term provides a measure of the reachability of the target considering the opponent.
 
 \item \textit{For diagonal elements:}
 
 \begin{equation}
     \label{eq:Diagonal}
-    \delta(\tau_{i},robot)
+    \delta(\tau_{i},robot),
 \end{equation}
-, which considers only the euclidean distance to each tower.
+ which considers only the euclidean distance to each tower.
 %Giving the right value for $\gamma$ is necessary for having balanced values for the correspondence-interdependence value.
 \end{itemize}
 
@@ -98,17 +100,17 @@ Similarly, the player's outcome matrix is described as:
     \item \textit{Non-diagonal Elements:}\\
         \begin{equation}
             \label{for:Non-DiagonalPlayer}
-            \frac{\overrightarrow{t_{player}}^{(i)}}{\sum_{i}{\overrightarrow{t_{player}}^{(i)}}} \cdot \frac{\delta(\tau_{i},robot)}{\sum_{i}{\delta(\tau_{i},robot)}}, \, \forall\tau_{i} \in \mathcal{T} 
+            \frac{\overrightarrow{t}^{(i)}_{player}}{\sum_{i}{\overrightarrow{t}^{(i)}_{player}}} \cdot \frac{\delta(\tau_{i},robot)}{\sum_{i}{\delta(\tau_{i},robot)}}, \, \forall\tau_{i} \in \mathcal{T} 
         \end{equation}
     \item \textit{Diagonal Elements:}
         \begin{equation}
             \label{for:DiagonalPlayer}
             \gamma_p \cdot \frac{1}{\delta(\tau_{i},robot)}
-        \end{equation}
-        , where $\gamma_p$ is a tuning constant whose function is to scale values adequately.
+        \end{equation},
+        where $\gamma_p$ is a tuning constant whose function is to scale values adequately.
 \end{itemize}
 
-From the outcome matrices, the players' utility are incorporated into the interdependence-correspondence space~\citep{wagner_acting_2011}. For our purposes, the \textit{interdependence} dimension represents the correlation between the two players' outcome matrices, while \textit{correspondence} quantifies how much conflict exists between the two selected actions.
+From the outcome matrices, the players' utility is incorporated into the interdependence-correspondence space~\citep{wagner_acting_2011}. For our purposes, the \textit{interdependence} dimension represents the correlation between the two players' outcome matrices, while \textit{correspondence} quantifies how much conflict exists between the two selected actions.
 
 The two values are calculated considering three concepts: the variation of the robot's outcome matrix resulting from its own decisions; the variation of the player's outcome matrix resulting from its opponent's decisions; the variation in the outcome matrix resulting from both, joint, interactive decisions.
 
@@ -123,7 +125,7 @@ The calculations for interdependence are made as in algorithm~\ref{alg:interdepe
 \For{$i \in range(1,n(\mathcal{T}))$ }{
 $\Delta_{outcomes} = | max_{outcome(:,i)} - min_{outcome(:,i)} | $ \\
 $total = max_{outcome(:,i)} + min_{outcome(:,i)} $\\
-$\alpha = \alpha + \frac{\overrightarrow{t_{robot}}^{(i)}}{\sum_{i}{\overrightarrow{t_{robot}}^{(i)}}} \cdot \frac{\Delta}{total}$
+$\alpha = \alpha + \frac{\overrightarrow{t}^{(i)}_{robot}}{\sum_{i}{\overrightarrow{t}^{(i)}_{robot}}} \cdot \frac{\Delta}{total}$
 }
 \caption{Interdependence algorithm}
 \label{alg:interdependence}
@@ -160,20 +162,16 @@ $\beta \mathrel{{+}{=}} \frac{1}{2} \cdot \frac{Avg_{player}}{\sum{Avg_{player}}
 \caption{Correspondence algorithm.}
 \label{alg:correspondence}
 \end{algorithm}
-The procedure works by going through every action the robot and the player can take. For example, when evaluation to take action 1 (go to tower 1), the robot temporally ignores all the other columns of its outcome matrix and checks what are the indexes that maximize the robot's outcome and the player's one. It then calculates the difference between the outcomes using the two indexes (for both robot and player); a negative $\Delta$ means for the subject that the situation is a conflict (the values of the outcome matrix are positive). The variations are normalized and multiplied by each other and then multiplied by a factor that expresses how likely the action would be taken (if an action will not be chosen, $\beta$ will have a lower impact). Similarly, the same procedure is done w.r.t. the player's actions.
+The procedure works by going through every action the robot and the player can take. For example, when evaluating to take action 1 (go to tower 1), the robot temporally ignores all the other columns of its outcome matrix and checks what are the indexes that maximize the robot's outcome and the player's one. It then calculates the difference between the outcomes using the two indexes (for both robot and player); a negative $\Delta$ means for the subject that the situation is a conflict (the values of the outcome matrix are positive). The variations are normalized and multiplied by each other and then multiplied by a factor that expresses how likely the action would be taken (if an action will not be chosen, $\beta$ will have a lower impact). Similarly, the same procedure is done w.r.t. the player's actions.
 
-In figure~\ref{fig::interdependece} the correspondence and interdependence space distributions are represented by making a discretization of the playground into a grid and placing the robot at (4,5), while varying the  player's position on every other coordinate. It is possible to notice that the diagonal that leads to the towers has a higher value of dependency and conflict.
+In figure~\ref{fig::interdependece} the correspondence and interdependence space distributions are represented by discretizing the playground into a grid and placing the robot at (4,5), while varying the  player's position on every other coordinate. It is possible to notice that the diagonal that leads to the towers has a higher value of dependency and conflict.
 
-%TODO This may be skipped here, if you put the start of the section above \subsection{Communicating false goals}\label{sec:deception_communicate}
-%Having presented how to trigger deception, in this section we describe how it is possible to use deceptive behavior by communicating false goals, i.e., false attempts to knock down towers. We begin by describing the two methods used.
-%TODO Here, I would start another subsection stating first what is intended to be a deceptive action in our game, how it is expected to be perceived by the player, why, and then presenting how it is obtained.
-%Ewerton: Ok. I created the section below.
 \section{Triggering and communication deception}
-The mapping of the situation to the correspondence and interdependence space shows when deception may be needed. In our context, we call a deceptive movement, a robot motion whose purpose is to convey a false target to the human player while hiding its true one. If successful, the robot will deceive the player into believing the wrong target was likely to be the one of interest, as supported by its current motion, and upon the development of the situation increase the overall perception of smartness. In doing this, the human players are supposed to perceive the intention of the robot in trying to deceive them and, perhaps, increase the level of attention and competition in the expectation in counteract the robot.
+The mapping of the situation to the correspondence and interdependence space shows when deception may be needed. In our context, we call as a deceptive movement a robot motion whose purpose is to convey a false target to the human player, while hiding the true one. If successful, the robot will deceive the player into believing the wrong target was likely to be the one of interest, as supported by its current motion, and upon the development of the situation increase the overall perception of smartness. In doing this, the human players are supposed to perceive the intention of the robot in trying to deceive them and, possibly, increase the level of attention and competition in the expectation to counteract the robot. In this context, deception has the role of inducing the player to perceive the robot as smarter than when playing without deception, thus increasing attention, and challenge. For this, it is expected to be triggered only when the situation requires it. 
 
-The deception is triggered once a situation is detected as being dependent and conflicting enough. The meaning of ``enough'' is defined in term of satisfying a predefined threshold, picked during the phase of testing. When the condition is satisfied deception is triggered and the procedure to communicate it is launched.
+Deception is triggered once a situation is detected as being dependent and conflicting enough. The meaning of ``enough'' is defined in term of satisfying a predefined threshold, picked during the phase of testing. When the condition is satisfied deception is triggered and the procedure to communicate it is launched.
 
-Additionally, in order to regulate the behavior and control the amount of deception without altering its basic definition, \ie the formulas and parameters selected for the outcome matrices, we have also introduced a constant indicating the probability of communicating deception, \verb|decpt_prob|,  after having it triggered. In practice, we sample from a Bernoulli distribution with parameter of success equal to \verb|decpt_prob|. 
+Additionally, in order to regulate the behavior and control the amount of deception without altering its basic definition, \ie the formulas and parameters selected for the outcome matrices, we have also introduced a constant indicating the probability of communicating deception, \textit{decpt\_prob},  after having triggered it. In practice, we sample from a Bernoulli distribution with parameter of success equal to \textit{decpt\_prob}. 
 
 \begin{figure}[h]
     \centering
@@ -203,12 +201,12 @@ Once deception is decided, the algorithm calculates a fake target to be communic
     \label{fig::interdependece}
 \end{figure}
 
-Communicating false goals, however, is not a simple task and it is highly dependent on the platform capabilities to react quickly in the situation. For this task, we have experimented using two mechanisms, one based on predefined curvy trajectories and other using the scheme of steering behavior, which considers the use of vector and property of mass to move the robot. We detail them next.
+Communicating false goals, however, is not a simple task and it is highly dependent on the platform capabilities to react quickly in the situation. For this task, we have experimented using two mechanisms, one based on predefined curvy trajectories and other using the scheme of steering behavior, which considers the use of vector and property of mass to move the robot. We detail them in the next sections.
 
 \subsubsection{Static trajectory approach}
-In this first method the trajectories are established a priori. Once the navigation controller receives the fake and real target information, it calculates, based on the current position of the robot, the series of points the robot needs to follow in order to communicate the deception.
+In this first method the trajectories are established a priori. Once the navigation controller receives the fake and real target information, it calculates, based on the current position of the robot, the series of points the robot needs to follow in order to communicate deception.
 
-The algorithm can choose between two different types of trajectories. The first one is activated when the robot is close to the center of the playground and it consisting in making the robot move forward, towards the midpoint of the line connecting the fake and real target, and revealing, upon a certain travelled distance, its true target, leaving, in theory, 50\% of chance of guessing. The decision of which tower to attack is communicated with a sharp turn, which is intended to make clear to the human the deceptive strategy deployed by the root. Figure~\ref{fig:static_deception_1} outlines the strategy in its point-wise trajectory.
+The algorithm can choose between two different types of trajectories. The first one is activated when the robot is close to the center of the playground and it consists in making the robot move forward, towards the midpoint of the line connecting the fake and real target, and revealing, upon a certain travelled distance, its true target, leaving, in theory, 50\% of chance of guessing. The decision of which tower to attack is communicated with a sharp turn, which is intended to make clear to the human the deceptive strategy deployed by the root. Figure~\ref{fig:static_deception_1} outlines the strategy in its point-wise trajectory.
 
 The second static type will try to communicate the fake target right-away in order to let the player run and stay to a particular tower, and by doing this take spatial advantage when trying to knock down the real target. A pictorially description of such trajectories is shown in figure~\ref{fig:static_deception_2}.
 
@@ -231,20 +229,21 @@ The second static type will try to communicate the fake target right-away in ord
     \label{fig::trajectoryStatic}
 \end{figure}
 
-The trajectories are implemented by following a series of points to be followed. These points are spatially distributed along the desired trajectory. In the first type of deception, the middle point between the two targets is calculated, then three points are extracted in the segment between the robot's position and the middle point. Once reached the third point, the robot changes direction and goes to the real target. Similarly, in the second type, subsequent points are calculated between the robot and the fake target, once reached the second or third point of this sequence, the robot changes direction and goes to the real target. What makes those trajectories different w.r.t. a normal trajectory without deception is the sharp turn performed in order to emphasize the change in direction and convey the deception.
+The trajectories are implemented by defining a series of way points to be followed. These points are spatially distributed along the desired trajectory. In the first type of deception, the middle point between the two targets is calculated, then three points are extracted in the segment between the robot's position and the middle point. Once reached the third point, the robot changes direction and goes to the real target. Similarly, in the second type, subsequent points are calculated between the robot and the fake target, once reached the second or third point of this sequence, the robot changes direction and goes to the real target. What makes those trajectories different w.r.t. a normal trajectory without deception is the sharp turn performed in order to emphasize the change in direction and convey the deception.
 
-In the present proposal, deception is considered as a complete 'path' that starts when the robot receives the deception information (true and fake tower) and lasts until the robot hits the tower. Since no look-ahead for determining the player position in the future had been considered, it can happen that the player understands the deception and/or the player is really reactive and blocks the robot, so that it would be impossible to complete the deception procedure coherently.
+In the present proposal, deception is considered as a complete 'path' that starts when the robot receives the deception information (true and fake tower) and lasts until the robot hits the tower. Since no look-ahead for determining the player position in the future is considered, it can happen that the player understands the deception and/or  reacts and blocks the robot, so that it would be impossible to complete the deception procedure coherently.
 
 For this reason, the algorithm calculates the time required for successfully completing the deception (based on the distance to true target and velocity) and, every time something goes wrong (for example, the player blocks the robot), the estimated time expires and the deception procedure is aborted. When this happens, the normal procedure starts again to compute a regular target, until a new need for deception is detected.
 
 \subsubsection{Dynamic steering behavior approach}
-The second approach we propose in order to implement a deceiving trajectory is based on steering behaviors~\citep{reynolds_steering_1999}. The paper by~\cite{reynolds_steering_1999} proposes a force-based approach to guide an actor in a life-like and improvisational manner. Given a target, it will generate a force, either attractive or repulsive, based on its position with respect to the robot: by applying this force on the robot, it will be driven either towards or away from the target following a smooth path.
+The second approach we propose in order to implement a deceiving trajectory is based on steering behaviors~\citep{reynolds_steering_1999}. The paper by~\cite{reynolds_steering_1999} proposes a force-based approach to guide an actor in a life-like and improvisational manner. Given a target, it will generate a force, either attractive or repulsive, based on its position with respect to the robot: by applying this force on the robot, this will be driven either towards or away from the target following a smooth path.
 
-Being our robot holonomic, it has been represented as a point mass to calculate the results of the application of the forces generated by the steering behavior. This approach gives us the possibility to dynamically change the robot response to forces by changing the kinematic properties of the representation during the calculation process.
+Being our robot holonomic, it is represented as a point mass, allowing us to calculate the results of the application of the forces generated by the steering behavior. This approach gives us the possibility to dynamically change the robot response to forces %by changing the kinematic properties of the movement %TODO What are these? Can a representation have a kinematic property? Let's be proper. EWERTON: Removed the problematic part.
+during the calculation process.
 
 Instead of planning the complete trajectory, only the point where we want to change the motion parameters of the robot and reveal the true target is computed and set as a temporary target. The steering behavior framework drives the robot to reach this target following a slightly different trajectory each time, based on its initial velocity and position.
 
-In order to follow a deceptive trajectory as previously described, the dexterity of the robot is dynamically increased when revealing its real target: once the temporary target is reached the virtual mass of the robot is lowered and a higher force is allowed to be applied to it, along with a slight increase on its maximum velocity: then the target to be reached is set to the real target. This procedure generates a sharp turn and an acceleration of the robot towards the real goal. A visualization of the parameter change effect can be seen in figure~\ref{fig::trajectorySteering}. 
+In order to follow a deceptive trajectory as previously described, the dexterity of the robot is dynamically increased when revealing its real target: once the temporary target is reached, the virtual mass of the robot is lowered and a higher force is allowed to be applied to it, along with a slight increase on its maximum velocity: then the target to be reached is set to be the real target. This procedure generates a sharp turn and an acceleration of the robot towards the real goal. A visualization of the parameter change effect can be seen in figure~\ref{fig::trajectorySteering}. %TODO cannot this be done in a graphically way similar to the other one, referring to the whole field? 
 
 Given this framework, we wanted to investigate whether such change of motion pattern helps the player to realize that the intention carried out by the robot had been to deceive and whether diversity of trajectories increases the appeal of the game by making the robot movements less predictable.
 
@@ -257,7 +256,7 @@ Given this framework, we wanted to investigate whether such change of motion pat
 
 \section{Validation}
 \label{sec:deception_validation}
-In this section, we describe the acceptability of our strategy within our interactive scenario. We first present the experimental setup, stating the hypothesis and the use of a post-match survey for evaluating them. The analysis and related discussion follow next. 
+In this section, we describe the acceptability of our strategy within our interactive scenario. We first present the experimental setup, stating the hypothesis and the use of a post-match survey for evaluating them. The analysis and related discussion will follow. 
 
 \subsection{Experimental setup}
 \subsubsection{Hypotheses}
@@ -276,7 +275,9 @@ During our experiments we have kept the parameters that control the general game
 After every match, a questionnaire was administered to each player. It included few questions about the subject (including age and gender) and eleven statements about the game. All the answers to the statements were provided in a Likert scale with the following diversity of possibilities: 1 (Fully disagree), 2 (Disagree), 3 (Indifferent), 4 (Agree) and 5 (Fully agree). The full questionnaire can be seen in appendix~\ref{app:questionnaire}. 
 
 \subsection{Participants}
-We recruited 287 participants among the visitors of two science fairs: The Meet me Tonight science fair held in Milan held between September 28th and 29th, 2018 (from 09:00 to 22:00); and the European Edition of the MakerFaire held in Rome, from 12th to 14th of October, 2018 (from 09:00 to 19:00). Most of the experiments were conducted with children, spanning from 5 to 15 years old, with a few adults from 16 to 54 years. The distribution of subjects is reported in table~\ref{table::subjectDistribution}. Data collection was performed with subjects being sampled on different times of the day in the attempt to randomize the subjects as best as possible. Figure~\ref{fig:maker_faire} shows some scenes of subjects under the experimentation.
+We recruited 287 participants among the visitors of two science fairs: The Meet me Tonight science fair held in Milan held between September 28th and 29th, 2018%(from 09:00 to 22:00)
+; and the European Edition of the MakerFaire held in Rome, from 12th to 14th of October, 2018% (from 09:00 to 19:00)
+. Most of the experiments were conducted with children, spanning from 5 to 15 years old, with a few adults from 16 to 54 years. The distribution of subjects is reported in table~\ref{table::subjectDistribution}. Data collection was performed with subjects being sampled on different times of the day in the attempt to randomize the subjects as best as possible. Figure~\ref{fig:maker_faire} shows some scenes of subjects involved in the experimentation.
 
 \begin{table}[htbp]
     \caption{Gender distribution during the experiments. Additionally to testing the static and dynamic trajectory approach, we considered making some subjects play against the robot without any deceptive strategy in two distinct ways: one playing without deception and using steering behaviors as navigation style -- No deception (steering); and another without deception and using the baseline navigation described in section~\ref{sec:navigation}.}
@@ -357,7 +358,7 @@ From the self-reports we found that all the subjects either agreed or strongly a
     \label{fig:q6}
 \end{figure}
 
-From the result in figure~\ref{fig:q13}, most of the players agreed that the game rules are easy to follow and the robot behavior did not cause undesired effects, like fear, which was confirmed from the results in figure~\ref{fig:q11}. A particular property in the result of figure~\ref{fig:q13}, though, is the bigger proportion of people not agreeing being concentrated in the senior population. In general, our game was successful in providing an enjoying game that is easy to follow.
+From the result in figure~\ref{fig:q13}, most of the players agreed that the game rules are easy to follow and the robot behavior did not cause undesired effects, like fear, which was confirmed from the results reported in figure~\ref{fig:q11}. A particular aspect in the results reported in figure~\ref{fig:q13}, though, is the bigger proportion of people not agreeing being concentrated in the senior population. In general, our game was successful in providing an enjoying game that is easy to follow.
 
 \begin{figure}[h]
     \centering

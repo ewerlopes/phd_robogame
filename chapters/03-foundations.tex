@@ -12,11 +12,14 @@ The game mechanics and winning conditions were simple enough to allow for a larg
 
 The robot was able to move across the entire playground just as the human player could, and it was only constrained by the fact that an already captured tower, or one whose button is currently being pressed by the player, cannot be teared down. As main interaction channel between the two players,\ie robot and human, the human player could block the robot path at any moment by staying in front of it, causing the later to likely change target tower. Therefore, as consequence of the defined rules, while the player was trying to capture a given tower, the robot could try to tear down any other one.
 
-The game definition in itself is no trivial task and it is, for the case of~\gls{pirg}, constrained also by the characteristics of the robotic platform. Other than playability and fun, safety is also an important aspect and one that impose heavy bounds to the motion of the robot: a too fast of a robot would reduce the perception of the robot been safe to play against, thus limiting the natural interaction. Experimentally, we have evaluated that a robot with a maximum linear speed of 1.4 m/sec would be too difficulty to play against, which not the behavior we are looking for. Moreover, for a mobile robot as ours, speed have some negative impact in the robot control itself, due to mechanical phenomena like wheel slippage, manoeuvrability, and navigation issues (localization and obstacle avoidance). Details about the robot platform is given in section~\ref{sec:roboplat}.
+The game definition in itself is not a trivial task and it is, for the case of~\gls{pirg}, constrained also by the characteristics of the robotic platform. Other than playability and fun, safety is also an important aspect and one that impose heavy bounds to the motion of the robot: a too fast  robot would reduce the perception of the robot been safe to play against, thus limiting the natural interaction. Experimentally, we have evaluated that a robot with a maximum linear speed of 1.4 m/sec would be too difficulty to play against. Moreover, for a mobile robot as ours, speed have some negative impact in the robot control itself, due to mechanical phenomena like wheel slippage, manoeuvrability, and navigation issues (localization and obstacle avoidance). Details about the robot platform are given in section~\ref{sec:roboplat}.
 
 In summary, we designed our game such that we could have an environment rich enough to physically engage human players while allowing for the study of adaptive approaches to support engagement. RoboTower 2.0 stimulates player to perform strong cognitive tasks, like: trajectory planning, attention and spatial reasoning and places itself as an interesting environment from which one could test~\gls{ml} approaches. Next we briefly detail the Towers used in the game in term of their properties and operating system.
 
-%ANDY Here is one of the places were the smartness of game design has to be put in evidence.
+%TODO ********************************************
+%Here is one of the places were the smartness of game design has to be put in evidence. The Game rules should be described before this chapter or at its beginning, otherwise it would be difficult to understand what are the design choices. All the design choices should be functional to the game. Maybe we should call this section (and the figure) not as "hardware" but as "game design", including Rules, HW and Environment.
+%**************************************************
+
 %\begin{figure}[H]
 %	\centering
 %	\begin{subfigure}[b]{0.4\textwidth}
@@ -59,10 +62,12 @@ In summary, we designed our game such that we could have an environment rich eno
 
 %To obtain the data from the human player that are needed to perform the tracking we used the Microsoft Kinect presented in~\ref{kinectsec} and a computer vision algorithm for blob detection previously integrated in the ROS environment using OpenCV libraries.
 
-\section{Towers}\label{sec:towers}
+\subsection{Towers}\label{sec:towers}
 Each tower was powered individually, being capable of transmitting its status to the robot at a constant rate. The circuit used the~\href{https://einstronic.com/wp-content/uploads/2017/06/NodeMCU-ESP8266-ESP-12E-Catalogue.pdf}{NodeMCU V3 ESP8266 ESP-12E} WiFi module\footnote{\url{https://goo.gl/TzAjwi} accessed on December 17th, 2018.} (see figure~\ref{fig:tower_electronics}) whose connection was done via a private network. The communication between towers and the robot was supported through~\gls{tcp} using the rosserial\_server\footnote{\url{http://wiki.ros.org/rosserial_server} accessed on December 17th, 2018.} package. Appendix~\ref{app:hard_appendix} provides additional hardware details for the towers. 
 
-As power supply, a $7.4$V LiPo battery was used on each tower as can been seen on figure~\ref{fig:tower_electronics}. The nominal voltage for the boards was $5$V, which is supplied through a voltage regulator. A tilt sensor allows for the detection of fallen towers. A schematic of the circuit developed to detect such event is provided in figure~\ref{fig:tilt_circuit}.
+%TODO Irrelevant here -> As power supply, a $7.4$V LiPo battery was used on each tower as can been seen on figure~\ref{fig:tower_electronics}. The nominal voltage for the boards was $5$V, which is supplied through a voltage regulator. 
+A tilt sensor allows for the detection of fallen towers. 
+%TODO Irrelevant here -> A schematic of the circuit developed to detect such event is provided in figure~\ref{fig:tilt_circuit}. <- Figure not found, but also not needed here. Put these details in appendix. If you like you can put there the complete sections with details, and leave here only the relevant aspects.
 
 \begin{figure}[h]
   \centering
@@ -85,7 +90,7 @@ As power supply, a $7.4$V LiPo battery was used on each tower as can been seen o
       \framebox{\parbox{3cm}{\includegraphics[width=3cm,  height=4cm]{images/04-activity/tubes.jpg}}}
       \caption{}
     \end{subfigure}
-  \caption{a) Tower cap containing the button (red square) and \gls{led}s; b) Tower cap electronic; c) The four towers used in the game (height 110cm).}
+  \caption{a) Tower cap containing the button (red square) and \gls{led}s; b) Tower cap electronics; c) The four towers used in the game (height 110cm).}
   \label{fig:towers}
 \end{figure}
 
@@ -94,7 +99,10 @@ As depicted in figure~\ref{graph:PIRG_design_structure}, hardware is the core co
 
 Our wheeled robot, called Triskar, had holonomic kinematics,\ie it was free to move in any direction at a speed comparable to that of people in indoor environments (up to 1.4~m/sec). The base consisted of a metallic, triangular-shaped structure where motors, batteries, computer and necessary electronics are embedded. In total, the robot weights $22.3$ kg. Triskar has simultaneously and independently controlled rotational and translational motion capabilities thanks to three omnidirectional wheels actuated by a motor each. The robot's movement on flat floor is as free as the human one, which made it a good base for adversarial~\gls{pirg}s and, in particular, the one that we had designed. 
 
-\input{chart/hardware_map.tex}
+\input{chart/hardware_map.tex} %TODO Planning is completely missing in the chart as well as in the description. Even if it is basic it deserves a subsection, and a ball here.
+%TODO Instead of "Computing power" I would only write "Computing" which has to do with the sub-balls 
+%TODO A similar chart could be done for "Game setting" which includes the game rules, the playground, which in turn includes the towers.
+
 During the research progress, we have designed several versions of our robot, where the first two had an overall height of 85~cm, so comparable to that of a child players, but also acceptable for adult players. The first three versions adopted a Kinect\textsuperscript{\textregistered} sensor on top aimed at player tracking. Given the need to improve robustness, we have redefined the base by making structural changes to limit vibrations and improve stability of the sensors, which increased the overall height to 1 meter (2nd version). We also added new sensors such as planar laser scans needed to obtain reliable obstacle avoidance and localization (3rd and 4th version). Figure~\ref{fig:evolution} depicts the evolution of our prototype. Finally, on the fourth version we dropped the 3-D camera, deemed to be too much unreliable for player detection, and devised for this goal algorithms based on laser scans only. We kept the height in the same range as before although it was no longer needed to hold Kinect\textsuperscript{\textregistered}. To justify the height and give a character to the robot, we added eyes and hair on top, which were appreciated by players. On the next section we expose some consideration regarding sensing.
 
 \begin{figure}[ht]
@@ -183,7 +191,7 @@ Other than the localization issues which made the navigation inaccurate (sometim
 \subsubsection{Laser scanners}\label{sec:lasers_hokuyo}
 We have equipped our robot with two Hokuyo laser scanners model URG-04LX\footnote{\url{https://www.hokuyo-aut.jp/search/single.php?serial=165} accessed on \today.}. The sensors perceive the range of obstacles on a plan with a field of view of 240$^\circ$ and a resolution of 0.36$^\circ$, the maximum detectable distance is 5.6 m and they can be connected to the computer by means of a USB interface, being operated with a nominal voltage of 5V.
 
-The Hokuyo URG-04LX consists of a compact stacked structure with a spindle motor and the actual scanner on top of it. The motor rotates a small transmission mirror that deflects the vertical laser beam coming from the top of the sensor into horizontal direction. This allows the laser beam to scan a planar area around the sensor with an opening angle of 240$^\circ$. A second mirror below, the reception mirror, deviates the horizontal laser beam captured by the lens into vertical direction again.
+%TODO Irrelevant -> The Hokuyo URG-04LX consists of a compact stacked structure with a spindle motor and the actual scanner on top of it. The motor rotates a small transmission mirror that deflects the vertical laser beam coming from the top of the sensor into horizontal direction. This allows the laser beam to scan a planar area around the sensor with an opening angle of 240$^\circ$. A second mirror below, the reception mirror, deviates the horizontal laser beam captured by the lens into vertical direction again.
 
 % \begin{figure}[H]
 % 	\centering
@@ -231,46 +239,47 @@ Due to forces acting upon the robot during motion we have used software solution
 \end{figure}
 
 \subsection{Kinematics}
-As said before, our robot had holonomic kinematics. Holonomy being referred to existing restrictions applied among translational axes. If a robot is holonomic with respect to $N$ dimensions, it's then capable of moving in any direction in any of the $N$ physical dimensions available to it. Our robot  matches the kinematics of a human player well, since it is possible to refer to humans as holonomic within two-dimensional space. Mathematical details regarding a 3-wheel omnidirectional robot is given in appendix~\ref{app:hard_appendix}.
+As said before, our robot had holonomic kinematics, i.e. it was capable of moving in any direction in any of the three physical dimensions available to it (i.e., on the floor plan). Our robot matches the kinematics of a human player well, since it is possible to refer to humans as holonomic on the two-dimensional space such as a floor. Mathematical details regarding the kinematics of our 3-wheeled omnidirectional robot is given in appendix~\ref{app:hard_appendix}.
 
-\subsection{Power Supply}
-Our robotic platform operated at a nominal voltage of 24V with two lead-acid 12V batteries connected in series. A DC-DC board was used to regulate the input voltage down to 12V, which was the nominal voltage for the onboard computer and Kinect\textsuperscript{\textregistered} device -- both being powered independently through the DC-DC. The motors, were powered directly from the 24V via a separate circuit with an independent turn on/off switch and emergence button. Having separate circuits with independent switches was necessary in order to allow for turning off the motors (in case of an emergence) independently of the electronics (computer, sensors and control board). The two lasers were powered via USB connection to the PC. The power  configuration allowed for a total time of 40 minutes before demanding battery replacement. Details regarding the batteries and electrical circuits are described in appendix~\ref{app:hard_appendix}.
+%TODO This section is irrelevant for your work
+%\subsection{Power Supply}
+%Our robotic platform operated at a nominal voltage of 24V with two lead-acid 12V batteries connected in series. A DC-DC board was used to regulate the input voltage down to 12V, which was the nominal voltage for the onboard computer and Kinect\textsuperscript{\textregistered} device -- both being powered independently through the DC-DC. The motors, were powered directly from the 24V via a separate circuit with an independent turn on/off switch and emergence button. Having separate circuits with independent switches was necessary in order to allow for turning off the motors (in case of an emergence) independently of the electronics (computer, sensors and control board). The two lasers were powered via USB connection to the PC. The power  configuration allowed for a total time of 40 minutes before demanding battery replacement. Details regarding the batteries and electrical circuits are described in appendix~\ref{app:hard_appendix}.
 
 \subsection{Computing \& Electronics}
-\subsubsection{Onboard computer}\label{onboard pc}
-For computing a Shuttle XPC Slim DH270 was used. The device has a $190 \times 165 \times 43$~mm steel case, and weights $1.3$~kg.  The armature presents two holes for Kensington Locks and numerous threaded holes (M3) at both sides allowing for an easy placement. The operating system used was~\textit{Ubuntu 16.04.3 LTS (64bit)}. The computer had an Intel Core i7 and a RAM DDR4 memory of 16 GB .
+%TODO Irrelevant. It would be relevant have an idea of computing power but not even.
+%%For computing a Shuttle XPC Slim DH270 was used. The device has a $190 \times 165 \times 43$~mm steel case, and weights $1.3$~kg.  The armature presents two holes for Kensington Locks and numerous threaded holes (M3) at both sides allowing for an easy placement. The operating system used was~\textit{Ubuntu 16.04.3 LTS (64bit)}. The computer had an Intel Core i7 and a RAM DDR4 memory of 16 GB .
 
-\subsubsection{Control boards}\label{novacore}
-The low-level motors actuation and their interface between the ROS system have been realized with the Nova Core modules based on STM32-chip~\footnote{\url{http://www.novalabs.io/} accessed on \today.}, which implement ready to use components to fulfill robot prototyping requirements with plug \& play approach.  
-The provided modules allow to control different type of motors that can be modeled as a second order system, where the input is the voltage applied to the motor armature and output variable is the motor angular speed. Futher details about the deployed boards are presented in figure~\ref{fig:boards}.
+%\subsubsection{Control boards}\label{novacore}
+%The low-level motors actuation and their interface between the ROS system have been realized with the Nova Core modules based on STM32-chip~\footnote{\url{http://www.novalabs.io/} accessed on \today.}, which implement ready to use components to fulfill robot prototyping requirements with plug \& play approach.  
+%The provided modules allow to control different type of motors that can be modeled as a second order system, where the input is the voltage applied to the motor armature and output variable is the motor angular speed. Futher details about the deployed boards are presented in figure~\ref{fig:boards}.
 
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}[b]{0.3\textwidth}
-  \centering
-      \includegraphics[width=3cm,height=2.5cm]{images/03-foundation/udc}
-	\caption{}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.3\textwidth}
-  \centering
-      \includegraphics[width=3cm,height=2.5cm]{images/03-foundation/io}
-	\caption{}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.3\textwidth}
-  \centering
-      \includegraphics[width=3cm,height=2.5cm]{images/03-foundation/usb}
-	\caption{}
-	\label{fig:usb_board}
-  \end{subfigure}
-  \caption{a) UDC board (1 per each motor) capable of driving motors up to 70 W, with torque, speed, and position closed loop control. General attributes: 5-28V supply; 3A max (5A peak); current sense; encoder input; limit switch input; 25 x 45 mm in size. b) IO board (1 per each motor): Integrate existing hardware into the real-time Nova Core bus with analog and digital signals. General attributes: 8 digital GPIO;  4 analog inputs; 2 analog outputs; 2 UART; 1 I2C; 1 SPI; 25 x 45 mm in size. c) USB board (used for data collection) Interface the real-time Nova Core bus with a computer and logs data to microSD memory. General attributes: USB connector;  UART connector; microSD card slot; rosserial support; 25 x 45 mm in size.}
-  \label{fig:boards}
-\end{figure}
+%\begin{figure}[ht]
+% \centering
+%  \begin{subfigure}[b]{0.3\textwidth}
+%  \centering
+%      \includegraphics[width=3cm,height=2.5cm]{images/03-foundation/udc}
+%	\caption{}
+%  \end{subfigure}
+%  \begin{subfigure}[b]{0.3\textwidth}
+%  \centering
+%      \includegraphics[width=3cm,height=2.5cm]{images/03-foundation/io}
+%	\caption{}
+%  \end{subfigure}
+%  \begin{subfigure}[b]{0.3\textwidth}
+%  \centering
+%      \includegraphics[width=3cm,height=2.5cm]{images/03-foundation/usb}
+%	\caption{}
+%	\label{fig:usb_board}
+%  \end{subfigure}
+%  \caption{a) UDC board (1 per each motor) capable of driving motors up to 70 W, with torque, speed, and position closed loop control. General attributes: 5-28V supply; 3A max (5A peak); current sense; encoder input; limit switch input; 25 x 45 mm in size. b) IO board (1 per each motor): Integrate existing hardware into the real-time Nova Core bus with analog and digital signals. General attributes: 8 digital GPIO;  4 analog inputs; 2 analog outputs; 2 UART; 1 I2C; 1 SPI; 25 x 45 mm in size. c) USB board (used for data collection) Interface the real-time Nova Core bus with a computer and logs data to microSD memory. General attributes: USB connector;  UART connector; microSD card slot; rosserial support; 25 x 45 mm in size.}
+%  \label{fig:boards}
+%\end{figure}
 
-%ANDY all the technical details and names of devices could go in an appendix, while I'll leave here a functional description of robot and sensors, giving the characteristics that are functionally relevant, e.g., speed, omnidirectionality, range of sensors, their data rate, ...
+%TODO (still, in part) All the technical details and names of devices could go in an appendix, while I'll leave here a functional description of robot and sensors, giving the characteristics that are functionally relevant, e.g., speed, omnidirectionality, range of sensors, their data rate, ...
 
 \subsection{Navigation}\label{sec:navigation}
 \subsubsection{\glsdesc{slam}}\label{gmapping}
-To create a map of the environment, our system used \textit{gmapping}\footnote{http://wiki.ros.org/gmapping accessed on \today}, a ROS package used for~\gls{slam} that estimates the map of the environment and the trajectory of the robot using a technique known as~\gls{rbpf}~\citep{grisettiyz_improving_2005} and the provided odometry and laser measurements. The procedure in\textit{gmapping} can be decomposed in two phases: \begin{inparaenum}[\itshape a\upshape)]\item update the robot's state using all available positioning related data. In our case, odometry and laser measurements was used; \item update the map of the environment using~\gls{rbpf}.\end{inparaenum}
+To create a map of the environment, our system used \textit{gmapping}\footnote{http://wiki.ros.org/gmapping accessed on \today}, a ROS package used for~\gls{slam} that estimates the map of the environment and the trajectory of the robot using a technique known as~\gls{rbpf}~\citep{grisettiyz_improving_2005} and the provided odometry and laser measurements. The procedure in\textit{gmapping} can be decomposed in two phases: \begin{inparaenum}[\itshape a\upshape)]\item update the robot's state using all available positioning related data. In our case, odometry and laser measurements were used; \item update the map of the environment using~\gls{rbpf}.\end{inparaenum}
 
 The obtained map is an occupancy grid and it is represented as an image showing the blueprint of the environment. Once created, the integrated localization in ROS will be able to generate reference frame transforms from the map-frame to the robot odometry frame, correcting for estimated position in the environment. In Figure~\ref{fig:playground_map} an example of map is shown, with tower positions being clearly visible.
 
@@ -283,14 +292,14 @@ Considering only the playground (area of the rectangle delimited by four towers)
 	\label{fig:playground_map}
 \end{figure}
 
-In particular, aiming at standardizing the map across different environments, reduce the number of times it had to be remade and filter out noise, we have decided to enclose the playground by ``walls'' made from fabric and supported by lightweight aluminum profiles joined together. A custom entrance made in one of the sides made up for the element breaking the symmetry and allowing for effective localization. This arrangement could easily be reused without having to remake the map. Enclosing the area was particular useful when collecting data since very often~\gls{pirg}s tend to gather a number of people around the playground which can compromise the environmental perception by the robot. Furthermore, it allowed us to reduce the complexity of tracking the player, as it is going to be explained later. 
+In particular, aiming at standardizing the map across different environments, and at reducing the number of times it had to be remade and filtered out for noise, we have decided to enclose the playground in ``walls'' made from fabric and supported by lightweight aluminum profiles joined together. A custom entrance made in one of the sides made up for the element breaking the symmetry and allowing for effective localization. This arrangement could easily be reused without having to regenerate the map. Enclosing the area was particularly useful when collecting data since very often~\gls{pirg}s tend to gather a number of people around the playground which can compromise the environmental perception by the robot. Furthermore, it allowed us to reduce the complexity of tracking the player, as it is going to be explained later. %TODO Insert the \ref. 
 
-\subsection{Tower navigation}
-In this section we describe the algorithm that enables the robot to navigate from its current position to a target tower and its implementation. For this purpose, a point-to-point trajectory following approach has been considered. The proposed strategy is composed of three main part: sensor data analysis, obstacle detection and goal seeking. In general, with our navigation we wanted to provide a certain level of challenge to the human player while also trying to minimize behaviors that could lead to odometry errors and loss of localization in the map. The selection of the target tower takes into account the proximity relationship between the current position of the robot and that of the human player. The particular algorithm for that is going to be presented later as well as the mechanism for player tracking.
+\subsection{Basic navigation}
+In this section we describe the algorithm that enables the robot to navigate from its current position to a target tower and its implementation. For this purpose, a point-to-point trajectory following approach has been considered. The proposed strategy is composed of three main parts: sensor data analysis, obstacle detection and goal seeking. In general, with our navigation we wanted to provide a given level of challenge to the human player while also trying to minimize behaviors that could lead to odometry errors and loss of localization in the map. The selection of the target tower takes into account the proximity relationship between the current position of the robot and that of the human player. The particular algorithm for this is going to be presented later as well as the mechanism for player tracking.%TODO Insert the \ref. Wouldn't be better putting planning before navigation?
 
-For the navigation, we focused in particular on avoiding wheel slippage during the initial acceleration phase. Generally, the selection of a target tower by the robot is performed such that the direct path leading to it is as free as possible considering the current player's position. 
-
-During navigation, in case the human player is detected below a certain safety distance from the moving robot, the algorithm switches to the obstacle avoidance procedure described in section~\ref{sec:obt_avoidance}. As inputs to the navigation algorithm, we consider: the robot's estimated $x$ and $y$ position ($\hat{x}_R$, $\hat{y}_R$); target tower xy-coordinate ($x_G$, $y_G$) and a flag variable that assumes the value false if the robot is approaching an obstacle (\textsc{is\_safe}). The raw outputs are: the unsmoothed xy-linear velocity in the world frame ($\dot{\bar{x}}_R$, $\dot{\bar{y}}_R$) and a a flag variable that is true if the robot is close to a targeted tower (\textsc{near\_goal}). The procedure for generating velocity commands to the platform is detailed in algorithm~\ref{alg:pointopoint}. At each control loop call the algorithm publishes a new velocity command.
+For the navigation, we focused in particular on avoiding wheel slippage during the initial acceleration phase. %TODO Isn't this a control problem, more than a navigation problem? 
+Generally, the selection of a target tower by the robot is performed so that the direct path leading to it is as free as possible considering the current player position. 
+During navigation, in case the human player is detected closer than a certain safety distance from the moving robot, the algorithm switches to the obstacle avoidance procedure described in section~\ref{sec:obt_avoidance}. As inputs to the navigation algorithm, we consider: the robot's estimated $x$ and $y$ position ($\hat{x}_R$, $\hat{y}_R$); target tower xy-coordinate ($x_G$, $y_G$) and a flag variable that assumes the value false if the robot is approaching an obstacle (\textsc{is\_safe}). The raw outputs are: the unsmoothed xy-linear velocity in the world frame ($\dot{\bar{x}}_R$, $\dot{\bar{y}}_R$) and a flag variable that is true when the robot is close to a targeted tower (\textsc{near\_goal}). The procedure for generating velocity commands to the platform is detailed in algorithm~\ref{alg:pointopoint}. At each control loop call, the algorithm publishes a new velocity command.
 
 \begin{algorithm}[ht]
 	\# define initial e final points when the robot receives the id of the targeted tower \;
@@ -317,20 +326,22 @@ During navigation, in case the human player is detected below a certain safety d
 	\label{alg:pointopoint}
 \end{algorithm}
 
-Prior to the execution by the low-level sub-systems that control the motors, the velocity vector $<\dot{\bar{x}}_R,\dot{\bar{y}}_R>$ output by algorithm~\ref{alg:pointopoint} need further processing. Specially, it needs to be transformed from the world reference frame (the frame in which towers are located in) to the robot reference frame (see transformation details in appendix~\ref{app:hard_appendix}).
+Before being executed by the low-level sub-systems that control the motors, the velocity vector $<\dot{\bar{x}}_R,\dot{\bar{y}}_R>$ produced by algorithm~\ref{alg:pointopoint} need further processing. In particular, it needs to be transformed from the world reference frame (the frame in which towers are located in) to the robot reference frame (see transformation details in appendix~\ref{app:hard_appendix}).
 
-Another aspect that had to be addressed was that of guarantying the decoupling between robot rotations and translations. The control of the robot orientation had to be completely independent from the xy-translation, since the robot in our scenario had to be able to track the movement of the human player while navigating towards the target towers. Mathematical detail of this process is once again available in appendix~\ref{app:hard_appendix}. With this approach, the transformed velocity set-points $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, dynamically change during the game and often the variation has a step-function shaped form that causes the low level actuation to react violently to make the robot reach the desired velocity at once -- especially when starting from the initial position with 0-velocity (see figures~\ref{vel14} and~\ref{wheel14}). This will result in the robot wheels undergoing in slippage due to the too sharp acceleration required to reach the velocity set-point. This is an undesired effect that is source of non-systematic odometry errors that may lead to instability and loss of localization. 
+\subsubsection{Slippage control} \label{sec:obt_avoidance}
+Another aspect that had to be addressed was that of guaranteeing the decoupling between robot rotations and translations. %TODO Explain why. The relationship between this and slippage is not clear. Moreover the problem was due to the need to keep the person tracked with Kinect and this has to be mentioned somehow.
+The control of the robot orientation had to be completely independent from the xy-translation, since the robot in our scenario had to be able to track the movement of the human player while navigating towards the target towers. Mathematical detail of this process is available in appendix~\ref{app:hard_appendix}. With this approach, the transformed velocity set-points $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, dynamically change during the game and often the variation has a step-function shaped form that causes the low level actuation to react violently to make the robot reach the desired velocity at once -- especially when starting from the initial position with 0-velocity (see figures~\ref{vel14} and~\ref{wheel14}). This will result in the robot wheels undergoing in slippage due to the too sharp acceleration required to reach the velocity set-point. This is an undesired effect that is source of non-systematic odometry errors that may lead to instability and loss of localization. 
 
 A number of tests have been performed to quantify the effect of wheel slippage during the initial robot acceleration phase. In these tests the robot linearly translates along $x$ and $y$ axis and receives the initial velocity set-point at $1m/s$ or $1.4m/s$. In figures~\ref{opti14},~\ref{amcl14},~\ref{poserror14},~\ref{opti14y},~\ref{amcl14y}, and~\ref{poserror14y} we can see the localization error introduced during such test.
 
-To avoid this effect, a velocity smoother has been used in order to obtain a smooth velocity set-point control signal to be sent to the robot low-level actuation, towards avoiding wheels slippage during the acceleration phase. The inputs of the velocity smoother are the unsmoothed velocity set-points [$\dot{\bar{x}}_R^m$, $\dot{\bar{y}}_R^m$], some of the internal parameters such as maximum allowed velocity and maximum allowed acceleration can be changed online to modify the final response of the robot. The output are the final xy-velocity control signals [$\dot{x}_R^m$, $\dot{y}_R^m$] in robot reference frame that will be sent to the low level actuation.
+To avoid this effect, a velocity smoother has been used in order to obtain a smooth velocity set-point control signal to be sent to the robot low-level actuation, in order to avoid wheel slippage during the acceleration phase. The inputs of the velocity smoother are the unsmoothed velocity set-points [$\dot{\bar{x}}_R^m$, $\dot{\bar{y}}_R^m$], some of the internal parameters such as maximum allowed velocity and maximum allowed acceleration can be changed online to modify the final response of the robot. The output are the final xy-velocity control signals [$\dot{x}_R^m$, $\dot{y}_R^m$] in robot reference frame that will be sent to the low level actuation.
 
-The velocity smoother runs together with algorithm~\ref{alg:pointopoint}, receiving the output of this later as input. It basically pre-filters any incoming command input based on some acceleration constraints. Smoothing velocities are not just important for the reduction of localization errors, but is also an important factor in the reduction of material stress on the wheels, which can lead to mechanical breakdowns. In fact, during our research we have had a couple of mechanical breakdown due exactly to excessive acceleration. Such issues make up for important example of typical hardware concerns and issues on must deal with in the design of mobile agents for~\gls{pirg}.
+The velocity smoother runs together with algorithm~\ref{alg:pointopoint}, receiving the output of this later as input. It basically pre-filters any incoming command input to match some acceleration constraints. Smoothing velocities are not just important for the reduction of localization errors, but is also an important factor in the reduction of material stress on the wheels, which can lead to mechanical breakdowns. In fact, during our research we have had a couple of mechanical breakdown due exactly to excessive acceleration. Such issues make up for important example of typical hardware concerns and issues on must deal with in the design of mobile agents for~\gls{pirg}.
 
 \subsubsection{\glsdesc{oa}}\label{sec:obt_avoidance}
 For in-game obstacle avoidance, a fuzzy-logic based reactive control has been designed to respond appropriately to sensory input. This was used principally because the human player could move completely unconstrained through the playground,~\ie proximity between human and robot could be sensed from any direction and in any moment during the game. Having fuzzy-logic rules for the decision making provided much soft navigation and stable control since a fuzzy approach can handle well the uncertainty when the sensed obstacle is at the boundary of sensing areas.
 
-As first step, considering the laser sensing capabilities of our robot (see section~\ref{sec:lasers_hokuyo}), we have divided the rays cast from the laser into different discrete sensing areas around the platform. The information  contained in each laser scan message received from the ROS Hokuyo node (published in the topic \textit{/scan}) is composed of 1000 rays, each one of which carrying information about the distance and bearing angle of the sensed object w.r.t the sensor origin. The laser scan data was divided by indexes as follows:
+As first step, considering the laser sensing capabilities of our robot (see section~\ref{sec:lasers_hokuyo}), we have divided the rays cast from the laser into different discrete sensing areas around the platform. The information  contained in each laser scan message received from the ROS Hokuyo node (published in the topic \textit{/scan}) is composed of 1000 rays, each one of which carrying information about the distance and bearing angle of the sensed object w.r.t the sensor origin. The laser scan data was divided by indexes as follows: %TODO What these have to do with the fuzzy interpretation reported below? If they are interpreted in a fuzzy way, these intervals have no sense... If two interpretations are superimposed the reader has to understand why and how
 
 \begin{itemize}
 	\item \textbf{Rear Right:} indexes from 1 to 150;
@@ -341,16 +352,17 @@ As first step, considering the laser sensing capabilities of our robot (see sect
 	\item \textbf{Rear Left:} indexes from 850 to 1000.
 \end{itemize}
 
-For each area, the minimum distance to objects are calculated and a flag variable monitors whether an obstacle is within a given threshold distance (in our case $0.75$ meters). When this condition is verified, the fuzzy obstacle avoider takes the control from the trajectory navigation in order to handle the obstacle at hand. When the robot is close within a specified distance threshold from a target tower the obstacle avoider is disabled, thus, enabling it to tear down the towers instead of considering them as obstacles. In general, the output of the avoider is the tuple $(V_{x\_\text{avoider}}, V_{y\_ \text{avoider}})$ controlling the xy-translations.
+For each area, the minimum distance to objects are calculated and a flag variable monitors whether an obstacle is within a given threshold distance (in our case $0.75$ meters). When this condition is verified, the fuzzy obstacle avoider takes the control from the trajectory navigation in order to handle the obstacle at hand. When the robot is close within a specified distance threshold from a target tower the obstacle avoider is disabled, thus enabling the robot to tear down the towers instead of considering them as obstacles. The output of the avoider is the pair $(V_{x\_\text{avoider}}, V_{y\_ \text{avoider}})$ controlling the xy-translations.%TODO the pair is not "controlling" but maybe "used to control" but it is not clear how.
 
-when calculating the membership of an obstacle w.r.t. a sensory region, if the minimum distance of a sensing sector has index belonging to the fuzzy areas the ``crisp'' output values after defuzzyfication will be a mixture of the results of the rules associated to the two contiguous sectors. The membership functions shown in figure~\ref{indexesmmf} illustrates the idea. On the x-axis are reported the index values in a range from 1 to 1000, each one of it representing one of the 1000 laser's ray distance measurement that the system receives from each ROS /scan message.
-
-For capturing the minimum detected distance in each sector the membership functions shown in figure~\ref{minmmf} had been defined. The x-axis ranges from 0 to $0.75$ meters (as said, the obstacle avoidance takes control of the robot's navigation when obstacles are detected below this threshold) the three labels \textit{``Close''}, \textit{``Far''}, and \textit{``Dontcare''} were used to define the intensity of the control action during the obstacle avoidance maneuver.
+When calculating the membership of an obstacle w.r.t. a sensory region, if the minimum distance of a sensing sector has index belonging to the fuzzy areas %TODO Which areas??
+the ``crisp'' output values after defuzzyfication will be a mixture of the results of the rules associated to the two contiguous sectors. The defined membership functions are shown in figure~\ref{indexesmmf}. On the x-axis are reported the index values in a range from 1 to 1000, each one representing one of the 1000 laser's ray distance measurement that the system receives from each ROS /scan message.
+%TODO Here there are some problems. The two figures have the same caption In the present compilation of the pdf figures are somehow not included (I can see only file names).
+To interpret the minimum detected distance in each sector the membership functions shown in figure~\ref{minmmf} have been defined. The x-axis ranges from 0 to $0.75$ meters (as said, the obstacle avoidance takes control of the robot's navigation when obstacles are detected below this threshold) the three labels \textit{``Close''}, \textit{``Far''}, and \textit{``Dontcare''} were used to define the intensity of the control action during the obstacle avoidance maneuver.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{images/03-foundation/indexesmmf}
-	\caption{Membership functions (MMFs) for minimum detected distance \textit{index} in each sensing sector.}
+	\caption{Membership functions (MMFs) for minimum detected distance \textit{index} in each sensing sector.} %TODO Maybe "direction" instead of "minimum detected distance"? It is not clear what is "index".
 	\label{indexesmmf} 
 \end{figure}
 \begin{figure}[H]
@@ -360,9 +372,9 @@ For capturing the minimum detected distance in each sector the membership functi
 	\label{minmmf} 
 \end{figure}
 
-The system uses a Mamdani-type inference that requires the output membership functions to be fuzzy sets. After the aggregation process, \ie after evaluating the result of each rule, these results are combined to obtain a final result. There is a fuzzy set for each output variable that needs defuzzification.
+The system uses a Mamdani-type inference that requires the output membership functions to be fuzzy sets. After the aggregation process, \ie after evaluating the result of each rule, these results are combined to obtain a final fuzzy set for each output variable that needs defuzzification.
 
-The used defuzzification method was the ``Centroid'' method that returns the center of mass of the area under the curve, it can also be seen as a Center of Gravity and can be obtained with equation~\ref{centroid}:
+The selected defuzzification method was the ``Centroid'' method, which returns the center of mass of the area under the resulting fuzzy set membership function, it can also be seen as a Center of Gravity and can be obtained with equation~\ref{centroid}:
 \begin{equation}
 U=\dfrac{\int_{\text{min}}^{\text{max}} u\cdot\mu(u) du}{\int_{\text{min}}^{\text{max}}\mu(u) du}
 \label{centroid}
@@ -391,7 +403,7 @@ The singletons membership functions for $V_{x\_ \text{avoider}}$ and $V_{y\_ \te
 
 A set of fuzzy rules (reported in appendix~\ref{app:hard_appendix})	has been implemented to obtain an overall obstacle avoidance behavior that has been inspired from the artificial potential fields approach. The rules have been designed to mimic a repulsive field that will drive the robot away from obstacles when these are encountered during navigation (figure~\ref{avoid1}). In particular, when the robot reaches the condition of proximity with the human player during the game, the set of fuzzy rules will cause the robot to drift away from him until the proximity condition is no more verified ($is\_safe$ equals true. Refer to algorithm~\ref{alg:pointopoint}). At this point, the robot will go back to the normal point-to-point navigation to reach the selected target tower.
 
-Since the ultimate goal of the robot is to physically tear down one of the four towers that are placed in the playground, the fuzzy rules also implement an attractive effect (figure\ref{avoid2}) that is exerted by the target tower when the robot comes close to it  ($near\_goal == true$, again refer to algorithm~\ref{alg:pointopoint}).
+Since the ultimate goal of the robot is to physically tear down one of the four towers that are placed in the playground, the fuzzy rules also implement an attractive effect (figure\ref{avoid2}) that is exerted by the target tower when the robot comes close to it  ($near\_goal == true$, again refer to algorithm~\ref{alg:pointopoint}). %TODO It is not clear how this last matches the description of the navigation given before that seemed to bring the robot to the tower. Maybe you may say there that if the obstacle is a tower, the fuzzy algorithm will bring the robot against it, so that when the reader comes here can get no surprise.
 
 \begin{figure}[H]
 	\centering

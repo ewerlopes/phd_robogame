@@ -1,6 +1,6 @@
 \chapter{Player behavior modeling}\label{ch:modeling}
 
-Having identified an activity recognition system, we aimed at the definition of an approach to model user behavior that could account for the combination of the player physical effort and interaction level. The proposed model is based on the human activity recognition (chapter~\ref{ch:activity}) and a description of interaction (proximity and body contraction index) relative to the robot co-player.
+Having identified an activity recognition system, we aimed at the definition of an approach to model user behavior that could account for the combination of the player physical effort and interaction level. The proposed model is based on the human activity recognition (chapter~\ref{ch:activity}) and on a description of interaction features like proximity and body contraction index.
 
 \section{Relational Activity Model}\label{sec:simple_model}
 
@@ -13,10 +13,10 @@ In the proposed model, the two dimensions (activity and interaction) are combine
 Equation~\ref{eq:activity_eq} is used to compute the general amount of activity $\alpha(m)$, given the classification of primitive motions from chapter~\ref{ch:activity}:
 
 \begin{equation}
-	\alpha(m)=\sum_{i \in \mathcal{A}} \omega_{i}\varphi_i(m);\qquad m \in \mathcal{M}
+	\alpha(m)=\sum_{i \in \mathcal{A}} \omega_{i}\varphi_i(m);\qquad m \in \mathcal{M},
 	\label{eq:activity_eq}
 \end{equation}
-, where $\mathcal{A}$ stands for the set of activities \{``running'', ``locally moving'', ``walking/dodging''\}; $\omega$ stands for the activity weight; $\varphi$ for the stochastic prediction value for the motion primitive $m$.
+where $\mathcal{A}$ stands for the set of activities \{``running'', ``locally moving'', ``walking/dodging''\}; $\omega$ stands for the activity weight; $\varphi$ for the stochastic prediction value for the motion primitive $m$.
 
 We consider equation~\ref{eq:activity_eq} as a measure of the ``effort'' of the player. The weight $\omega$ states how much each physical activity contributes to the overall quantification and is a hyper-parameter intended to capture the partial ordering among activities.
 
@@ -26,11 +26,15 @@ In order to model the interaction we take into account the spatial relationship 
 Proximity is a measure defined in the interval [0, 1], computed from the data provided by Microsoft Kinect\textsuperscript{\textregistered}, normalized according to the sensor specifications (see section~\ref{sec:kinectsec}).~\gls{ci} is also in [0, 1] and it is calculated using a technique related to the bounding region, i.e., the minimum rectangle surrounding the body: the algorithm compares the area covered by this rectangle with the area currently covered by the player's silhouette~\citep{castellano_recognising_2007}.
 
 
-%EWERTON: I have red
+%EWERTON: I have a
 %ISSUE: Not providing data and analysis to support this makes this assumption quite weak.
     %PROBLEMATIC PARAGRAPH: A high~\gls{ci} is associated with an intense interaction because a wide openness of the body is interpreted as a higher focus level of the player w.r.t the robot and the game; for this reason it will boost the final outcome. Low~\gls{ci}, in turn, is interpreted as a lack of focus or, in general, limited motivation of the player, which penalizes the interaction.
 % REWRITTEN: (BELOW)
-The~\glsdesc{ci} can be viewed as a measure of focus and in our application it tries to capture, via body contraction, the amount of attention in the robot movement. It is so because~\glsdesc{ci} can be seen as correlated with situations demanding high attention in other physical games. For example, highly concentrated players in a soccer game tend to keep their arms opened when dealing with a situation demanding high attention, like and attack or penalty. To us,~\gls{ci} tends to be high when players are expecting a response by the robot and tends to be low when situations are not risky. Figure~\ref{fig:low_high_CI} depicts two situations where the~\gls{ci} is different and show different level of attention.
+The~\glsdesc{ci} can be viewed as a measure of focus on the activity, and in our application it is aimed at capturing the amount of attention in the robot movement. 
+
+%We make this assumption since~\glsdesc{ci} can be seen as correlated with situations demanding high attention in other physical games. For example, highly concentrated players in a soccer game tend to keep their arms opened when dealing with a situation demanding high attention, like an attack or penalty. %TODO Actually, not really.  This is related to the specific game: in basketball it is functional to stop balls, in soccer is not worth, to prevent hand fouls. 
+% EWERTON: I played quite a lot of soccer and I can affirm that defensive players tend to open their arm in order to increase body volume and object attacking players (similar to basketball players). I myself played in the defense and used such technique. 
+In this game,~\gls{ci} tends to be high when players are expecting a response by the robot and tends to be low when situations are not risky. Figure~\ref{fig:low_high_CI} depicts two situations where the~\gls{ci} is different and show different levels of attention.
 
 \begin{figure}[h]
     \centering 
@@ -53,9 +57,11 @@ The~\glsdesc{ci} can be viewed as a measure of focus and in our application it t
 The model to describe the player relational activity is a combination of the activity level and the degree of interaction, named $\epsilon$; it summarizes the player physical activity during the game and has a linear relationship with his interaction with the robotic opponent as follows: 
 \begin{equation}
 \label{enagementeq}
-\epsilon=\rho\alpha(m),
+\mathcal{C}=\iota \alpha(m),
 \end{equation}
-, where $\rho$ is the estimated amount of interaction between the players. The variable $\epsilon$ is a simple linear relation that puts in relation interaction and physical activity. Here $\rho$ is an overall degree of interaction, i.e., the combination of~\gls{ci} and proximity and should not be zero. The combination of the interaction signals is not bound to a specific method. In this work, we have used a fuzzy logic system to obtain the desired combination, described in a linguistic way. In principle, the combination of the signals depends on the specifics of the~\gls{pirg} environment.
+where $\iota$ is the estimated amount of interaction between the players. %TODO In previous chapters \rho was a different thing. Let's try to use the same Greek letters always for the same purpose. EWERTON: OK. Changed it to iota.
+The variable $\mathcal{C}$ is a simple linear relation that puts in relation interaction and physical activity. Here $\iota$ is an overall degree of interaction, i.e., the combination of~\gls{ci} and proximity and should not be zero. The combination of the interaction signals is not bound to a specific method. In this work, we have used a fuzzy logic system to obtain three levels describing the amplitude of the combination: small, medium, high. %TODO It should be reported here. EWERTON: Is it really necessary? we only considered the fuzzy to have discrete values to account for the interaction. 
+In principle, the combination of the signals depends on the specifics of the~\gls{pirg} environment. 
 
 For the evaluation of the model we have reused the same data from section~\ref{sec:data_collection}. The model output for two different players can be seen in Figure~\ref{fig:model_output}. In Figure~\ref{fig:fun}, the player is perceived as more active than the one in fig.~\ref{fig:nofun}, which is reflected by the difference in the inactivity time and the amplitude of the bars.
 
@@ -80,7 +86,7 @@ For the evaluation of the model we have reused the same data from section~\ref{s
 
 The model quantitatively describes, in a simple way, the player's relational activity by the combination of the amount of physical activity and interaction relative to the robot. This can be used as a metric expected to enable the robot to take into account the player's attitude in order to adapt its own activity to match it. Using this model, for instance, an active player could be viewed as one having a larger cumulative sum of $\epsilon$ values up to a point in time.
 
-However, this model is limited in several ways, %TODO I cannot evaluate it since I cannot understand it
+However, this model is limited in several ways, %TODO I cannot evaluate it since I cannot understand it. EWERTON: Can you be more precise on this?
 one of which is the manual definition of weights for the activities ($\omega$). Manually selecting these scaling factors becomes difficult as the number of activities grows. With this in mind, we have then worked on a definition of a more robust player model relying on latent representation which is described in the next section.
 
 \section{Latent player modeling}
@@ -93,11 +99,11 @@ In particular, our decision to use~\gls{lda} was inspired by the work of~\cite{s
 
 The feasibility of applying~\gls{lda} to this problem is further reinforced by noticing the apparent difficulty in objectively separating the existing types of motion patterns in the acceleration signal via inspection. A player in his/her playing activity may show different motion patterns that are often not clearly distinguishable from each other and thus not easy to provide a supervision for,~\ie a class tag. Here, the assumption is that a high motion profile, i.e., high turbulence in acceleration signal, is typical for a highly motivated player, since we believe a non-motivated player tends to stay relatively still, or to show a very low acceleration profile.
 
-The claim that motion patterns convey engagement or even emotional state~\citep{aristidou_emotion_2015,shafir_emotion_2016,tsachor_somatic_2017} has been supported by several academic papers. Systematic approaches for describing body movement, such as~\gls{lma}~\citep{laban_language_1974} are used to derive low-dimensional representation of mood, facilitating affective motion modeling~\citep{burton_laban_2016}. This same type of analysis has been applied when investigating motor elements that characterize movements whose execution enhances basic emotions, such as: anger, fear, happiness and sadness~\citep{shafir_emotion_2016}. In game situations, despite the limited capacity for entertainment detection and modeling in Exergames, \gls{lma} had been reported as useful in fostering emotion recognition in states like: concentration, meditation, excitement and frustration~\citep{zacharatos_emotion_2013}.
+The claim that motion patterns convey engagement or even emotional state~\citep{aristidou_emotion_2015,shafir_emotion_2016,tsachor_somatic_2017} has been supported by several papers. Systematic approaches for describing body movement, such as~\gls{lma}~\citep{laban_language_1974} are used to derive low-dimensional representation of mood, facilitating affective motion modeling~\citep{burton_laban_2016}. This same type of analysis has been applied when investigating motor elements that characterize movements whose execution enhances basic emotions, such as: anger, fear, happiness and sadness~\citep{shafir_emotion_2016}. In game situations, despite the limited capacity for entertainment detection and modeling in Exergames, \gls{lma} had been reported as useful in fostering emotion recognition in states like: concentration, meditation, excitement and frustration~\citep{zacharatos_emotion_2013}.
 
 Here, we hypothesize that, on average, a player will display his/her game-intrinsic motion style and convey some information about his/her interest in playing. Discovering which coherent groups of motion style exist in a dataset makes it possible to estimate to what extent an unknown player relates to known groups in terms of his/her own motion profile. This may ultimately support the design of~\gls{pirg}s able to adapt in order to offer a better play experience.
 
-In summary, in our methodology a player is represented by how much of each discovered motion groups (called motion \textit{topics}) his/her data is likely to be generated from. Such representation is called the player's \textit{mixture proportion} of motion types and is akin to the mixture proportion of documents in topic modeling applications~\citep{blei_latent_2003}. We expect to see similar players grouped together in a coherent collection, enabling to distinguish among them and their motion types. The results obtained using the dataset detailed in section~\ref{sec:data_collection} are validated with human supervision, suggesting the applicability of our method to future mechanisms for designing auto-adapting agents.
+In summary, in our methodology, a player is represented by how much of each discovered motion groups (called motion \textit{topics}) his/her data is likely to belong to. Such representation is called the player's \textit{mixture proportion} of motion types and is analogous to the mixture proportion of documents in topic modeling applications~\citep{blei_latent_2003}. We expect to see similar players grouped together in a coherent collection, enabling to distinguish among them and their motion types. The results obtained using the dataset presented in section~\ref{sec:data_collection} have been validated with human supervision.
 
 \subsection{Problem Statement}
 This section formulates the problem of modeling the player as a probabilistic mixture of player styles derived from data. One can see that it is a step towards advancements in the dimension of design referred to the ability to play for engagement maximization, as discussed in section~\ref{sec:dimensions}.
@@ -281,7 +287,7 @@ However, this new architecture would be more complex to train since the model wo
 
 In this work, we adopt an undercomplete autoencoder, since our goal is to represent an image in a lower dimensional space. 
 Our architecture has multiple layers: the first layer takes only the input, while the following ones decrease in size with the power of two.
-We represent the input with a code having 64 dimensions requiring 4 bits each for %TODO What do they represent?
+We represent the input with a code having 64 dimensions %requiring 4 bits each for %TODO What do they represent? EWERTON: The origin of the phrase "requiring 4 bits each for" is completly unknown to me. It is not even in the paper we published. Therefore, I just took it out.
 ; thus, from an input of 1024 features, we derive a representation of 64 components using an autoencoder.
 
 The reconstruction of the input by the decoder function has a very low loss, below 0.05\%. The~layers obtained by the encoder are often difficult to understand by people. For instance, in Figure~\ref{fig:levels_autoencoder}a--c, we can observe the first layer, and we cannot derive any structure or meaning from it. However, looking at deeper levels, the layers show a clear structure; in Figure~\ref{fig:levels_autoencoder}g--i, we can observe that the filters are extracting horizontal and vertical patterns. Indeed, most of the original images show a cross pattern, or multiple crosses; therefore, this representation seems to be able to represent the input data with a lower dimensionality.
@@ -348,7 +354,7 @@ for each available raw acceleration, time series segments (windows) are extracte
 \end{figure}
 
 \subsection{Experimental Results}
-In this section, we first report how to come up with the undercomplete representation for the~\gls{gasf} images using a simple autoencoder architecture, then we discuss how do we transform the extracted features into input words for the \gls{lda} model. Finally, we show the results when confronting the model output with human judgment. All experimental code used is available at the address ~\url{https://github.com/ewerlopes/lda-player-model.git}.
+In this section, we first report how to come up with the undercomplete representation for the~\gls{gasf} images using a simple autoencoder architecture, then we discuss how do we transform the extracted features into input words for the \gls{lda} model. Finally, we show the results when confronting the model output with human judgment\footnote{All experimental code used is available at the address ~\url{https://github.com/ewerlopes/lda-player-model.git.}}.
 
 \subsubsection{Feature Extraction}
 The first question we need to answer concerns the size of the windows used to segment the raw acceleration signal. This parameter regards the definition of the~\gls{gasf} images used as building blocks for the dictionary learning. The~window size should be large enough to capture motion patterns relevant for player characterization, but not so large to confound their interpretation. We tried different window sizes and, similarly to our previous experiments~\citep{oliveira_activity_2017}, decided to consider half a second of data per window without overlap, which allows for a quite fine-grained data representation.
@@ -366,7 +372,7 @@ A window of half a second corresponds to 32 samples given our accelerometer aver
 
 It is possible to notice from the reconstruction result that, despite such a large compression (from 1024 to only 64 values), the input image relevant structure is captured. This can also be seen in the reconstructed time series. A closer look reveals that the autoencoder practically smoothed the time series while preserving the overall shape, this being a nice property that can help to prevent overfitting.
 
-From Figure~\ref{fig:reconstruction}, we can also see that the obtained time series reconstruction presents some holes. This seems to be caused by the information loss in the reconstruction. In our experimentation, the data is well approximated and did not seem to affect the learning performance.
+From Figure~\ref{fig:reconstruction}, we can also see that the obtained time series reconstruction presents some holes. This seems to be caused by the information loss in the reconstruction. In our experimentation, data are well approximated and this issue does not seem to affect the learning performance.
 
 \subsubsection{Dictionary Learning and input word definition}
 \glsdesc{lda} works by considering the relationship among word tokens with respect to a collection of documents. Therefore, in order to use the method, we needed to come up with a way to encode the diversity of~\gls{gasf} images into a discrete set of fixed tokens describing the motion primitives appearing in each game session. We opted to follow an approach similar to~\cite{prince_computer_2012} and further encode each extracted vector of feature as \textit{visual words}, finally composing the game session document. 
@@ -437,4 +443,4 @@ Our approach addresses the problem in the points I and II by giving means to pro
 
 
 \section{Considerations}
-In this chapter, we have proposed some ideas for player modeling in~\gls{pirg}s. The main contribution stems from the use of popular~\gls{ml} algorithms, such as~\gls{lda}, K-means, and autoencoder to evaluate phenomena in our game scenario. The results show the capacity of the model of approximating the human evaluation as to what concerns the similarity among players. Further investigation can address strategies for increasing interpretability of the uncovered topics in the sense of whether each topic can confidently be associated with meaningful tags (\eg ``over excited'', ''lazy'', etc) similar to the ones given when using~\gls{lda} to text mining. We expect that the experimentation detailed in this chapter will inspire further research and help to increase interest in the design of~\gls{pirg}s.
+In this chapter, we have proposed some approaches for player modeling in~\gls{pirg}s. The main contribution stems from the use of popular~\gls{ml} algorithms, such as~\gls{lda}, K-means, and autoencoders to classify phenomena from data in our game scenario. The results show the capacity of the model of approximating the human evaluation as to what concerns the similarity among players. Further investigation can address strategies for increasing interpretability of the uncovered topics in the sense of whether each topic can confidently be associated with meaningful tags (\eg ``over excited'', ''lazy'', etc.) similarly to what done when using~\gls{lda} for text mining.
