@@ -36,10 +36,10 @@ Nonetheless, it is reasonable to assume that players do not conscientiously obta
 
 \section{A proposed model: Collaborative effort regression}
 
-Among the most successful techniques for recommender system is~\gls{cl}~\citep{su_survey_2009, schafer_collaborative_2007}. %TODO Insert citation. EWERTON: Done.
+Among the most successful techniques for recommender system is~\gls{cf}~\citep{su_survey_2009, schafer_collaborative_2007}. %TODO Insert citation. EWERTON: Done.
 This technique is able to make automatic predictions about the interests of a user by collecting preferences from many others. The underlying assumption of the method is that if a user X has the same opinion as a user Y on an issue, X is more likely to have Y's opinion on a different issue than that of a randomly chosen user. In general, the technique differs from the simpler approach of giving an average (non-specific) preference, since it glean information from many users when exploiting their similarities.
 
-From the class of~\gls{cl} approaches, one may observe the potential advantage of~\gls{pmf}~\citep{mnih_probabilistic_2008}. This approach was invented as a type of matrix factorization method. Essentially, it models the user's preference matrix (a matrix of scores, votes, etc.) as a product of two lower-rank user and item matrices. Mathematical details regarding the standard~\gls{pmf} is given in appendix~\ref{app:pmf}. 
+From the class of~\gls{cf} approaches, one may observe the potential advantage of~\gls{pmf}~\citep{mnih_probabilistic_2008}. This approach was invented as a type of matrix factorization method. Essentially, it models the user's preference matrix (a matrix of scores, votes, etc.) as a product of two lower-rank user and item matrices. Mathematical details regarding the standard~\gls{pmf} is given in appendix~\ref{app:pmf}. 
 
 In general, in the recommendation by matrix factorization, one represents the users and the items being recommended in a shared latent space of dimension K, where a user $i$ is represented by a latent vector $u_{i}$ defined in this space, \ie $u_{i} \in \mathbb{R}_{K}$ and a item $j$, in turn, by its own vector $v_{j} \in \mathbb{R}_{K}$. The predictions of whether the user $i$ is going to like item $j$ is then modeled by the inner product of their latent vectors.
 
