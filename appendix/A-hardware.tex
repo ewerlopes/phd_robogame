@@ -746,6 +746,44 @@ With the values reported in table~\ref{parsmoother}, the behavior shown in figur
 	\label{wheel14}
 \end{figure}
 
+\section{General system organization}
+Our system was designed in the~\gls{ros} platform. It was developed to act like a robotics middleware, that is, a collection of tools, libraries, and conventions to provide services such as hardware abstraction, low-level device control, implementation of commonly used functionality, message-passing between processes, and package management designed for heterogeneous distributed computer cluster. 
+
+Despite its name,~\gls{ros} does not replace, but instead works alongside a traditional operating system. Given the growing collection of algorithms for common tasks such as navigation, motion planning, mapping, and many others,~\gls{ros} offers an implementation of each of these algorithms in stable packages with a message passing interface that is becoming a true standard for robot software interoperability. A~\gls{ros} package is a coherent collection of files, generally including both executables and supporting files, that serve a specific purpose.
+
+The~\gls{ros} sytem is mainly based on \textit{nodes} that can be seen as small, mostly independent programs running at the same time; the supported programming languages are C++, Python, and Lisp. 
+
+The task to enable the communications between nodes is carried out by the \textit{ROS master} node. The primary mechanism used by nodes to communicate is to send \textit{messages}, called \textit{topics}, that are named buses over which nodes exchange messages using a paradigm called ``publish \& subscribe''. This works as follows:
+
+\begin{enumerate}
+	\item a node that wants to share information will \emph{publish} messages on the appropriate topics,~\eg the motor encoder node may share information publishing wheels angular speed in a topic called \verb|angular_vel|. 
+	\item a node that wants to receive information will \emph{subscribe} to the topics that it’s interested in. For example, a velocity controller node might subscribe to the topic \verb|angular_vel| to adjust the control action basing on the wheels angular speed during navigation.
+\end{enumerate}
+
+The information that is contained in each message of a given topic is included in the \textit{message type}. The word ``type'' in this context refers to the concept of a \textit{data type} and the message type determines its structure.
+
+In~\gls{ros}, nodes are meant to operate at a fine-grained scale; a robot control system will usually include many nodes. For example, one node controls a laser range-finder; another node controls the wheel motors; another node performs localization; yet another performs path planning, and so on. In general, the entire robotic platform can be managed with a suitable~\gls{ros} infrastructure. A general example of publish and subscribe is reported in figure~\ref{fig:ros_pub_sub}.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=13cm]{images/03-foundation/pubsub}
+	\caption{publish and subscribe to topics in a~\gls{ros} network; the subscriber can either wait until a new message is received or use callbacks to process new messages in the background.}
+	\label{fig:ros_pub_sub}
+\end{figure}
+
+A full description of~\gls{ros} is available on its official page in:~\url{http://wiki.ros.org}. In order to attend the technical demands in RoboTower 2.0, our robot system comprises a collection of different nodes, each one having an specific task to perform. Figure~\ref{fig:ros_graph_robotower} shows the \verb|ros_graph| for the interaction of the core packages in our application. In it, the node \verb|amcl| is used to perform localization and it receives odometry information (as coordinate frame messages called \verb|\tf|) from the odometry node, named as~\verb|odometry_publisher|, which in turn receives velocity messages~\verb|\vel| from the control boards. Information from the right and left lasers come from their respective driver packages and are passed to the node responsible to join the two laser data into a single overall sensing laser~\verb|\scan| message. To complete the loop of localization, this~\verb|\scan| information is later passed to the~\verb|\amcl| node in order to update the robot position in the playground.
+
+There are isolate nodes in the graph of figure~\ref{fig:ros_graph_robotower}. They indicate idle nodes waiting to be triggered. For instance,~\verb|rosserial_server| is a node that manages communication with the~\gls{ros} package running in the towers.~\verb|heartbeat|, instead, monitors the lifetime of critical nodes inactive in the moment the graph of figure~\ref{fig:ros_graph_robotower} was generated. A node for saving sensor data for posterior analysis is shown in the figure as~\verb|record_bag|. It appears inactive since it waits for the joystick commands to start the recording section. 
+
+Naturally, there exist nodes for the control of other tasks, such as: game and tower management, planning, player modeling and activity recognition, deceptive behavior, etc. Because the full graph of the interaction between all nodes in our application is hard to accommodate in a single page, we invite the reader to look for the description in the code repository.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{images/A-hardware/rosgraph_triskar}
+	\caption{A graph of the core~\gls{ros} packages in RoboTower 2.0.} 
+	\label{fig:ros_graph_robotower}
+\end{figure}
+
 \section{Fuzzy Rules} 
 \subsection{Repulsive behavior if obstacles are encountered}
 
