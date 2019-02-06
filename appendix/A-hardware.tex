@@ -16,20 +16,59 @@
     \label{fig:tilt_circuit} 
 \end{figure}
 
+As power supply for the towers, a 7.4V LiPo battery was used on each tower as can been seen on figure~\ref{fig:tower_electronics}. The nominal voltage for the boards was 5V, which is supplied through a voltage regulator.
 
-% std_msgs/Header header
+\begin{lstlisting}[language=C++, label={alg:tower_msg}, caption={Class definition for a message communicating tower led configurations.}]
+std_msgs/Header header
 
-% uint8 TYPE_TOWER_HAS_FALLEN=1
-% uint8 TYPE_TOWER_OFFLINE=2
-% uint8 TYPE_TOWER_ONLINE=3
-% uint8 TYPE_TOWER_CAPTURED=4
+uint8 id
+bool[3] charge_leds
+bool[2] status_led_color
 
-% uint8 id
-% uint8 status
-% bool[4] leds
-% uint8 bt_presses
-% float32 press_accuracy
-% \caption{Data package structure transmitted from the tower to the robot. The code sintax is that of  }
+int32 feedback_led_threshold
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=C++, label={alg:buttonTilt_state_msg}, caption={Class definition for a message communicating tower button state and tilt state.}]
+std_msgs/Header header
+uint8 id
+bool value
+\end{lstlisting}
+
+The towers maintain a constant communication with the robot via the \verb|game_manage|~\gls{ros} package. The listing~\ref{alg:buttonTilt_state_msg} presents the class definition for messages sent by the towers in response to two main events: a button press (whether of not the button is being currently pressed) and a tilt status (whether the tower has fallen). The same custom message class is used for the two events, but with different~\gls{ros} topic names, making them correspond to their respective sensory inputs independently.
+
+The transmission of button and tilt events makes the \verb|game_manage| update the status of the towers and the game situation to the robot. The listing~\ref{alg:tower_msg} shows the definition of the custom~\gls{ros} message used for indicating which~\glspl{led} should be turned on. The \verb|status_led_color| is separated from the other three \verb|charge_leds| because it is an RGB~\gls{led} (forth~\gls{led} in the tower) used to indicate the status of the tower to the player: it becomes green when the tower has been captured (the player has turned on all four~\glspl{led} by making the necessary button presses); red to indicate the tower has not being capture yet; and blue to indicate the tower has fallen and the player has lost the match. All the first three~\glspl{led} have the same yellow color. The \verb|id| in both classes is used to indicate which tower the message is sent to or received from.
+
+On our system, we have decided to put the logic for turning leds and indicating statuses of the towers separated, \ie in the \verb|game_manage| \gls{ros} package, in order to facilitate changes in the code when needed without having to re-upload specific code to all towers. Additionally, having a central manager allow us to resume operation when facing hardware problems with towers. As an example, the status of towers can be resumed when a tower turns off because of electrical and/or communication problems. Full access to code in in the project repository at GitHub: \url{https://github.com/ewerlopes/phd_robogame.git}.
+
+\section{Computing}
+For computing a Shuttle XPC Slim DH270 was used. The device has a 190 $\times$ 165 $\times$ 43~mm steel case, and weights 1.3~kg.  The armature presents two holes for Kensington Locks and numerous threaded holes (M3) at both sides allowing for an easy placement. The operating system used was~\textit{Ubuntu 16.04.3 LTS (64bit)}. The computer had an Intel Core i7 and a~\gls{ram} DDR4 memory of 16 GB.
+
+\section{Control boards}\label{novacore}
+The low-level motors actuation and their interface between the~\gls{ros} system have been realized with the Nova Core modules based on STM32-chip\footnote{\url{http://www.novalabs.io/} accessed on \today.}, which implement ready to use components to fulfill robot prototyping requirements with plug \& play approach.  
+The provided modules allow to control different type of motors that can be modeled as a second order system, where the input is the voltage applied to the motor armature and output variable is the motor angular speed. Further details about the deployed boards are presented in figure~\ref{fig:boards}.
+
+\begin{figure}[ht]
+\centering
+ \begin{subfigure}[b]{0.3\textwidth}
+ \centering
+     \includegraphics[width=3cm,height=2.5cm]{images/03-foundation/udc}
+	\caption{}
+ \end{subfigure}
+ \begin{subfigure}[b]{0.3\textwidth}
+ \centering
+     \includegraphics[width=3cm,height=2.5cm]{images/03-foundation/io}
+	\caption{}
+ \end{subfigure}
+ \begin{subfigure}[b]{0.3\textwidth}
+ \centering
+     \includegraphics[width=3cm,height=2.5cm]{images/03-foundation/usb}
+	\caption{}
+	\label{fig:usb_board}
+ \end{subfigure}
+ \caption{a) UDC board (1 per each motor) capable of driving motors up to 70 W, with torque, speed, and position closed loop control. General attributes: 5-28V supply; 3A max (5A peak); current sense; encoder input; limit switch input; 25 x 45 mm in size. b) IO board (1 per each motor): Integrate existing hardware into the real-time Nova Core bus with analog and digital signals. General attributes: 8 digital GPIO;  4 analog inputs; 2 analog outputs; 2 UART; 1 I2C; 1 SPI; 25 x 45 mm in size. c) USB board (used for data collection) Interface the real-time Nova Core bus with a computer and logs data to microSD memory. General attributes: USB connector;  UART connector; microSD card slot; rosserial support; 25 x 45 mm in size.}
+ \label{fig:boards}
+\end{figure}
 
 \section{Kinematics of a 3-wheeled omni-directional robot}\label{sec:kinematics}
 The pose of a rigid mobile robot is commonly described by six variables, its three-dimensional Cartesian coordinates and its three Euler angles (roll, pitch, yaw) relative to an external coordinate frame~\citep{thrun_probabilistic_2005}. If the robot is considered as moving on a planar surface, this reduces to two Cartesian coordinates and an orientation angle.
@@ -234,8 +273,7 @@ where $\mathbf{\dot{x}}$ = [$\dot{x}_R,\dot{y}_R,\dot{\theta}$]$^T$ is the robot
 
 It is important to notice that the transformation matrix in model~\ref{model1} is full rank, which denotes that the translation and rotation of the robot are decoupled, and guarantees the separate control of these two movements.
 
-Low level actuation (such as velocity control of the wheels) is embedded in the robot boards and, after considering figure~\ref{triskar1} and figure~\ref{triskar2}, we can define a system of equations that describes the angular velocity of each wheel.\\	
-If we define $[\omega R_1; \omega R_2; \omega R_3]^T$ as the wheel angular velocities vector, we have:
+Low level actuation (such as velocity control of the wheels) is embedded in the robot boards and, after considering figure~\ref{triskar1} and figure~\ref{triskar2}, we can define a system of equations that describes the angular velocity of each wheel. If we define $[\omega_{R_1}; \omega_{R_2}; \omega_{R_3}]^T$ as the wheel angular velocities vector, we have:
 \begin{equation}
 \begin{cases} 
 
@@ -590,7 +628,7 @@ To avoid this effect, a velocity smoother has been introduced in order to obtain
 	\label{smoother}
 \end{algorithm}
 
-With the values reported in table~\ref{parsmoother}, the behavior shown in figure~\ref{controlsweep} has been obtained. The velocity smoother runs together with the Point-to-Point Navigation algorithm to apply robot's velocity and acceleration limits to the incoming commands before resending them to the robot. It basically pre-filters any incoming command input based on some acceleration constraints. 
+With the values reported in table~\ref{parsmoother}, the behavior shown in figure~\ref{controlsweep} has been obtained. The velocity smoother runs together with the Point-to-Point Navigation algorithm to apply robot's velocity and acceleration limits to the incoming commands before re-sending them to the robot. It basically pre-filters any incoming command input based on some acceleration constraints. 
 
 \begin{table}[h]
 	\begin{center}

@@ -24,11 +24,6 @@ In summary, we designed our game such that we could have an environment rich eno
 \subsection{Towers}\label{sec:towers}
 Each tower was powered individually, being capable of transmitting its status to the robot at a constant rate. The circuit used the~\href{https://einstronic.com/wp-content/uploads/2017/06/NodeMCU-ESP8266-ESP-12E-Catalogue.pdf}{NodeMCU V3 ESP8266 ESP-12E} WiFi module\footnote{\url{https://goo.gl/TzAjwi} accessed on December 17th, 2018.} (see figure~\ref{fig:tower_electronics}) whose connection was done via a private network. The communication between towers and the robot was supported through~\gls{tcp} using the rosserial\_server\footnote{\url{http://wiki.ros.org/rosserial_server} accessed on December 17th, 2018.} package. A tilt sensor allows for the detection of fallen towers. Appendix~\ref{app:hard_appendix} provides additional hardware details for the towers. 
 
-%TODO Irrelevant here -> As power supply, a $7.4$V LiPo battery was used on each tower as can been seen on figure~\ref{fig:tower_electronics}. The nominal voltage for the boards was $5$V, which is supplied through a voltage regulator. 
-% EWERTON: OK.
-%TODO Irrelevant here -> A schematic of the circuit developed to detect such event is provided in figure~\ref{fig:tilt_circuit}. <- Figure not found, but also not needed here. Put these details in appendix. If you like you can put there the complete sections with details, and leave here only the relevant aspects.
-% EWERTON: OK.
-
 \begin{figure}[h]
   \centering
   \begin{subfigure}[b]{0.3\textwidth}
@@ -58,7 +53,7 @@ Each tower was powered individually, being capable of transmitting its status to
 As depicted in figure~\ref{graph:PIRG_design_structure}, hardware is the core concern for a mobile robot in~\gls{pirg}. In the graph in figure~\ref{graph:HARDWARE_structure} we have detailed some relevant aspects that we considered during our design. The graph is not supposed to give an extensive map of the necessary hardware aspects and their inter relationship, but to instruct the reader on the necessary aspect in this first phase of design taking our development as example. %Naturally, not all mobile robots involved in~\glspl{pirg} will take into account all such concerns. In fact, the original RoboTower~\citep{bonarini_timing_2014} and Jedi Trainer 3.0~\citep{martinoia_physically_2013} were examples of mobile robots that did not considered, for instance, navigation techniques, such as~\gls{slam} and~\gls{oa} and had no sophisticated structural and sensing requirements given the little computing power available.
 % EWERTON: OK. But, it is necessary to note that the pigs developed previously were much less complex than our.
 
-Our wheeled robot, called Triskar, had holonomic kinematics,\ie it was free to move in any direction at a speed comparable to that of people in indoor environments (up to 1.4~m/sec). The base consisted of a metallic, triangular-shaped structure where motors, batteries, computer and necessary electronics are embedded. In total, the robot weights $22.3$ kg. Triskar has simultaneously and independently controlled rotational and translational motion capabilities thanks to three omnidirectional wheels actuated by a motor each. The robot's movement on flat floor is as free as the human one, which made it a good base for adversarial~\glspl{pirg} and, in particular, the one that we had designed. 
+Our wheeled robot, called Triskar, had holonomic kinematics,\ie it was free to move in any direction at a speed comparable to that of people in indoor environments (up to 1.4~m/sec). The base consisted of a metallic, triangular-shaped structure where motors, batteries, computer and necessary electronics are embedded. In total, the robot weights 22.3kg. Triskar has simultaneously and independently controlled rotational and translational motion capabilities thanks to three omnidirectional wheels actuated by a motor each. The robot's movement on flat floor is as free as the human one, which made it a good base for adversarial~\glspl{pirg} and, in particular, the one that we had designed. 
 
 \input{chart/hardware_map.tex} %TODO Planning is completely missing in the chart as well as in the description. Even if it is basic it deserves a subsection, and a ball here. % EWERTON: It's missing here because planning is not a hardware concern in my view. Note that planning appears in the graph of chapter 4 where it becomes important for playing for competition. Anyway, I have put a circle for it under computing
 %TODO Instead of "Computing power" I would only write "Computing" which has to do with the sub-balls
@@ -146,39 +141,6 @@ As an additional way to increase safety, we have considered placing plastic bump
 \subsection{Kinematics}
 As said before, our robot had holonomic kinematics, i.e. it was capable of moving in any direction in any of the three physical dimensions available to it (i.e., on the floor plan). Our robot matches the kinematics of a human player well, since it is possible to refer to humans as holonomic on the two-dimensional space such as a floor. Mathematical details regarding the kinematics of our 3-wheeled omnidirectional robot is given in appendix~\ref{app:hard_appendix}.
 
-
-%\subsection{Computing \& Electronics}
-%TODO Irrelevant. It would be relevant have an idea of computing power but not even.
-%%For computing a Shuttle XPC Slim DH270 was used. The device has a $190 \times 165 \times 43$~mm steel case, and weights $1.3$~kg.  The armature presents two holes for Kensington Locks and numerous threaded holes (M3) at both sides allowing for an easy placement. The operating system used was~\textit{Ubuntu 16.04.3 LTS (64bit)}. The computer had an Intel Core i7 and a RAM DDR4 memory of 16 GB .
-
-%\subsubsection{Control boards}\label{novacore}
-%The low-level motors actuation and their interface between the~\gls{ros} system have been realized with the Nova Core modules based on STM32-chip~\footnote{\url{http://www.novalabs.io/} accessed on \today.}, which implement ready to use components to fulfill robot prototyping requirements with plug \& play approach.  
-%The provided modules allow to control different type of motors that can be modeled as a second order system, where the input is the voltage applied to the motor armature and output variable is the motor angular speed. Futher details about the deployed boards are presented in figure~\ref{fig:boards}.
-
-%\begin{figure}[ht]
-% \centering
-%  \begin{subfigure}[b]{0.3\textwidth}
-%  \centering
-%      \includegraphics[width=3cm,height=2.5cm]{images/03-foundation/udc}
-%	\caption{}
-%  \end{subfigure}
-%  \begin{subfigure}[b]{0.3\textwidth}
-%  \centering
-%      \includegraphics[width=3cm,height=2.5cm]{images/03-foundation/io}
-%	\caption{}
-%  \end{subfigure}
-%  \begin{subfigure}[b]{0.3\textwidth}
-%  \centering
-%      \includegraphics[width=3cm,height=2.5cm]{images/03-foundation/usb}
-%	\caption{}
-%	\label{fig:usb_board}
-%  \end{subfigure}
-%  \caption{a) UDC board (1 per each motor) capable of driving motors up to 70 W, with torque, speed, and position closed loop control. General attributes: 5-28V supply; 3A max (5A peak); current sense; encoder input; limit switch input; 25 x 45 mm in size. b) IO board (1 per each motor): Integrate existing hardware into the real-time Nova Core bus with analog and digital signals. General attributes: 8 digital GPIO;  4 analog inputs; 2 analog outputs; 2 UART; 1 I2C; 1 SPI; 25 x 45 mm in size. c) USB board (used for data collection) Interface the real-time Nova Core bus with a computer and logs data to microSD memory. General attributes: USB connector;  UART connector; microSD card slot; rosserial support; 25 x 45 mm in size.}
-%  \label{fig:boards}
-%\end{figure}
-
-%TODO (still, in part) All the technical details and names of devices could go in an appendix, while I'll leave here a functional description of robot and sensors, giving the characteristics that are functionally relevant, e.g., speed, omnidirectionality, range of sensors, their data rate, ...
-
 \subsection{Navigation}\label{sec:navigation}
 \subsubsection{\glsdesc{slam}}\label{gmapping}
 To create a map of the environment, our system used \textit{gmapping}\footnote{http://wiki.ros.org/gmapping accessed on \today}, a~\gls{ros} package used for~\gls{slam} that estimates the map of the environment and the trajectory of the robot using a technique known as~\gls{rbpf}~\citep{grisettiyz_improving_2005} and the provided odometry and laser measurements. The procedure in\textit{gmapping} can be decomposed in two phases: \begin{inparaenum}[\itshape a\upshape)]\item update the robot's state using all available positioning related data. In our case, odometry and laser measurements were used; \item update the map of the environment using~\gls{rbpf}.\end{inparaenum}
@@ -235,9 +197,9 @@ This was necessary when using the Kinect\textsuperscript{\textregistered}, since
 
 Despite all, the transformed velocity set-points $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, dynamically change during the game and often the variation has a step-function shaped form that causes the low level actuation to react violently to make the robot reach the desired velocity at once -- especially when starting from the initial position with 0-velocity (see figures~\ref{vel14} and~\ref{wheel14}). This will result in the robot wheels undergoing in slippage due to the sharp acceleration required to reach the velocity set-point. This is an undesired effect that is source of non-systematic odometry errors that often lead to instability and loss of localization. 
 
-A number of tests have been performed to quantify the effect of wheel slippage during the initial robot acceleration phase. In these tests the robot linearly translates along $x$ and $y$ axis and receives the initial velocity set-point at $1m/s$ or $1.4m/s$. In figures~\ref{opti14},~\ref{amcl14},~\ref{poserror14},~\ref{opti14y},~\ref{amcl14y}, and~\ref{poserror14y} we can see the localization error introduced during such test.
+A number of tests have been performed to quantify the effect of wheel slippage during the initial robot acceleration phase. In these tests the robot linearly translates along $x$ and $y$ axis and receives the initial velocity set-point at 1m/s or 1.4m/s. In figures~\ref{opti14},~\ref{amcl14},~\ref{poserror14},~\ref{opti14y},~\ref{amcl14y}, and~\ref{poserror14y} we can see the localization error introduced during such test.
 
-To avoid this effect, a velocity smoother has been used in order to obtain a smooth velocity set-point control signal to be sent to the robot low-level actuation, in order to avoid wheel slippage during the acceleration phase. The inputs of the velocity smoother are the unsmoothed velocity set-points [$\dot{\bar{x}}_R^m$, $\dot{\bar{y}}_R^m$], some of the internal parameters such as maximum allowed velocity and maximum allowed acceleration can be changed online to modify the final response of the robot. The output are the final xy-velocity control signals [$\dot{x}_R^m$, $\dot{y}_R^m$] in robot reference frame that will be sent to the low level actuation.
+To avoid this effect, a velocity smoother has been used in order to obtain a smooth velocity set-point control signal to be sent to the robot low-level actuation, in order to avoid wheel slippage during the acceleration phase. The inputs of the velocity smoother are the un-smoothed velocity set-points [$\dot{\bar{x}}_R^m$, $\dot{\bar{y}}_R^m$], some of the internal parameters such as maximum allowed velocity and maximum allowed acceleration can be changed online to modify the final response of the robot. The output are the final xy-velocity control signals [$\dot{x}_R^m$, $\dot{y}_R^m$] in robot reference frame that will be sent to the low level actuation.
 
 The velocity smoother runs together with algorithm~\ref{alg:pointopoint}, receiving the output of this later as input. It basically pre-filters any incoming command input to match some acceleration constraints. Smoothing velocities are not just important for the reduction of localization errors, but is also an important factor in the reduction of material stress on the wheels, which can lead to mechanical breakdowns. In fact, during our research we have had a couple of mechanical breakdown due exactly to excessive acceleration. Such issues make up for important example of typical hardware concerns and issues on must deal with in the design of mobile agents for~\gls{pirg}.
 
@@ -359,8 +321,6 @@ Two features could be extracted from the procedure: distance (relative to the ro
 
 Despite being an useful sensor, its usage in our platform had some issues. One of such was the indirect negative impact in the robot localization caused by having the sensor in a fixed position (see figure~\ref{fig:evolution}). It occurred in our game that the player would run from any side, thus, forcing the tracking algorithms to issue in-place rotation commands to the platform in order to reacquire the player position when he goes out of the~\gls{fov}. Repeatedly rotating the platform in our environment was likely to introduce higher amount of odometry error which contributed to the lack of precision in localization, affecting the accuracy of the platform in navigating toward target towers. Figure~\ref{fig:maps} give an idea of the problem. It is possible to see a higher mismatch between the laser scan and the map of the environment in the subfigure~\ref{fig:laser_map_mismatch} which, in our context, was a consequence of repeatedly rotating the robot in order to keep the player in the~\gls{fov}. 
 
-Other than the localization issues which made the navigation inaccurate (sometimes missing the towers), the need to rotate the player so to keep it in the camera's~\gls{fov} made the interaction slow and, in some cases, clumsy. As a solution to the problem we have later replaced the Kinect\textsuperscript{\textregistered} sensor by a pair of lasers sensors such that a~\gls{fov} of 360$^\circ$ could be granted.
-
 \begin{figure}
     \centering 
     \begin{subfigure}[h]{0.49\columnwidth}
@@ -379,4 +339,26 @@ Other than the localization issues which made the navigation inaccurate (sometim
     \label{fig:maps}
 \end{figure}
 
-The \textcolor{red}{...}
+Other than the localization issues which made the navigation inaccurate (sometimes missing the towers), the need to rotate the player so to keep it in the camera's~\gls{fov} made the interaction slow and, in some cases, clumsy. As a solution to the problem we have later replaced the Kinect\textsuperscript{\textregistered} sensor by a pair of lasers sensors such that a~\gls{fov} of 360$^\circ$ could be granted.
+
+With full view granted by the laser, there were no need to rotate the robot in order to keep track of the player, which, thus, helped to reduce the negative impact in the localization. Moreover, with the laser, it was possible to better track the player using filtering algorithms. The algorithm of choice for us was~\gls{pf}, a popular algorithm for solving filtering problems arising in signal processing and Bayesian statistical inference. This algorithm uses a set of particles (also called samples) to represent the posterior distribution of some stochastic process given noisy and/or partial observations. In our case, the process being object of~\gls{pf} is the player position in space.~\gls{pf} does not requires particular assumptions about the state distribution of the process and, in our circumstances given that it can model multi-modal distributions, the algorithm performs robust tracking.
+
+As evidences to such system, we have used a supervised learning approach for detecting clusters in the laser data that could be the player's legs. Upon looking into the data for clusters, we have used Random Forest to classify features (descriptive statistics as well as geometrical properties) from the clusters and decide whether or not they represent legs. 
+
+For training the Random Forest, we have collected a dataset of leg clusters by asking people to walk and run several times around the robot. Each cluster detected inside a bounding box centered on the robot position was considered as a positive leg example. During this data collection the robot did not move. All the negative examples (non legs) where collected by moving the robot around in a place without legs, thus, making any cluster found an example of non-leg clusters. 
+
+Each particle in the model was designed to be a Kalman Filter with linear constant model envisioning better characterize the evidences in the gating zone (area where new evidences are likely to appear). Each particle maintains an estimation in terms of player's position and velocity. In the \textit{particle propagate} phase, the algorithm updates the position of particles based on how close their predicted future position is to the current evidence. In general,~\gls{pf} weights particles based on their proximity to evidences. Those weights are them used in the \textit{re-sampling} phase in order to allow the best particles to be reused in the next time frame. In the limit, particles tend to converge to the true position of the player. The mean of the best particles (in terms of weights) is used to describe the player position in a given time.
+
+Laser clusters were further processed before feeding them into the~\gls{pf} system, which was done in order to reduce noise. The process consisted in observing their relationship of clusters to fixed elements in the playground, as for example: the walls and towers. All clusters identified as being part of such elements were excluded. Figure~\ref{fig:laser_tracking} shows the environment containing an estimated player position by our~\gls{pf} algorithm. The circle around the player position in the figure represents the variance in the position.
+
+\begin{figure}[h]
+    \centering 
+    \framebox{\includegraphics[width=0.95\textwidth]{images/03-foundation/laser_tracking}}
+    \caption{Visualization of the playground map. The walls which isolate the game area and the absolute towers positions are denoted in black. Those are the fixed elements in the map. The player's legs are marked in magenta. Blue circles denote the detection of cylindrical clusters estimated to be a single human leg. On our scenario, towers appear cylindrical to the laser which makes up for false positives for legs and further complicates tracking. The green rectangle, which has towers in the corners, denotes the playground. Player velocity (dark magenta arrow) is estimated by the difference of position in the center of player's leg across time.}
+    \label{fig:laser_tracking}
+\end{figure}
+
+\section{Considerations}
+This chapter presented the hardware consideration for our agent as well as the game rules and playing environment. We provided a comprehensive description of our platform, basically demonstrating the fundamental concepts and challengers related to its functionality in the designed~\gls{pirg}.
+
+Envisioning satisfying the game rules we have exposed the main characteristics from which the exposition in the upcoming chapters is going to be based on. Further technical details about the platform and game elements in described in the appendix~\ref{app:hard_appendix}.
