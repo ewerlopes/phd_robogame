@@ -1,6 +1,6 @@
 \chapter{Player behavior modeling}\label{ch:modeling}
 
-Having identified an activity recognition system, we aimed at the definition of an approach to model user behavior that could account for the combination of the player physical effort and interaction level. The proposed model is based on the human activity recognition (chapter~\ref{ch:activity}) and on a description of interaction features like proximity and body contraction index.
+Having identified an activity recognition system, we aimed at the definition of a modeling approach that can characterize user behavior, accounting for the combination of the player physical effort (as accounted by the activities) and interaction level. A first model is based on the human activity recognition (chapter~\ref{ch:activity}) and on a description of interaction features like proximity and body contraction index. A second one takes inspiration from data mining in order to group types of players.
 
 \section{Relational Activity Model}\label{sec:simple_model}
 
@@ -21,7 +21,7 @@ where $\mathcal{A}$ stands for the set of activities \{``running'', ``locally mo
 We consider equation~\ref{eq:activity_eq} as a measure of the ``effort'' of the player. The weight $\omega$ states how much each physical activity contributes to the overall quantification and is a hyper-parameter intended to capture the partial ordering among activities.
 
 \subsection{Interaction}\label{Interaction}
-In order to model the interaction we take into account the spatial relationship between the player and the robot defined as \textit{proximity} and a measure of body contraction named~\gls{ci}.
+In order to model the interaction we take into account the spatial relationship between the player and the robot defined as \textit{proximity} and a measure of body contraction named~\acrfull{ci}.
 
 Proximity is a measure defined in the interval [0, 1], computed from the data provided by Microsoft Kinect\textsuperscript{\textregistered}, normalized according to the sensor specifications (see section~\ref{sec:kinectsec}).~\gls{ci} is also in [0, 1] and it is calculated using a technique related to the bounding region, i.e., the minimum rectangle surrounding the body: the algorithm compares the area covered by this rectangle with the area currently covered by the player's silhouette~\citep{castellano_recognising_2007}.
 
@@ -47,7 +47,7 @@ In this game,~\gls{ci} tends to be high when players are expecting a response by
 \end{figure}
 
 \subsection{Combined model}\label{sec:engagement}
-The model to describe the player relational activity is a combination of the activity level and the degree of interaction, named $\epsilon$; it summarizes the player physical activity during the game and has a linear relationship with his interaction with the robotic opponent as follows: 
+The model to describe the player relational activity is a combination of the activity level and the degree of interaction, named $\iota$; it summarizes the player physical activity during the game and has a linear relationship with his interaction with the robotic opponent as follows: 
 \begin{equation}
 \label{enagementeq}
 \mathcal{C}=\iota \alpha(m),
@@ -77,31 +77,31 @@ For the evaluation of the model we have reused the same data from section~\ref{s
       \label{fig:model_output}
 \end{figure}
 
-The model quantitatively describes, in a simple way, the player's relational activity by the combination of the amount of physical activity and interaction relative to the robot. This can be used as a metric expected to enable the robot to take into account the player's attitude in order to adapt its own activity to match it. Using this model, for instance, an active player could be viewed as one having a larger cumulative sum of $\epsilon$ values up to a point in time.
+The model quantitatively describes, in a simple way, the player's relational activity by the combination of the amount of physical activity and interaction relative to the robot. This can be used as a metric expected to enable the robot to take into account the player's attitude in order to adapt its own activity to match it. Using this model, for instance, an active player could be viewed as one having a larger cumulative sum of $\mathcal{C}$ values up to a point in time.
 
-However, this model is limited in several ways, %TODO I cannot evaluate it since I cannot understand it. EWERTON: Can you be more precise on this? ANDY IF the "several" are the following ONE, let's arrange the sentence in a better way
-one of which is the manual definition of weights for the activities ($\omega$). Manually selecting these scaling factors becomes difficult as the number of activities grows. With this in mind, we have then worked on a definition of a more robust player model relying on latent representation which is described in the next section.
+However, this model is limited. %TODO I cannot evaluate it since I cannot understand it. EWERTON: Can you be more precise on this? ANDY IF the "several" are the following ONE, let's arrange the sentence in a better way EWERTON: Okay, redefined the sentence
+One such limitation is the manual definition of weights for the activities ($\omega$). Manually selecting these scaling factors becomes difficult as the number of activities grows. Additionally, it may not always be easy to define the partial order of importance to activities. With this in mind, we have then worked on a definition of a more robust player model relying on latent representation which is described in the next section.
 
 \section{Latent player modeling}
 
-We attempted to improve the previous model in several ways. First, by mapping the stream of accelerometer data to an image representation, called Gramian Angular Field (GAF) images~\citep{wang_imaging_2015}, in order to take advantage from algorithms for unsupervised feature extraction, such as autoencoders~\citep{goodfellow_deep_2016}, and reduce the effort of handcrafting representation features for the user behavior. After the definition of a dictionary of primitives on the feature space, we apply ~\gls{lda}~\citep{blei_latent_2003}, a discrete generative model (an admixture model) mostly used for document retrieval and classification, to uncover coherent groups of motion patterns that can be used to categorize players.
+We attempted to improve modeling by fitting a generative data process for the acceleration data produced by players. First, we map the stream of acceleration data to an image representation, called Gramian Angular Field (GAF) images~\citep{wang_imaging_2015}, in order to take advantage from algorithms for unsupervised feature extraction, such as autoencoders~\citep{goodfellow_deep_2016}, and reduce the effort of handcrafting representation features for the user behavior. After the definition of a dictionary of primitives on the feature space, we apply ~\acrfull{lda}~\citep{blei_latent_2003}, a discrete generative model (an admixture model) mostly used for document retrieval and classification, to uncover coherent groups of motion patterns that can be used to categorize players.
 
 The model here is comprehensively different from the simple one presented in the previous section: it does not take into account features of interaction, but only the player's acceleration patterns (despite not being considered in literature, there is no fundamental constraint that prevents the use of such data). There is also no need to manually set scaling factors from target activities since the model explores the importance of each acceleration spike by itself. Furthermore, the model is able to provide the distinction between players so that it can be easily used for clustering. Each player is represented by a normalized vector where each component denotes the proportion of membership to a given class of players obtained from data.
 
 In particular, our decision to use~\gls{lda} was inspired by the work of~\cite{smith_mining_2016}, which considers each game session as a ``document'' and the player generated data stream as the ``words'' of such document. The interpretation of game session as documents and player data as words preserves the jargon of the text mining and information retrieval literature from which~\gls{lda} is most used for. The main assumption is that different players generate different streams of input words, thus different ``documents'', depending on their own motivation or play style. 
 
-The feasibility of applying~\gls{lda} to this problem is further reinforced by noticing the apparent difficulty in objectively separating the existing types of motion patterns in the acceleration signal via inspection. A player in his/her playing activity may show different motion patterns that are often not clearly distinguishable from each other and thus not easy to provide a supervision for,~\ie a class tag. Here, the assumption is that a high motion profile, i.e., high turbulence in acceleration signal, is typical for a highly motivated player, since we believe a non-motivated player tends to stay relatively still, or to show a very low acceleration profile.
+The feasibility of applying~\gls{lda} to this problem is further reinforced by noticing the apparent difficulty in objectively separating the existing types of motion patterns in the acceleration signal via inspection. A player in his/her playing activity may show different motion patterns that are often not clearly distinguishable from each other and thus not easy to provide a supervision for --~\ie a class tag. Here, the assumption is that a high motion profile, i.e., high turbulence in acceleration signal, is typical for a highly motivated player, since we believe a non-motivated player tends to stay relatively still, or to show a very low acceleration profile.
 
-The claim that motion patterns convey engagement or even emotional state~\citep{aristidou_emotion_2015,shafir_emotion_2016,tsachor_somatic_2017} has been supported by several papers. Systematic approaches for describing body movement, such as~\gls{lma}~\citep{laban_language_1974} are used to derive low-dimensional representation of mood, facilitating affective motion modeling~\citep{burton_laban_2016}. This same type of analysis has been applied when investigating motor elements that characterize movements whose execution enhances basic emotions, such as: anger, fear, happiness and sadness~\citep{shafir_emotion_2016}. In game situations, despite the limited capacity for entertainment detection and modeling in Exergames, \gls{lma} had been reported as useful in fostering emotion recognition in states like: concentration, meditation, excitement and frustration~\citep{zacharatos_emotion_2013}.
+The claim that motion patterns convey engagement or even emotional state~\citep{aristidou_emotion_2015,shafir_emotion_2016,tsachor_somatic_2017} has been supported by several papers. Systematic approaches for describing body movement, such as~\gls{lma}~\citep{laban_language_1974} are used to derive low-dimensional representation of mood, facilitating affective motion modeling~\citep{burton_laban_2016}. This same type of analysis has been applied when investigating motor elements that characterize movements whose execution enhances basic emotions, such as: anger, fear, happiness and sadness~\citep{shafir_emotion_2016}. In game situations, despite the limited capacity for entertainment detection and modeling in physical games, \gls{lma} had been reported as useful in fostering emotion recognition in states like: concentration, meditation, excitement and frustration~\citep{zacharatos_emotion_2013}.
 
-Here, we hypothesize that, on average, a player will display his/her game-intrinsic motion style and convey some information about his/her interest in playing. Discovering which coherent groups of motion style exist in a dataset makes it possible to estimate to what extent an unknown player relates to known groups in terms of his/her own motion profile. This may ultimately support the design of~\gls{pirg}s able to adapt in order to offer a better play experience.
+Here, we hypothesize that, on average, a player will display his/her game-intrinsic motion style and convey some information about his/her interest in playing. This information is related to the engagement of the player, which, in turn, is expected to be related to entertainment. Discovering which coherent groups of motion style exist in a dataset makes it possible to estimate to what extent an unknown player relates to known groups in terms of his/her own motion profile. This may ultimately support the design of~\gls{pirg}s able to adapt in order to offer a better play experience.
 
 In summary, in our methodology, a player is represented by how much of each discovered motion groups (called motion \textit{topics}) his/her data is likely to belong to. Such representation is called the player's \textit{mixture proportion} of motion types and is analogous to the mixture proportion of documents in topic modeling applications~\citep{blei_latent_2003}. We expect to see similar players grouped together in a coherent collection, enabling to distinguish among them and their motion types. The results obtained using the dataset presented in section~\ref{sec:data_collection} have been validated with human supervision.
 
 \subsection{Problem Statement}
 This section formulates the problem of modeling the player as a probabilistic mixture of player styles derived from data. One can see that it is a step towards advancements in the dimension of design referred to the ability to play for engagement maximization, as discussed in section~\ref{sec:dimensions}.
 
-Here, we use data coming from a single accelerometer placed on the human player's body as in Chapter~\ref{ch:activity}. For the current study, player movement is our primary source of information for characterizing the playing style. The basic assumption is that a highly active player would naturally express his/her status by a very turbulent motion signal, making the signal compatible with strong in-game activity. Consider, for instance, the difference in signal shapes reported in Figure~\ref{figure:acc_signal_shape}.
+Here, we use data coming from a single accelerometer placed on the human player's body as in Chapter~\ref{ch:activity}. For the current study, building upon previous experiments, player movement is our primary source of information for characterizing the playing style. The basic assumption is that a highly active player would naturally express his/her status by a very turbulent motion signal, making the signal compatible with strong in-game activity. Consider, for instance, the difference in signal shapes reported in Figure~\ref{figure:acc_signal_shape}.
 
 \begin{figure}[h]
     \centering
@@ -129,7 +129,7 @@ This section presents the basic concepts and principles behind~\gls{gaf}, autoen
 
 \subsubsection{\glsdesc{gaf} Images}
 
-The results obtained in this work rely on the transformation of the acceleration time series generated by the player into images that are then processed and understood in terms of emergent patterns. The types of image we have chosen are~\gls{gasf} and~\gls{gadf}. Such images had been proposed in the field of time series classification~\citep{wang_imaging_2015}, where the authors evaluated the efficacy of representing time series in a polar coordinate system instead of the typical Cartesian coordinates. For a deep understanding of the method, we suggest reading the work of~\cite{wang_imaging_2015} where the authors did not only present the idea of~\gls{gasf}/\gls{gadf}, but also reported experimental results comparing them with other time series techniques. Here, we present an overview of the idea behind the method in order to familiarize the reader and to point out its role in our proposal.
+The results obtained in this work rely on the transformation of the acceleration time series generated by the player into images that are then processed and understood in terms of emergent patterns. The types of image we have chosen are~\acrfull{gasf} and~\gls{gadf}. Such images had been proposed in the field of time series classification~\citep{wang_imaging_2015}, where the authors evaluated the efficacy of representing time series in a polar coordinate system instead of the typical Cartesian coordinates. For a deep understanding of the method, we suggest reading the work of~\cite{wang_imaging_2015} where the authors did not only present the idea of~\gls{gasf}/\gls{gadf}, but also reported experimental results comparing them with other time series techniques. Here, we present an overview of the idea behind the method in order to familiarize the reader and to point out its role in our proposal.
 
 In general, in order to obtain a~\gls{gasf}/\gls{gadf} representation for a time series $\mathcal{X}=\{x_{1}, x_{2}, ... x_{n}\}$ of size $n \in \mathbb{N}_{>0}$, rescaling is first performed in order to put the time series in the interval $[\,-1,1] \,$ or $[\,0,1]\,$. The second step is to represent the rescaled time series $\widetilde{\mathcal{X}}$ in polar coordinates, where each sample value is now mapped into the angular cosine and the time stamp information is represented as the radius. 
 The formula for this step is as follows:
@@ -153,14 +153,14 @@ The third step in completing the transformation is to exploit the angular perspe
 
 \begin{equation}
     \begin{aligned}
-    \gls{gasf} &= [\,\cos(\phi_{i} + \phi{j}]\, \\
+    \gls{gasf} &= [\,\cos(\phi_{i} + \phi{j})]\, \\
     	 &= \widetilde{\mathcal{X}}' \cdot \widetilde{\mathcal{X}} - \sqrt{I-\widetilde{\mathcal{X}}^2}' \cdot \sqrt{I-\widetilde{\mathcal{X}}^2}
     \end{aligned}
 \end{equation}
 
 \begin{equation}
     \begin{aligned}
-    \gls{gadf} &= [\,\sin(\phi_{i} + \phi{j}]\, \\
+    \gls{gadf} &= [\,\sin(\phi_{i} + \phi{j})]\, \\
     	 &= \sqrt{I-\widetilde{\mathcal{X}}^2}' \cdot \widetilde{\mathcal{X}} - \widetilde{\mathcal{X}}' \cdot \sqrt{I-\widetilde{\mathcal{X}}^2}\\
     \end{aligned}
 \end{equation}
@@ -174,9 +174,9 @@ According to~\cite{wang_imaging_2015}, the~\gls{gaf}s have several advantages:
 \item \textbf{{Advantage \#2:}} from the main diagonal, it is possible to reconstruct the time series back into the original Cartesian space. This is useful especially in a classification task, where we can convert the time series back to numerical Cartesian space from the high level features learned by, for instance, a deep neural network.
 \end{itemize}
 
-However, the size of the Gramian matrix $G$ is $n \times n$, for $n$ being the length of the raw time series, which may produce issues regarding memory complexity. For this issue~\cite{wang_imaging_2015} propose a solution by attempting to reduce the size of the produced~\gls{gaf} using, for instance,~\gls{paa}~\citep{keogh_scaling_2000} to smooth the time series while preserving the trends. An example of the conversion from time series to~\gls{gasf} image is shown in Figure~\ref{figure:gasf_example}.
+However, the size of the Gramian matrix $G$ is $n \times n$, for $n$ being the length of the raw time series, which may produce issues regarding memory complexity. For this issue~\cite{wang_imaging_2015} propose a solution by attempting to reduce the size of the produced~\gls{gaf} using, for instance,~\gls{paa}~\citep{keogh_scaling_2000} to smooth the time series while preserving its trends. An example of the conversion from time series to~\gls{gasf} image is shown in Figure~\ref{figure:gasf_example}.
 
-\begin{figure} [h]
+\begin{figure} [htbp]
 \centering
 \includegraphics[width=\textwidth]{images/05-modeling/gasfpipeline} 
  \caption{Conversion of time series into a~\gls{gasf} image and then back into its original space.}
@@ -184,11 +184,11 @@ However, the size of the Gramian matrix $G$ is $n \times n$, for $n$ being the l
 \end{figure}
 
 \subsubsection{Latent Dirichlet Allocation}
-\glsdesc{lda} is one of the most simple and influential topic models. A topic model is a formal statistical relationship between a group of observed and latent (unknown) random variables, which specifies a probabilistic procedure to generate \textit{topics}. The \textit{topics} are defined as a probability distribution over a collection of words and can be seen as generating mechanisms for words in a documents. The idea behind the method is that of assuming a generative procedure from which several topics are likely to have generated the words. Each document then is represented by a vector of proportions describing to which proportion each topic is estimated to have contributed to the document, which is related to the presence in it of words characteristic of the topic. Such vector is called the \textit{mixture proportions}.
+\glsdesc{lda} is one of the most simple and influential topic models. A topic model is a formal statistical relationship between a group of observed and latent (unknown) random variables, which specifies a probabilistic procedure to generate \textit{topics}. \textit{Topics} are defined as a probability distribution over a collection of words and can be seen as generating mechanisms for words in a documents. The idea behind the method is that of assuming a generative procedure from which several topics are likely to have generated the words. Each document then is represented by a vector of proportions describing to which proportion each topic is estimated to have contributed to the document, which is related to the presence in it of words characteristic of the topic. Such vector is called the \textit{mixture proportions}.
 
 \input{chart/lda_graph.tex}
 
-For instance, consider a text document about governmental investments in sport stadiums. It can be assumed that it is a collection of words generated from different distributions (different topics) that take into account contexts like \textit{finance}, \textit{sports}, \textit{public administration} and \textit{life quality} improvements. In such discrete word distributions (over the same vocabulary) each word is weighted by its relationship to the context its is associated to. As an example, the word \textit{stadium} would have a higher likelihood under the topic about sports than under a one representing public administration or finance. Thus, each word, yet present in all topics, is weighted differently according to their relationship in the document corpus. The~\glsdesc{lda} algorithm does not provide a meaning to the topics, but the designer can attribute a meaning to it based on the words with higher probability.
+For instance, consider a text document about governmental investments in sport stadiums. It can be assumed that such document is a collection of words generated from different distributions (different topics) that individually take into account contexts like \textit{finance}, \textit{sports}, \textit{public administration} and \textit{life quality} improvements. In such discrete word distributions (over the same vocabulary) each word is weighted by its relationship to the context its is associated to. As an example, the word \textit{stadium} would have a higher likelihood under the topic about sports than under a one representing public administration or finance. Thus, each word, yet present in all topics, is weighted differently according to their relationship in the document corpus. The~\acrfull{lda} algorithm does not provide a meaning to the topics, but the designer can attribute a meaning to each topic based on the words with higher probability in them.
 
 The graphical model shown in Figure~\ref{fig:graphical-model} presents the basic structure of the~\gls{lda} model~\citep{blei_latent_2003}. For our purposes, as in~\cite{smith_mining_2016}, the \textit{K}-th probability distribution over input words $\beta_{k}$ (topic k) is representative of the $K$ groups (types) of player motion styles in which we are interested in. Each document $d$ corresponds to a game play session for the game and belongs to the corpus $D$ of all observed player sessions.
 
@@ -198,7 +198,7 @@ In these terms, a document may present multiple types $\beta_{k}$ with mixture p
 \overline{\beta}_{d} = \sum_{n=1}^{K} \theta_{d}(k) \cdot \beta_{k}
 \end{equation}
 
-The \textit{n}-th word $w_{d,n}$ of document \textit{d} is, in our case, the~\gls{gasf} obtained encoding, as we will explain later. $z_{d,n} \in \{1:K\}$ refers to the random motion type from which a word is drawn, and it is an auxiliary variable that makes inference easier. Following the standard~\gls{lda} model, $\alpha$ and $\eta$ are hyperparameters that control the sparsity in the mixture proportions and word distributions~\citep{smith_mining_2016}.
+The \textit{n}-th word $w_{d,n}$ of document \textit{d} is, in our case, the~\gls{gasf} obtained encoding, as we will explain later. $z_{d,n} \in \{1:K\}$ refers to the random motion type from which a word is drawn, and it is an auxiliary variable that makes inference easier~\citep{blei_latent_2003}. Following the standard~\gls{lda} model, $\alpha$ and $\eta$ are hyperparameters that control the sparsity in the mixture proportions and word distributions~\citep{smith_mining_2016}.
 
 \subsubsection{Autoencoder}\label{sec:autoencoder}
 
@@ -214,7 +214,7 @@ Autoencoder is an unsupervised learning technique that learns a representation o
 \label{fig:autoencoder_architecture}
 \end{figure}
 
-In general, autoencoders are good at capturing the structure of the input and tend to represent it well~\cite{goodfellow_deep_2016}. We can understand an autoencoder as a neural network that tries to copy its input to its output. We can represent its general architecture with the following terminology:
+In general, autoencoders are good at capturing the structure of the input and tend to represent it well~\citep{goodfellow_deep_2016}. We can understand an autoencoder as a neural network that tries to copy its input to its output. We can represent its general architecture with the following terminology:
 
 \begin{itemize}[leftmargin=*,labelsep=5.8mm]
 	\item the input $x$,
@@ -274,7 +274,7 @@ However, this new architecture would be more complex to train since the model wo
         \includegraphics[width=0.2\columnwidth]{images/05-modeling/autoencoder_levels/autoencoders_7_2} \\
         (\textbf{g}) & (\textbf{h}) & (\textbf{i}) \\
     \end{tabular}
-    \caption{Example layers from the trained autoencoder. (a--c) represent the information extracted by the first layer of the autoencoder. It is hard to grasp the meaning of the representation derived. Going deeper, in (d--f), the representation seems to become more clear and with a structure. Indeed going directly to the obtained code, in (g--i), we can see a more accentuate structure composed mainly of horizontal or vertical lines.}
+    \caption{Example layers from the trained autoencoder. (a--c) represent the information extracted by the first layer of the autoencoder. It is hard to grasp the meaning of the representation derived. However, going deeper, in (d--f), the representation seems to become more clear and with a structure. Indeed going directly to the obtained code, in (g--i), we can see a more accentuate structure composed mainly of horizontal or vertical lines.}
     \label{fig:levels_autoencoder}
 \end{figure}
 
@@ -282,12 +282,12 @@ In this work, we adopt an undercomplete autoencoder, since our goal is to repres
 Our architecture has multiple layers: the first layer takes only the input, while the following ones decrease in size with the power of two.
 We represent the input with a code having 64 dimensions; thus, from an input of 1024 features, we derive a representation of 64 components using an autoencoder.
 
-The reconstruction of the input by the decoder function has a very low loss, below 0.05\%. The~layers obtained by the encoder are often difficult to understand by people. For instance, in Figure~\ref{fig:levels_autoencoder}a--c, we can observe the first layer, and we cannot derive any structure or meaning from it. However, looking at deeper levels, the layers show a clear structure; in Figure~\ref{fig:levels_autoencoder}g--i, we can observe that the filters are extracting horizontal and vertical patterns. Indeed, most of the original images show a cross pattern, or multiple crosses; therefore, this representation seems to be able to represent the input data with a lower dimensionality.
+The reconstruction of the input by the decoder function has a very low loss, below 0.05\%. The~layers obtained by the encoder are often difficult to understand by people. For instance, in Figure~\ref{fig:levels_autoencoder}a--c, we can observe the first layer, and we cannot derive any structure or meaning from it. However, looking at deeper levels, the layers show a clearer structure, with wide color patches; in Figure~\ref{fig:levels_autoencoder}g--i, we can observe that the filters are extracting horizontal and vertical patterns. Indeed, most of the original images show a cross pattern, or multiple crosses At the end of the training process of a autoencoder, the internal representation ``h'' found is used as a representation for the images.
 
 \subsection{Modeling}
 This section describes our approach to model the activity of the player, while emphasizing differences and similarities with respect to existing methods. We take inspiration from approaches like~\cite{smith_mining_2016, wang_encoding_2015, wang_imaging_2015} and aim at modeling game sessions as ``documents'', where player's acceleration data are considered as ``words''. We use~\gls{lda}~\cite{blei_latent_2003} to categorize the player's motion profile as a composition or mixture of game play motion types, the latter being analogous to the ``topics'' in the general application of \gls{lda} for document modeling.
 
-Differently from~\cite{smith_mining_2016}, our input word atoms are not discrete, but continuous (acceleration data), and also they are not attached to any explicit meaning. For instance, in~\cite{smith_mining_2016} the natural interpretability of joystick input signals like ``left'' and ``right'' is available: the inputs convey their respective meaning when controlling a game character. In our case the raw accelerometer data carry no obvious absolute meaning that a discrete tag could easily describe. In other words, in our scenario tagging is difficult, but also not not required in this development stage.
+Differently from~\cite{smith_mining_2016}, our input word atoms are not discrete, but continuous (acceleration data), and also they are not attached to any explicit meaning. For instance, in~\cite{smith_mining_2016} the natural interpretability of joystick input signals like ``left'' and ``right'' is available: the inputs convey their respective meaning when controlling a game character. In our case the raw accelerometer data carry no obvious absolute meaning that a discrete tag could easily describe. In other words, in our scenario tagging is difficult, but also not required in this development stage.
 
 The method adopted for selecting the input words is based on sliding windows (just as in~\cite{smith_mining_2016}), without overlap. This means that we segment the entire accelerometer signal into subsets, called windows, so as to produce words. For all effects, as mentioned above, to the context of the application of~\gls{lda}, the \textit{document} produced by a given player is the whole raw acceleration during a game session and the \textit{words} of such document are the windows extracted from the acceleration.
 
@@ -297,7 +297,7 @@ For the job, we have used~\gls{gasf} images instead of~\gls{gadf} because the ma
     \cos(\phi)=\sqrt{\frac{G_{ii}+1}{2}} \qquad \phi \in [\,0,\frac{\pi}{2}]\,
 \end{equation}
 
-An example of signal decomposition into~\gls{gasf} images is shown in Figure~\ref{fig:acc_signal_gasfs}. The figure shows data of about 30 seconds of real game play from a three-axis accelerometer (48.8 Hz). It also displays thirty five~\gls{gasf} segments of a linear combination of the multidimensional time series. The combination collapses the signal into one dimension, and makes easy the transformation into~\gls{gasf}. For this case, each image corresponds to 0.65 seconds and includes 32 samples.
+An example of signal decomposition into~\gls{gasf} images is shown in Figure~\ref{fig:acc_signal_gasfs}. The figure shows data of about 30 seconds of real game play from a three-axis accelerometer (48.8 Hz). It also displays thirty five~\gls{gasf} segments of a linear combination of the multidimensional time series. The combination collapses the signal into one dimension, and makes easy the transformation into~\gls{gasf}. For this case, each image corresponds to 0.65 seconds and have 32 data samples.
 
 \begin{figure}[H]
     \centering
@@ -318,8 +318,10 @@ An example of signal decomposition into~\gls{gasf} images is shown in Figure~\re
 \end{figure}
 
 Given recent advances in deep learning and pattern recognition for images, we take the route of~\citep{wang_encoding_2015} and exploit the applicability of autoencoders for extracting unsupervised features from~\gls{gasf} images (see Section~\ref{sec:autoencoder}). This is relevant since the process of feature engineering is time-consuming and laborious. Moreover, unsupervised feature extraction from such methods has been proven to work well~\citep{wang_imaging_2015, wang_time_2016}.
-Sparse encoding via linear-algebra methods for dictionary learning is also a possibility. However, in our experiments, it turned out to be not as efficient as autoencoders. After encoding the images using an autoencoder we are left with a continuous description of each image and a procedure of discretization and dictionary learning for~\gls{lda} had to be performed. For this, we clustered the representations and used the so-obtained cluster centroids as dictionary words. This methodology is summarized in Figure~\ref{diagram:methodology}. In summary, 
-for each available raw acceleration, time series segments (windows) are extracted. Such segments are then turned into~\gls{gasf} images, whose representations (features) are obtained using an autoencoder. Since the basic \gls{lda} method works with a multinomial distribution of topics, hence a discrete distribution, we define a dictionary of visual ``words'' (through clustering) before inferring the~\gls{lda} variables. Therefore, for each~\gls{gasf} vector of representation we use its cluster centroid as a surrogate, allowing for the discretization into representative words. In the~\gls{lda} model, the latent variable of interest are the \textit{mixture proportions} and the \textit{topic} distributions, which basically estimate the participation of each uncovered topic (player types) in the generation of the player data.
+
+Sparse encoding via linear-algebra methods for dictionary learning is also a possibility. However, in our experiments, it turned out to be not as efficient as autoencoders. After encoding the images using an autoencoder we are left with a continuous description of each image and a procedure of discretization and dictionary learning for~\gls{lda} had to be performed. For this, we clustered the representations and used the so-obtained cluster centroids as dictionary words. This methodology is summarized in Figure~\ref{diagram:methodology}.
+
+In summary, for each available raw acceleration, time series segments (windows) are extracted. Such segments are then turned into~\gls{gasf} images, whose representations (features) are obtained using an autoencoder. Since the basic \gls{lda} method works with a multinomial distribution of topics, hence a discrete distribution, we define a dictionary of visual ``words'' (through clustering) before inferring the~\gls{lda} variables. Therefore, for each~\gls{gasf} vector of representation we use its cluster centroid as a surrogate, allowing for the discretization into representative words. In the~\gls{lda} model, the latent variable of interest are the \textit{mixture proportions} and the \textit{topic} distributions, which basically estimate the participation of each uncovered topic (player types) in the generation of the player data.
 
 \begin{figure}[h]
 	\centering
@@ -341,7 +343,7 @@ for each available raw acceleration, time series segments (windows) are extracte
      \path [l] (features) -- (dict);
      \path [l] (dict) -- (lda);
     \end{tikzpicture}
-    \caption{The pipeline of our methodology.}
+    \caption{The pipeline of using LDA for grouping player motion profiles in RoboTower 2.0.}
     \label{diagram:methodology}
 \end{figure}
 
@@ -364,7 +366,7 @@ A window of half a second corresponds to 32 samples given our accelerometer aver
 
 It is possible to notice from the reconstruction result that, despite such a large compression (from 1024 to only 64 values), the input image relevant structure is captured. This can also be seen in the reconstructed time series. A closer look reveals that the autoencoder practically smoothed the time series while preserving the overall shape, this being a nice property that can help to prevent overfitting.
 
-From Figure~\ref{fig:reconstruction}, we can also see that the obtained time series reconstruction presents some holes. This seems to be caused by the information loss in the reconstruction. In our experimentation, data are well approximated and this issue does not seem to affect the learning performance.
+From Figure~\ref{fig:reconstruction}, we can also see that the obtained time series reconstruction presents some holes. This seems to be caused by the information loss in the autoencoder reconstruction. In our experimentation, data are well approximated and this issue does not seem to affect the learning performance.
 
 \subsubsection{Dictionary Learning and input word definition}
 \glsdesc{lda} works by considering the relationship among word tokens with respect to a collection of documents. Therefore, in order to use the method, we needed to come up with a way to encode the diversity of~\gls{gasf} images into a discrete set of fixed tokens describing the motion primitives appearing in each game session. We opted to follow an approach similar to~\cite{prince_computer_2012} and further encode each extracted vector of feature as \textit{visual words}, finally composing the game session document. 
@@ -393,7 +395,7 @@ Each line represents a topic, while each column represents a word. As one can se
 
 In order to validate the discovered topics, we use human judgment. We invited volunteers to watch a set of pairs of recorded game segments (15 s each) and point out the similarities between players in their motivation as perceived by their motion. Subjects had to judge how similar, on a scale from 0--5, the movements of two players were. With this, we generated a similarity matrix to be used as the ground truth and main guide for deciding which hyper-parameter value to use and to check whether the proposed method could achieve reasonable results.
 
-The similarity matrix was composed of $406$ independent evaluations from six different human subjects. The generated evaluation matrix was then compared with a cosine similarity matrix generated after training the~\gls{lda} in our dataset. The similarity, in this case, is based on the mixture proportions among the discovered topics. 
+The similarity matrix was composed of 406 independent evaluations from six different human subjects. The generated evaluation matrix was then compared with a cosine similarity matrix generated after training the~\gls{lda} in our dataset. The similarity, in this case, is based on the mixture proportions among the discovered topics. 
 
 We used this information to define the number of topics and the number of words. The best set of parameters is the one that presents a higher similarity compared to the one expressing human judgment. The metric used for evaluation was the~\gls{mse}. The graph in Figure~\ref{hyperparameter_results} shows the results obtained varying the size of the dictionary (number of cluster centroids) and the number or topics. From it, we have decided to pick 100 as the number of visual words and 10 for the topics present in our dataset.
 
