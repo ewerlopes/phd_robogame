@@ -91,13 +91,11 @@ The kinematic model of an omni-directional base consists of an equation of motio
   \caption{Kinematics diagram of the base of an omnidirectional robot. a) omnidirectional base wheels displacement angle. b) the omnidirectional base reference frames and velocities.}
 \end{figure}
 
-Considering the figure (\ref{triskar2}), each wheel of the robot is driven by a DC motor and its center has the same distance L to the robot center of mass $P_0$. we define the fixed world coordinate system [$X_R$, $Y_R$] and a mobile robot fixed frame [${x}^m_R$, ${y}^m_R$] that is parallel to the floor and whose origin locates at $P_0$.\\
-The robot's orientation is denoted by angle $\theta$, which is the direction angle of the axis $X_m$ in the world coordinate system (positive in the
-counterclockwise direction) and $\delta$ refers to the wheel orientation in the robot coordinate system and it is equal to 30 degrees in our considered example.
-\\
-$\alpha$ and $\phi$ denote the direction of the robot translation velocity $v_R$ observed in the world and robot coordinate systems, respectively.\\
-We consider \textbf{v} = [$\dot{x}^m_R,\dot{y}^m_R,\omega$]$^T$ the robot velocities observed in the robot coordinate system; \\
-$\mathbf{\dot{q}}$ = [$\dot{q}_1,\dot{q}_2,\dot{q}_3$]$^T$ is the vector of wheel velocities equal to the i-th wheel radius $r_\omega$ multiplied by the wheel angular velocity.
+Considering the figure (\ref{triskar2}), each wheel of the robot is driven by a DC motor and its center has the same distance L to the robot center of mass $P_0$. we define the fixed world coordinate system [$X_R$, $Y_R$] and a mobile robot fixed frame [${x}^m_R$, ${y}^m_R$] that is parallel to the floor and whose origin locates at $P_0$.
+
+The robot's orientation is denoted by angle $\theta$, which is the direction angle of the axis $X_m$ in the world coordinate system (positive in the counterclockwise direction) and $\delta$ refers to the wheel orientation in the robot coordinate system and it is equal to 30 degrees in our considered example. $\alpha$ and $\phi$ denote the direction of the robot translation velocity $v_R$ observed in the world and robot coordinate systems, respectively.
+
+We consider \textbf{v} = [$\dot{x}^m_R,\dot{y}^m_R,\omega$]$^T$ the robot velocities observed in the robot coordinate system; $\mathbf{\dot{q}}$ = [$\dot{q}_1,\dot{q}_2,\dot{q}_3$]$^T$ is the vector of wheel velocities equal to the i-th wheel radius $r_\omega$ multiplied by the wheel angular velocity.
 
 We introduce the transformation matrix from the robot coordinate system to the world coordinate system:
 \begin{equation}
@@ -148,7 +146,7 @@ y_{Ri}\\
 \end{bmatrix}
 \end{equation}
 
-Again, considering that the wheels present a displacement of $120^\circ$ between each other we can deduce the following three vectors:
+Again, considering that the wheels present a displacement of 120$^\circ$ between each other we can deduce the following three vectors:
 
 \begin{equation}
 \begin{cases} 
@@ -514,8 +512,8 @@ Let us consider again the equation~\ref{model2} introduced in section~\ref{sec:k
 		\dot{q_3}\\
 	\end{bmatrix}	
 \end{equation*}
-As we already anticipated, the transformation matrix is full rank. A matrix is said to have full rank if its rank equals the largest possible for a matrix of the same dimensions. Now considering the matrix properties, we know that if $A$ is a square matrix ($m = n$), then $A$ is invertible if and only if $A$ has rank $n$ (that is, $A$ has full rank).\\
-For the high-level control laws without considering the wheel velocities, the kinematic model is given as:
+As we already anticipated, the transformation matrix is full rank. A matrix is said to have full rank if its rank equals the largest possible for a matrix of the same dimensions. Now considering the matrix properties, we know that if $A$ is a square matrix ($m = n$), then $A$ is invertible if and only if $A$ has rank $n$ (that is, $A$ has full rank). For the high-level control laws without considering the wheel velocities, the kinematic model is given as:
+
 \begin{equation}
 \begin{bmatrix}
 \dot{\bar{x}}_R\\
@@ -550,10 +548,9 @@ As anticipated, it is now necessary to transform the velocities from world frame
 We define an \textit{Inverse Input-Output Linearization} based control approach where:
 
 \begin{equation}
-    C = G^{-1},
+    C = G^{-1}
 \end{equation} 
-
-denotes that the translation and rotation of the robot are decoupled, and guarantees the separate control of these two movements. The linearized system becomes $\mathbf{\dot{x}} = \mathbf{u}$ with a new input vector \textbf{u} = [$u_1,u_2,u_3$]$^T$.
+, denotes that the translation and rotation of the robot are decoupled, and guarantees the separate control of these two movements. The linearized system becomes $\mathbf{\dot{x}} = \mathbf{u}$ with a new input vector \textbf{u} = [$u_1,u_2,u_3$]$^T$.
 
 \begin{figure}[H]
 	\centering
@@ -562,8 +559,7 @@ denotes that the translation and rotation of the robot are decoupled, and guaran
 	\label{comp1}
 \end{figure}
 
-Figure~\ref{comp1} shows a linear system completely decoupled and enable to control the robot translation and rotation in a separate way. \\
-When a controller $K$ is designed based on this simple linear system, the controller of the original system is generated as $CK$. The overall control loop, consists of the nonlinear system, the compensator, and the controller shown below:
+Figure~\ref{comp1} shows the scheme to obtain a linear system decoupled, which enables to control the robot translation and rotation in a separate way. When a controller $K$ is designed based on this simple linear system, the controller of the original system is generated as $CK$. The overall control loop, consists of the nonlinear system, the compensator, and the controller shown below:
 
 \begin{figure}[H]
 	\centering
@@ -604,7 +600,7 @@ The outputs of algorithm~\ref{alg:pointopoint} will then be the input of the com
 With this approach, the velocity set-points $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, returned from the algorithm~\ref{alg:compensator}, dynamically change during the game and often the variation has a step-function shaped form that causes the low level actuation to react violently to make the robot reaching the desired velocity, especially when starting from the initial position with 0-velocity (see figures~\ref{vel14} and~\ref{wheel14}).
 This will result in the robot wheels undergoing in slippage due to the too sharp acceleration required to reach the velocity set-point. This is an undesired effect that is source of non-systematic odometry errors that may lead to instability and loss of localization. A number of tests have been performed to quantify the effect of the wheel slippage during the initial robot acceleration phase. In these tests the robot linearly translates along $x$ and $y$ axis and receives the initial velocity set-point at $1m/s$ or $1.4m/s$. In figures~\ref{opti14},~\ref{amcl14},~\ref{poserror14},~\ref{opti14y},~\ref{amcl14y}, and~\ref{poserror14y} we can see the localization error introduced during the xy-translation.
 
-To avoid this effect, a velocity smoother has been introduced in order to obtain a smooth velocity set-point control signal to be sent to the robot low level actuation to avoid wheels slippage during the  acceleration phase. The inputs of the velocity smoother are the un-smoothed velocity set-points [$\dot{\bar{x}}_R^m$, $\dot{\bar{y}}_R^m$], some of the internal parameters such as maximum allowed velocity and maximum allowed acceleration can be changed online to modify the final response of the robot, t. The output are the final xy-velocity control signals [$\dot{x}_R^m$, $\dot{y}_R^m$] in robot reference frame that will be sent to the low level actuation.
+To avoid this effect, a velocity smoother has been introduced in order to obtain a smooth velocity set-point control signal to be sent to the robot low level actuation to avoid wheels slippage during the  acceleration phase. The inputs of the velocity smoother are the un-smoothed velocity set-points [$\dot{\bar{x}}_R^m$, $\dot{\bar{y}}_R^m$], some of the internal parameters such as maximum allowed velocity and maximum allowed acceleration can be changed online to modify the final response, t, of the robot. The output are the final xy-velocity control signals [$\dot{x}_R^m$, $\dot{y}_R^m$] in robot reference frame that will be sent to the low level actuation.
 
 \begin{algorithm}[h]
 	\# define initial velocity\;
@@ -625,10 +621,10 @@ To avoid this effect, a velocity smoother has been introduced in order to obtain
 	${\dot{y}_R^m} = {\dot{\bar{y}}_R^m}_{(t-1)}+\tau\cdot{\dot{\bar{y}}_R^m}_{(t)}-\tau\cdot{\dot{\bar{y}}_R^m}_{(t-1)}$ \;
 	\Return $\dot{x}_R^m$, $\dot{y}_R^m$
 	\caption{Velocity Smoother} 
-	\label{smoother}
+	\label{alg:smoother}
 \end{algorithm}
 
-With the values reported in table~\ref{parsmoother}, the behavior shown in figure~\ref{controlsweep} has been obtained. The velocity smoother runs together with the Point-to-Point Navigation algorithm to apply robot's velocity and acceleration limits to the incoming commands before re-sending them to the robot. It basically pre-filters any incoming command input based on some acceleration constraints. 
+With the values reported in table~\ref{parsmoother}, the behavior shown in figure~\ref{controlsweep} has been obtained. The velocity smoother (algorithm~\ref{alg:smoother}) runs together with the Point-to-Point Navigation algorithm to apply robot's velocity and acceleration limits to the incoming commands before re-sending them to the robot. It basically pre-filters any incoming command input based on some acceleration constraints. 
 
 \begin{table}[h]
 	\begin{center}
@@ -784,7 +780,7 @@ Naturally, there exist nodes for the control of other tasks, such as: game and t
 	\label{fig:ros_graph_robotower}
 \end{figure}
 
-\section{Fuzzy Rules} 
+\section{Fuzzy rules for obstacle avoidance} 
 \subsection{Repulsive behavior if obstacles are encountered}
 
 \begin{enumerate}

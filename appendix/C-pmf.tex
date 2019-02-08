@@ -4,8 +4,7 @@ One possibility for modeling how well a player played a given~\gls{ds} would be 
 
 By using a matrix factorization approach we can model the score signal in the space of latent features. In this space, we define factors (detached for any standard unit measure) and take advantage of collaborative filtering approaches to relate~\gls{ds} to users. Collaborative filtering is an approach used in recommendation systems where other user's ratings are used to recommend an item to a new user. The recommendation happens by exploring the similarity among users.
 
-In this appendix, we go over the theory with~\gls{pmf}~\citep{mnih_probabilistic_2008} and point out its relationship with our scenario of interest. Suppose we have $M$ robot difficulty settings\footnote{This can be thought of as setting that have a relationship with game difficulty. In our study case we investigate robot velocity and blocking factor. This later is defined as a measure of how tolerant the robot should be towards the situation of having a path to a tower being blocked the player). In other words, the utility of the robot in going to a given tower is inverse proportional to its blocking factor.}, $N$
-players, and score values in $\mathbb{R}$. Let $S_{ij}$ represent the score of player $i$ for difficulty setting (DS) $j$, $U \in \mathbb{R}^{D\times N}$ and $V \in \mathbb{R}^{D\times M}$ be latent player and~\gls{ds} feature matrices, with column vectors $U_i$ and $V_j$ representing player-specific and~\gls{ds}-specific latent feature vectors respectively.  
+In this appendix, we go over the theory with~\gls{pmf}~\citep{mnih_probabilistic_2008} and point out its relationship with our scenario of interest. Suppose we have $M$ robot difficulty settings, $N$ players, and score values in $\mathbb{R}$. Let $S_{ij}$ represent the score of player $i$ for difficulty setting (DS) $j$, $U \in \mathbb{R}^{D\times N}$ and $V \in \mathbb{R}^{D\times M}$ be latent player and~\gls{ds} feature matrices, with column vectors $U_i$ and $V_j$ representing player-specific and~\gls{ds}-specific latent feature vectors respectively.  
 
 Note that part of score matrix $S$ is observed. We then note the following fact
 
@@ -157,7 +156,7 @@ Thus one may map the ratings $1, ..., K$ to the interval $[0, 1]$ using the func
   }
  }
  \textbf{Predict} that player i scores in~\gls{ds} j as $U_{i}^{T}V_j$.
- \caption{MAP inference coordinate ascent algorithm for the~\gls{pmf} model.}
+ \caption{MAP inference coordinate ascent algorithm for the~\gls{pmf} model for the case of items recomendations.}
 \end{algorithm}
 \end{center}
 
