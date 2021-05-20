@@ -1,0 +1,87 @@
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+    [
+      observed/.style={minimum size=15pt,circle,draw=blue!50,fill=blue!20},
+      unobserved/.style={minimum size=15pt,circle,draw},
+      hyper/.style={minimum size=1pt,circle,fill=black},
+      post/.style={->,>=stealth',semithick},
+      bend_left/.style={->,>=stealth',semithick, left=30},
+      bend_right/.style={->,>=stealth',semithick, right=20},
+    ]
+
+	% mixture proportions
+    \node (theta) [unobserved] at (-3.5,2.5) {$\boldsymbol{\theta}_s$};
+    \node (pi) [unobserved] at (2,2.5) {$\boldsymbol{\pi}_{p}$};
+    
+    \node (theta-hyper) [label=above:$\alpha$, left of=theta]{};
+    \filldraw [black, left of=theta] (-3.5,2.5) circle (3pt);
+    
+    \node (pi-hyper) [label=above:$\lambda$] at (3,2.5) {};
+    \filldraw [black] (3,2.5) circle (3pt);
+
+	% features lda variables
+    \node (f_d_n) [observed] at (0,0) {$\boldsymbol{f}_{d,n}$};
+    \node (zf_d_n) [unobserved] at (-1.5,0) {$z_{d,n}$};
+    
+    \node (mu) [unobserved] at (2,0.7) {$\boldsymbol{\mu}_{k}$};
+  	\node (lam) [unobserved] at (2,-0.7) {$\boldsymbol{\Lambda}_{k}$};
+    
+    \node (lambda-hyper) [label=above:$\mathcal{W}_{0}\nu_{0}$] at (3.5,-0.7) {};
+    \filldraw [black] (3.5,-0.7) circle (3pt);
+    
+    \node (mu-hyper) [label=above:$\mu_{0}$] at (3.5,0.7) {};
+    \filldraw [black] (3.5,0.7) circle (3pt);
+    
+    % Progress and effort
+    \node (effort) [observed] at (-0.7,3.7) {$\boldsymbol{\xi}_{d,m}$};
+    \node (progress) [observed] at (-0.7,1.7) {$\psi_{d}$};
+    
+    % indicators
+    \node (sigma) [observed] at (-1.5,-2) {$\sigma_{d}$};
+    \node (rho) [observed] at (0,-2) {$\rho_{d}$};
+    
+    \node (rhoa) [observed] at (-0.7,5.5) {$\rho_{d}$};
+    
+    \path
+    (zf_d_n) edge [post] (f_d_n)
+    (theta-hyper) edge [post] (theta)
+    (theta) edge [bend right=15,->,>=stealth',semithick] (zf_d_n)
+    (mu) edge [post] (f_d_n)
+    (lambda-hyper) edge [post] (lam)
+    (mu-hyper) edge [post] (mu)
+    (pi) edge [bend left=10,->,>=stealth',semithick] (zf_d_n)
+    (pi-hyper) edge [post] (pi)
+    (sigma) edge [post] (zf_d_n)
+    (rho) edge [post] (f_d_n)
+    (rhoa) edge [post] (effort)
+    (pi) edge [bend right=15,->,>=stealth',semithick] (effort)
+    (theta) edge [bend right=15,->,>=stealth',semithick] (progress)
+    (theta) edge [bend left=15,->,>=stealth',semithick] (effort)
+    (pi) edge [bend left=15,->,>=stealth',semithick] (progress)
+    (lam) edge [post] (f_d_n)
+  	(lam) edge [post] (mu)
+    ;
+
+	\node [draw,fit=(theta) (theta), inner sep=10pt] (plate-prior){};
+    \node [above right] at (plate-prior.south west) {$S$};
+    
+    \node [draw,fit=(f_d_n) (zf_d_n) (sigma) (rho) (rhoa) (effort) (progress), inner sep=15pt] (plate-context) {};
+    \node [above right] at (plate-context.south west) {$D$};
+    
+    \node [draw,fit=(f_d_n) (zf_d_n), inner sep=10pt] (plate-token) {};
+    \node [above right] at (plate-token.south west) {$N$};
+    
+     \node [draw,fit=(effort), inner sep=10pt] (plate-actions) {};
+    \node [above right] at (plate-actions.south west) {$M$};
+    
+    \node [draw,fit=(mu) (lam), inner sep=10pt] (plate-topic) {};
+    \node [above right] at (plate-topic.south west) {$K$};
+    
+    \node [draw,fit=(pi), inner sep=10pt] (plate-pi) {};
+    \node [below right=0.05cm and 0.01cm of pi]{$P$};
+
+  \end{tikzpicture}
+  \caption{Graphical model for the~\gls{pepga} model. The model reuses ideas from the~\gls{pga} model~\cite{smith_mining_2016} depicted in figure~\ref{gph:pga}, but goes several steps ahead by jointly incorporating variables for capturing effort and progress. It does that through the variables $\xi$ and $\psi$, respectively. Another main difference is that the model uses a continuous version of the LDA and rather than focusing in the actions alone it includes player game state features $\boldsymbol{f}$, which are collectively modeled. This last helps to understand the interaction between player and game level $s$.}
+  \label{gph:graphical-model}
+\end{figure}

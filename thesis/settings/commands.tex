@@ -1,0 +1,126 @@
+%=============================================
+% Commands
+%---------------------------------------------
+
+%---------------------------------------------
+% Generic
+%
+\newcommand{\thesistitle}{Learning models to optimize the player experience in robogames}
+
+\usepackage{xspace}
+\DeclareRobustCommand{\eg}{e.g.,\@\xspace}
+\DeclareRobustCommand{\ie}{i.e.,\@\xspace}
+\DeclareRobustCommand{\wrt}{w.r.t.\@\xspace}
+
+
+\newcommand{\Environment}{\mathcal{E}}
+\newcommand{\Objective}{\mathcal{J}}
+\newcommand{\statespace}{\mathcal{X}}
+\newcommand{\observationspace}{\mathcal{O}}
+\newcommand{\actionspace}{\mathcal{U}}
+\newcommand{\Rmodel}{\mathcal{R}}
+\newcommand{\Pmodel}{\mathcal{P}}
+\newcommand{\Omodel}{\Omega}
+\newcommand{\Imodel}{\mathcal{\iota}}
+\newcommand{\Dataset}{\mathcal{D}}
+\newcommand{\traj}{\tau}
+\newcommand{\trajset}{\mathcal{T}}
+\newcommand{\trajspace}{\mathbb{T}}
+
+\newcommand{\gradient}[1]{\nabla_{#1}}
+\newcommand{\Hessian}{\mathcal{H}}
+
+\newcommand{\genericdist}{\mathcal{D}}
+
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+%---------------------------------------------
+% Algorithms
+%
+
+\newcommand{\algorithmicinput}{\textbf{input}}
+\newcommand{\algorithmicoutput}{\textbf{output}}
+\newcommand{\INPUT}{\item[\algorithmicinput]}
+\newcommand{\OUTPUT}{\item[\algorithmicoutput]}
+
+%---------------------------------------------
+% Math & Theorems
+%
+
+\newtheorem{Property}{Property}
+\newtheorem{theorem}{Theorem}
+\newtheorem{assumption}{Assumption}
+\crefname{Property}{Property}{Properties}
+
+%---------------------------------------------
+% Hierarchical
+%
+
+\newcommand{\Cgraph}{\mathcal{G}}
+\newcommand{\Cblocks}{B}
+\newcommand{\Cblock}{b}
+\newcommand{\CDedges}{D}
+\newcommand{\CDedge}{d}
+\newcommand{\CRedges}{C}
+\newcommand{\CRedge}{c}
+\newcommand{\CAedges}{A}
+\newcommand{\CAedge}{a}
+
+%---------------------------------------------
+% IRL
+%
+
+%\newcommand{\SOMEIRL}{SOME-IRL\xspace}
+%\newcommand{\GIRL}[1][]{GIRL}
+%\newcommand{\PGIRL}[1][]{PGIRL}
+
+\newcommand{\Rparams}{\boldsymbol{\omega}}
+\newcommand{\Hparams}{\boldsymbol{\rho}}
+\newcommand{\Pparams}{\boldsymbol{\theta}}
+\newcommand{\PPspace}{\Theta}
+
+%---------------------------------------------
+% Figures
+%
+\newlength\figureheight 
+\newlength\figurewidth 
+
+%---------------------------------------------
+% Glossary style
+%
+\setglossarystyle{altlist}
+
+% table icons
+%%%%% marks %%%%%
+
+\newcommand{\mysquare}[1][black]{\small\textcolor{#1}{\ensuremath\blacksquare}}
+\newcommand{\mycirc}[1][black]{\small\textcolor{#1}{\ensuremath\bullet}}
+\newcommand{\mylozenge}[1][black]{\small\textcolor{#1}{\ensuremath\blacklozenge}}
+\newcommand{\mytriangle}[1][red]{\small\textcolor{#1}{\ensuremath\blacktriangle}}
+\newcommand{\mydtriangle}[1][black]{\small\textcolor{#1}{\ensuremath\blacktriangledown}}
+\newcommand{\mystar}[1][black]{\Large\textcolor{#1}{\ensuremath\star}} %% or \bigstar
+%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% \norm command
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+
+%---------------------------------------------
+% Listing style
+%
+\lstdefinestyle{customc}{
+    frame=tb, % draw a frame at the top and bottom of the code block
+    tabsize=4, % tab space width
+    showstringspaces=false, % don't mark spaces in strings
+    numbers=left, % display line numbers on the left
+    xleftmargin=2em,
+    framexleftmargin=1.5em,
+    commentstyle=\color{green}, % comment color
+    keywordstyle=\color{blue}, % keyword color
+    stringstyle=\color{red} % string color
+}
+
+\lstset{escapechar=@,style=customc}
+
+

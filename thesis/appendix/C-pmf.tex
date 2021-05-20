@@ -1,0 +1,163 @@
+\chapter{Derivation of Probabilistic Matrix Factorization}\label{app:pmf}
+\small
+One possibility for modeling how well a player played a given~\gls{ds} would be to use linear regression for fitting a curve to score signals (dependent variables). This may require a great amount of feature engineering in order to define the independent variables. Besides being a time-consuming task, feature engineering may require a different set of features depending on difficulty levels, robot capabilities, etc. 
+
+By using a matrix factorization approach we can model the score signal in the space of latent features. In this space, we define factors (detached for any standard unit measure) and take advantage of collaborative filtering approaches to relate~\gls{ds} to users. Collaborative filtering is an approach used in recommendation systems where other user's ratings are used to recommend an item to a new user. The recommendation happens by exploring the similarity among users.
+
+In this appendix, we go over the theory with~\gls{pmf}~\citep{mnih_probabilistic_2008} and point out its relationship with our scenario of interest. Suppose we have $M$ robot difficulty settings, $N$ players, and score values in $\mathbb{R}$. Let $S_{ij}$ represent the score of player $i$ for difficulty setting (DS) $j$, $U \in \mathbb{R}^{D\times N}$ and $V \in \mathbb{R}^{D\times M}$ be latent player and~\gls{ds} feature matrices, with column vectors $U_i$ and $V_j$ representing player-specific and~\gls{ds}-specific latent feature vectors respectively.  
+
+Note that part of score matrix $S$ is observed. We then note the following fact
+
+\begin{equation}
+p(S_{ij} | U, V) = \int p(S_{ij}, S_{/\{ij\}} ) | U, V)dS_{/\{ij\}}
+\end{equation}
+, where $S_{/\{ij\}}$ is the unobserved part of $S$, i.e., it is those matrix entries whose score of player $i$ in the~\gls{ds} $j$ is missing. The joint can be factorized in the following way:
+
+\begin{equation}
+p(S_{ij},U,V) = \underbrace{\Bigg[\prod_{(i,j)\in\Omega} p(S_{ij}|u_{i}v_{j}) \Bigg]}_\text{conditionally independent likelihood} \underbrace{\Bigg[\prod_{i=1}^{N}p(u_{i})\Bigg] \Bigg[\prod_{j=1}^{M}p(v_{j})\Bigg]}_\text{independent priors}
+\end{equation}
+
+
+Since model performance is measured by computing the~\gls{rmse} on the test set we first adopt a probabilistic linear model with Gaussian observation noise. We define the conditional distribution over the observed ratings as
+
+\begin{equation}
+p(S|U,V,\sigma^{2}) = \prod_{i=1}^{N}\prod_{j=1}^{M} \Bigg[ \mathcal{N}(S_{ij}|U^{T}_{i}V_{j},\sigma^{2}) \Bigg]^{I_{ij}},
+\end{equation}
+where $\mathcal{N}(x|\mu, \sigma^{2})$ is the probability density function of the Gaussian distribution with mean $\mu$ and variance $\sigma^{2}$, and $I_{ij}$ is the indicator function that is equal to $1$ if player $i$ played~\gls{ds} $j$ and equal to 0 otherwise.  We also place zero-mean spherical Gaussian priors on user and movie feature vectors:
+
+\begin{equation}\label{eq:map}
+p(U|\sigma_{U}^{2}) = \prod_{i=1}^{N}\mathcal{N}(U_{i}|0,\sigma_{U}^{2}\boldsymbol{I}) \qquad p(V|\sigma_{V}^{2}) = \prod_{j=1}^{M}\mathcal{N}(V_{j}|0,\sigma_{V}^{2}\boldsymbol{I})
+\end{equation}
+
+Upon defining the form of the priors and likelihood, we are interested in the following posterior\footnote{Note the technicality here, what should be kept in mind is that the posterior is referring to the posterior obtained after running maximum likelihood (MLL). The MAP solution referred here for $U$ and $V$ is the maximum of the log joint likelihood (i.e., MLL), not the posterior from the application of standard Bayes rule (note the equation~(\ref{eq:map}), does not divide by $S$.}
+
+\begin{align}
+\small
+p(U,V|S,\sigma^{2},\sigma_{U}^{2},\sigma_{V}^{2}) &= \prod_{i=1}^{N}\prod_{j=1}^{M} \Bigg[ \mathcal{N}(S_{ij}|U^{T}_{i}V_{j},\sigma^{2}) \Bigg]^{I_{ij}}\Bigg[\prod_{i=1}^{N}\mathcal{N}(U_{i}|0,\sigma_{U}^{2}\boldsymbol{I})\Bigg] \\ &\quad \Bigg[\prod_{j=1}^{M}\mathcal{N}(V_{j}|0,\sigma_{V}^{2}\boldsymbol{I})\Bigg]
+\normalsize
+\end{align}
+
+
+Let's work with the log of the posterior distribution, considering $\Phi = (S,\sigma^{2},\sigma_{U}^{2},\sigma_{V}^{2})$
+
+\begin{align*}
+\ln{p(U,V|\Phi)} &= \sum_{i=1}^{N}\sum_{j=1}^{M} I_{ij}\ln{\Bigg(\mathcal{N}(S_{ij}|U^{T}_{i}V_{j},\sigma^{2})\Bigg)} + \sum_{i=1}^{N}\ln{\mathcal{N}(U_{i}|0,\sigma_{U}^{2}\boldsymbol{I})} \\&\quad 
++ \sum_{j=1}^{M}\ln{\mathcal{N}(V_{j}|0,\sigma_{V}^{2}\boldsymbol{I})}\\
+&\\
+&= \sum_{i=1}^{N}\sum_{j=1}^{M} I_{ij}\ln{\Bigg( (2\pi)^{-\frac{1}{2}}(\sigma^{2})^{-\frac{1}{2}} exp\Bigg\{-\frac{1}{2\sigma^{2}}(S_{ij} - U_{i}^{T}V_{j})^{2} \Bigg\}  \Bigg)} \\&\quad
++ \sum_{i=1}^{N} \ln{ \Bigg( \frac{1}{(2\pi)^{\frac{D}{2}}(\sigma_{U}^{\cancel{2}})^{\frac{D}{\cancel{2}}}} exp\Bigg\{ -\frac{1}{2\sigma_{U}^{2}} U_{i}^{T}U_{i} \Bigg\} \Bigg) } \\&\quad
++ \sum_{j=1}^{M} \ln{ \Bigg( \frac{1}{(2\pi)^{\frac{D}{2}}(\sigma_{V}^{\cancel{2}})^{\frac{D}{\cancel{2}}}} exp\Bigg\{ -\frac{1}{2\sigma_{V}^{2}} V_{j}^{T}V_{j} \Bigg\} \Bigg) }\\
+&\\
+&= \sum_{i=1}^{N}\sum_{j=1}^{M} I_{ij}\Bigg[-\frac{1}{2}\ln{(2\pi)} -\frac{1}{2}\ln{(\sigma^{2}) -\frac{1}{2\sigma^{2}}(S_{ij} - U_{i}^{T}V_{j})^{2}\Bigg]} \\&\quad
+-\frac{1}{2} \sum_{i=1}^{N}\Bigg[ D\ln{2\pi} + D\ln{\sigma_{U}^{2}} + \frac{U_{i}^{T}U_{i}}{\sigma_{U}^{2}} \Bigg] \\&\quad
+-\frac{1}{2} \sum_{j=1}^{M}\Bigg[ D\ln{2\pi} + D\ln{\sigma_{V}^{2}} + \frac{V_{j}^{T}V_{j}}{\sigma_{V}^{2}} \Bigg] \\
+\\
+&= -\frac{1}{2\sigma^{2}}\sum_{i=1}^{N}\sum_{j=1}^{M} I_{ij}(S_{ij} - U_{i}^{T}V_{j})^{2} -\frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^{M} I_{ij}\ln{(\sigma^{2})} \underbrace{-\frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^{M} I_{ij}\ln{(2\pi)}}_\text{constant} \\&\quad
+-\frac{1}{2} \sum_{i=1}^{N}  \frac{U_{i}^{T}U_{i}}{\sigma_{U}^{2}} -\frac{1}{2} \sum_{i=1}^{N} D\ln{\sigma_{U}^{2}} \underbrace{-\frac{1}{2} \sum_{i=1}^{N} D\ln{2\pi}}_\text{constant} \\&\quad
+-\frac{1}{2} \sum_{j=1}^{M}  \frac{V_{j}^{T}V_{j}}{\sigma_{V}^{2}} -\frac{1}{2} \sum_{j=1}^{M} D\ln{\sigma_{V}^{2}} \underbrace{-\frac{1}{2} \sum_{j=1}^{M} D\ln{2\pi}}_\text{constant}\\
+\\
+&= -\frac{1}{2\sigma^{2}}\sum_{i=1}^{N}\sum_{j=1}^{M} I_{ij}(S_{ij} - U_{i}^{T}V_{j})^{2} - \frac{1}{2\sigma_{U}^{2}} \sum_{i=1}^{N} U_{i}^{T}U_{i} -\frac{1}{2\sigma_{V}^{2}} \sum_{j=1}^{M} V_{j}^{T}V_{j} \\&\quad
+\underbrace{-\frac{1}{2}\Bigg( \sum_{i=1}^{N}\sum_{j=1}^{M} I_{ij}\ln{\sigma^{2}} + ND\ln{\sigma_{U}^2} + MD\ln{\sigma_{V}^2}\Bigg)}_\text{since we assume $\sigma^{2},\sigma_{U}^{2},\sigma_{V}^{2}$ are given, this can be absorbed into the constant} + const\tag{\stepcounter{equation}\theequation}
+\end{align*}
+
+So, we can equivalently minimize (since we view it as a cost function and normally we \textit{minimize} cost functions) the negative of the above expression. Let's also eliminate $\sigma^2$ by multiplying everything by $-\sigma^2$.
+
+\begin{align}
+E &= \frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^{M} I_{ij}(S_{ij} - U_{i}^{T}V_{j})^{2} +\frac{\lambda_U}{2} \sum_{i=1}^{N} U_{i}^{T}U_{i} +\frac{\lambda_V}{2} \sum_{j=1}^{M} V_{j}^{T}V_{j}
+\end{align}
+\begin{empheq}[box=\tcbhighmath]{equation*}
+E = \frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^{M} I_{ij}(S_{ij} - U_{i}^{T}V_{j})^{2} +\frac{\lambda_U}{2} \sum_{i=1}^{N} \norm{U_{i}}_{FRO}^{2} +\frac{\lambda_V}{2} \sum_{j=1}^{M} \norm{V_{j}}_{FRO}^{2}
+\end{empheq}
+,where $\lambda_{U} = \sigma^{2}/\sigma_{U}^{2}$, $\lambda_{V} =\sigma^{2}/\sigma_{V}^{2}$ and $\norm{\cdot}_{FRO}$ is the Frobenius norm: $\sqrt[]{\sum_{i=1}^{N}\sum_{j=1}^{M} A_{ij}^{2}}$, for a matrix $A$ of dimension $N \times M$. Note that in the equation above the square root gets eliminated by the exponent.
+
+Taking the partial derivatives with respect to the latent variables, we have
+
+\begin{align}\label{eq:derivativel}
+\frac{\partial E}{\partial U_{i}} &= \frac{\partial}{\partial U_{i}} \Bigg(\frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^{M} I_{ij}(S_{ij} - \underbrace{U_{i}^{T}V_{j}}_\text{$V_{j}^{T}U_{i}$})^{2} +\frac{\lambda_U}{2} \sum_{i=1}^{N} \underbrace{\norm{U_{i}}_{FRO}^{2}}_\text{$U_{i}^{T}U_{i}$} + \underbrace{\frac{\lambda_V}{2} \sum_{j=1}^{M} \norm{V_{j}}_{FRO}^{2}}_\text{constant w.r.t. $U_{i}$} \Bigg) \\
+&= \sum_{j=1}^{M} I_{ij}(S_{ij} - V_{j}^{T}U_{i})(-V_{j}^{T}) +\frac{\lambda_{U}}{\cancel{2}}\cancel{2}U_{i}^{T} + 0\label{eq:derivativeU}
+\end{align}
+
+Note all the other users $U_{k} : k \neq i$ are constants w.r.t. $U_i$, thus, we remove the summation over players and consider just the~\gls{ds} that were played by player $i$. Note also that in equation~(\ref{eq:derivativel}) since the result of $U_{i}^{T}V_{j}$ is a scalar, then it is true that we can replace the expression by its transpose, i.e., $(U_{i}^{T}V_{j})^{T} = V_{j}^{T}U_{i}$.
+
+Computing the partial derivative for the $V_{j}$ results in a similar expression
+
+\begin{align}
+\frac{\partial E}{\partial V_{j}} &= \frac{\partial}{\partial V_{j}} \Bigg(\frac{1}{2}\sum_{i=1}^{N}\sum_{j=1}^{M} I_{ij}(S_{ij} - U_{i}^{T}V_{j})^{2} +\underbrace{\frac{\lambda_U}{2} \sum_{i=1}^{N} \norm{U_{i}}_{FRO}^{2}}_\text{constant w.r.t. $V_{j}$} + \frac{\lambda_V}{2} \sum_{j=1}^{M} \underbrace{\norm{V_{j}}_{FRO}^{2}}_\text{$V_{j}^{T}V_{j}$} \Bigg) \\
+&= \sum_{i=1}^{N} I_{ij}(S_{ij} - U_{i}^{T}V_{j})(-U_{i}^{T}) +\frac{\lambda_{V}}{\cancel{2}}\cancel{2}V_{j}^{T} + 0\label{eq:derivativeV}
+\end{align}
+
+To find the optimal we set the derivatives to zero. Beginning with $U_i$ and using~(\ref{eq:derivativeU}) we obtain
+
+\begin{align}
+\sum_{j=1}^{M} I_{ij}(S_{ij} - V_{j}^{T}U_{i})(-V_{j}^{T}) +\lambda_{U}U_{i}^{T} = 0
+\end{align}
+
+\begin{align}
+&\Rightarrow -\sum_{j=1}^{M} I_{ij}(S_{ij}V_{j}^{T}) + \sum_{j=1}^{M} I_{ij}(V_{j}^{T}U_{i}V_{j}^{T}) +\lambda_{U}U_{i}^{T} = 0 \\
+&\Rightarrow -\sum_{j=1}^{M} I_{ij}(S_{ij}V_{j}^{T}) + \sum_{j=1}^{M} I_{ij}((V_{j}^{T}U_{i})^{T}V_{j}^{T}) +\lambda_{U}U_{i}^{T} = 0 \\
+&\Rightarrow -\sum_{j=1}^{M} I_{ij}(S_{ij}V_{j}^{T}) + \sum_{j=1}^{M} I_{ij}(U_{i}^{T}V_{j}V_{j}^{T}) +\lambda_{U}U_{i}^{T} = 0 \\
+&\Rightarrow -\sum_{j=1}^{M} I_{ij}(S_{ij}V_{j}^{T}) + U_{i}^{T} \Bigg(\sum_{j=1}^{M} I_{ij}(V_{j}V_{j}^{T}) +\lambda_{U} \Bigg) = 0 \\
+&\Rightarrow \Bigg(-\sum_{j=1}^{M} I_{ij}(S_{ij}V_{j}^{T}) + U_{i}^{T} \Bigg(\sum_{j=1}^{M} I_{ij}(V_{j}V_{j}^{T}) +\lambda_{U} \Bigg)\Bigg)^{T} = (0)^{T} \\
+&\Rightarrow -\sum_{j=1}^{M} I_{ij}(S_{ij}V_{j}) + \Bigg(\sum_{j=1}^{M} I_{ij}(V_{j}V_{j}^{T}) +\lambda_{U} \Bigg)U_{i} = 0 \\
+&\Rightarrow U_{i} = \sum_{j=1}^{M} I_{ij}(S_{ij}V_{j}) \Bigg(\sum_{j=1}^{M} I_{ij}(V_{j}V_{j}^{T}) +\lambda_{U} \Bigg)^{-1}\label{eq:optimumForU}
+\end{align}
+
+At this point we arrive at the optimal solution for $U_i$
+
+\begin{empheq}[box=\tcbhighmath]{equation*}
+U_{i} = \sum_{j=1}^{M} I_{ij}(S_{ij}V_{j}) \Bigg(\sum_{j=1}^{M} I_{ij}(V_{j}V_{j}^{T}) +\lambda_{U} \Bigg)^{-1}
+\end{empheq}
+
+Now, in order to find the optimal solution for $V_j$ we use~(\ref{eq:derivativeV}) and obtain
+
+\begin{align}
+\sum_{i=1}^{N} I_{ij}(S_{ij} - U_{i}^{T}V_{j})(-U_{i}^{T}) +\lambda_{V}V_{j}^{T}
+\end{align}
+
+\begin{align}
+&\Rightarrow -\sum_{i=1}^{N} I_{ij}(S_{ij}U_{i}^{T}) + \sum_{i=1}^{N} I_{ij}(U_{i}^{T}V_{j}U_{i}^{T}) +\lambda_{V}V_{j}^{T} = 0 \\
+&\Rightarrow -\sum_{i=1}^{N} I_{ij}(S_{ij}U_{i}^{T}) + \sum_{i=1}^{N} I_{ij}((U_{i}^{T}V_{j})^{T}U_{i}^{T}) +\lambda_{V}V_{j}^{T} = 0 \\
+&\Rightarrow -\sum_{i=1}^{N} I_{ij}(S_{ij}U_{i}^{T}) + V_{j}^{T} \Bigg(\sum_{i=1}^{N} I_{ij}(U_{i}U_{i}^{T}) +\lambda_{V} \Bigg) = 0 \\
+&\Rightarrow \Bigg(-\sum_{i=1}^{N} I_{ij}(S_{ij}U_{i}^{T}) + V_{j}^{T} \Bigg(\sum_{i=1}^{N} I_{ij}(U_{i}U_{i}^{T}) +\lambda_{V}\Bigg)\Bigg)^{T} = (0)^{T} \\
+&\Rightarrow -\sum_{i=1}^{N} I_{ij}(S_{ij}U_{i}) + \Bigg(\sum_{i=1}^{N} I_{ij}(U_{i}U_{i}^{T}) +\lambda_{V} \Bigg)V_{j} = 0 \\
+&\Rightarrow V_{j} = \sum_{i=1}^{N} I_{ij}(S_{ij}U_{i})\Bigg(\sum_{i=1}^{N} I_{ij}(U_{i}U_{i}^{T}) +\lambda_{V} \Bigg)^{-1}
+\end{align}
+
+Thus, similar to equation~(\ref{eq:optimumForU}) we arrived at the optimum for $V_j$
+
+\begin{empheq}[box=\tcbhighmath]{equation*}
+V_{j} = \sum_{i=1}^{N} I_{ij}(S_{ij}U_{i})\Bigg(\sum_{i=1}^{N} I_{ij}(U_{i}U_{i}^{T}) +\lambda_{V} \Bigg)^{-1}
+\end{empheq}
+
+\indent\textit{The final conclusion is that since we have solved the log posterior for each hidden variable, we do not need to use Expectation Maximization or any other type of approximate inference}. \textbf{However, we cannot solve for all $U_{i}$ and $V_{j}$ at once to find the Maximum a Posteriori (MAP) solution. Thus, as with K-means and the Gaussian Mixture Model, we use a coordinate ascent algorithm. }
+
+Using a simple linear-Gaussian model can have the effect of making predictions outside of the range of valid rating values. As said in the original paper~\citep{mnih_probabilistic_2008}, we can actually pass the dot product between user- and movie-specific feature vectors through the logistic function $g(x) = 1/(1 + exp(-x))$, which bounds the range of predictions:
+
+\begin{equation}
+p(S|U,V,\sigma^{2}) = \prod_{i=1}^{N}\prod_{j=1}^{M} \Bigg[ \mathcal{N}(S_{ij}|g(U^{T}_{i}V_{j}),\sigma^{2}) \Bigg]^{I_{ij}},
+\end{equation}
+
+Thus one may map the ratings $1, ..., K$ to the interval $[0, 1]$ using the function $t(x) = (x - 1)/(K - 1)$, so that the range of valid rating values matches the range of predictions the model makes. Minimizing the objective function given above using \textit{steepest descent} takes time linear in the number of observations.
+
+\section{Pseudo-code}
+\begin{center}
+\begin{algorithm}[H]
+ \KwData{An incomplete ratings matrix S.}
+ \KwResult{$N1$ user locations, $U_i \in \mathbb{R}^d$, and $N2$ object locations, $V_j \in \mathbb{R}^d$.}
+ \textbf{Initialize} each $V_{j}$. For example, generate $V_{j} \sim \mathcal{N}(0, \lambda_{V}\boldsymbol{I})$. Do the same for each $U_{i}$, i.e., generate $U_{i} \sim \mathcal{N}(0, \lambda_{U}\boldsymbol{I})$\;
+ \For{each iteration}{
+  \For{$i = 1,...,N$}{
+  	// update player location\\
+    $U_{i} = \sum_{j=1}^{M} I_{ij}(S_{ij}V_{j}) \Bigg(\sum_{j=1}^{M} I_{ij}(V_{j}V_{j}^{T}) +\lambda_{U} \Bigg)^{-1}$
+  }
+  \For{$j = 1,...,M$}{
+  	// update~\gls{ds} location \\
+    $V_{j} = \sum_{i=1}^{N} I_{ij}(S_{ij}U_{i})\Bigg(\sum_{i=1}^{N} I_{ij}(U_{i}U_{i}^{T}) +\lambda_{V} \Bigg)^{-1}$
+  }
+ }
+ \textbf{Predict} that player i scores in~\gls{ds} j as $U_{i}^{T}V_j$.
+ \caption{MAP inference coordinate ascent algorithm for the~\gls{pmf} model for the case of items recomendations.}
+\end{algorithm}
+\end{center}
+
+Equivalently, we can also used gradient descent for minimizing the cost function $E$ as suggested by~\cite{mnih_probabilistic_2008}.

@@ -1,0 +1,197 @@
+%=============================================
+% Document settings
+%---------------------------------------------
+% For printing in a4
+\documentclass[a4,10pt,twoside,openright,italian,english]{book}% twoside!
+
+% For printing with the A5 format
+%\documentclass[draft,10pt,twoside,openright,english]{book}
+
+% Set paper size
+\usepackage[twoside=true]{geometry}
+
+%For printing with the weird format
+\geometry{
+	paperwidth=17cm,
+	paperheight=24cm,
+%	margin=2cm,
+	margin=1.9cm,
+	bottom=2cm,
+	top=2.3cm,
+	bindingoffset=0.4cm
+}
+% For printing in a4
+%\geometry{a4paper,
+%  margin=3cm,
+%  top=3.8cm,
+%  bindingoffset=0.4cm
+%}
+
+%Uncomment this for final prints: this just enables printing on a4 paper
+%\usepackage[cam,center,a4,pdflatex,axes]{crop}
+
+\usepackage{phdthesis}
+\usepackage{phdtitle}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[main=english,italian]{babel}
+
+%% force the font size for subsubsection titles
+\titleformat*{\subsubsection}{\large\bfseries}
+
+%% force the font size for paragraph titles
+\titleformat*{\paragraph}{\large\bfseries}
+
+\input{settings/packages}
+\input{settings/commands}
+\input{acronyms}
+\makeglossaries
+%=============================================
+% Title and other info
+%---------------------------------------------
+
+%TODO To be fixed the thesis title. Where is it?
+\hypersetup{pdftitle={\thesistitle}, pdfauthor={Ewerton de Oliveira}}
+\hypersetup{pageanchor=false}
+
+\department {Dipartimento di Elettronica, Informazione e Bioingegneria}
+\phdprogram{Doctoral Program In Information Technology}
+
+\author{Ewerton Lopes Silva de Oliveira}
+\title{\thesistitle}
+
+\supervisor{Andrea Bonarini}
+\cosupervisor{Tiago Pereira do Nascimento}
+\tutor{Francesco Amigoni}
+\chair{Barbara Pernici}
+\titleimage{images/polilogo/logoPoliWhite_nome.pdf}
+\phdcycle{2018 -- Cycle XXX}
+%TODO Maybe the year is not 2018. It should 2019 or the year of your first enrollment. Maybe you might leave only the cycle.
+
+%%\input{contents/glossary} % to enable it again, decomment also the last line
+%%\makenoidxglossaries
+
+\begin{document}
+\selectlanguage{english}
+
+\maketitle
+
+%=============================================
+% Print info
+%---------------------------------------------
+%\vspace*{\fill}
+%\noindent Ewerton Lopes Silva de Oliveira\\
+%Dipartimento di Elettronica, Informazione e Bioingegneria\\
+%Politecnico di Milano\\
+%e-mail: \texttt{ewerton.lopes@polimi.it}\\[.2cm]
+%\begin{small}
+%Printed \today
+%\end{small}
+\hypersetup{pageanchor=true}
+
+\cleardoublepage
+\newpage
+
+% change numbering into Roman numbers for the introductory part
+\setcounter{page}{1}
+\pagenumbering{Roman}
+\pagestyle{fancy} %\pagestyle{plain}
+
+%=============================================
+% Acknowledgement
+%---------------------------------------------
+% \include{contents/acknowledgment}
+% \cleardoublepage
+% \newpage
+
+%=============================================
+% Abstract
+%---------------------------------------------
+\include{chapters/00-abstract}
+
+%=============================================
+% Sommario
+%---------------------------------------------
+\selectlanguage{italian}
+\include{chapters/00-sommario}
+\selectlanguage{english}
+
+%=============================================
+% Epigraph
+%---------------------------------------------
+\chapter*{}
+\vspace*{\fill}
+\renewcommand{\epigraphsize}{\large}
+\setlength{\epigraphwidth}{0.5\textwidth}
+\epigraph{\itshape True happiness is to enjoy the present, without anxious dependence upon the future, not to amuse ourselves with either hopes or fears but to rest satisfied with what we have, which is sufficient, for he that is so wants nothing. The greatest blessings of mankind are within us and within our reach. A wise man is content with his lot, whatever it may be, without wishing for what he has not.}{--- Seneca}
+\cleardoublepage
+
+% Dedication
+\chapter*{}
+\begin{flushright}
+\null\vspace{\stretch{1}}
+To the ones I bring in my mind and heart.
+\vspace{\stretch{2}}\null
+\end{flushright}
+\cleardoublepage
+
+%=============================================
+% TOC
+%---------------------------------------------
+\tableofcontents
+\listoffigures
+\listoftables
+\printglossaries
+\cleardoublepage
+\newpage
+
+% Now let's go back to normal numbering
+\setcounter{page}{1}
+\pagenumbering{arabic}
+\cleardoublepage
+
+%=============================================
+% Main document
+%---------------------------------------------
+
+\include{chapters/01-introduction}
+\include{chapters/02-art}
+
+\part{Platform design}
+
+\include{chapters/03-foundations}
+\include{chapters/04-competition}
+
+\part{Engagement design}
+
+\include{chapters/05-entreview}
+\include{chapters/06-activity}
+\include{chapters/07-modeling}
+\include{chapters/08-deception}
+\include{chapters/09-adaptation}
+\include{chapters/10-future-and-conclusions}
+
+
+%=============================================
+% Bibliography
+%---------------------------------------------
+\cleardoublepage
+\phantomsection
+%\printbibliography
+\bibliography{bibliography}
+
+
+%=============================================
+% Appendices
+%---------------------------------------------
+
+\cleardoublepage
+\appendix
+
+\input{appendix/A-hardware}
+\input{appendix/B-questionnaire}
+\input{appendix/C-pmf}
+
+\end{document}

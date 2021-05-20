@@ -1,0 +1,357 @@
+\chapter{Hardware}\label{ch:foundation}
+%\epigraph{For the things we have to learn before we can do them, we learn by doing them.}{--- Aristotle, The Nicomachean Ethics}
+\section{Game environment and rules}\label{sec:game_environment}
+As mentioned in section~\ref{sec:research_question}, we were interested in understanding phenomena related to player engagement in~\glspl{pirg}. For this we designed a game, named RoboTower 2.0, where a human plays against a mobile adversarial robot.
+
+The playground consists of a rectangular area of 4m$\times$4m wide. On each corner of the playground, tubes (henceforth called ``towers'') were placed (details in figure~\ref{fig:towers}). Each tower was equipped with a button (which sits on the tower's cap) and four~\glspl{led} that could be progressively turned on, one by one.  Each~\gls{led} required the button to be pressed for 2.5 seconds, meaning that the tower takes about 10 seconds of button push in order to light up all of its four~\glspl{led}.
+
+The~\glspl{led} are supposed to display the progress of the human player in capturing a specific tower. For a given tower, after turning on all~\glspl{led}, it is said that the player had captured it. When a tower is secured, the robot cannot aim at it anymore.
+Button pressing time was cumulative and could be distributed on different moments -- that meant that the player would not lose his progress if he stopped pressing the button before the tower is completely captured. 
+
+The game mechanics and winning conditions were simple enough to allow for a large number of individual to play the game. In order to win, the human players must be able to secure all the existing towers without letting a single one be knocked down by the robot. If, at anytime, a tower falls (because of the robot or the player) the game ends and the human player loses. 
+
+The robot was able to move across the entire playground just as the human player could, and it was only constrained by the fact that an already captured tower, or one whose button is currently being pressed by the player, cannot be teared down. As main interaction channel between the two players,~\ie robot and human, the human player could block the robot path at any moment by staying in front of it, causing the later to likely change target tower. Therefore, as consequence of the defined rules, while the player was trying to capture a given tower, the robot could try to tear down any other one.
+
+The game definition in itself is not a trivial task and it is, for the case of~\gls{pirg}, constrained also by the characteristics of the robotic platform. Other than playability and fun, safety is also an important aspect and one that impose heavy bounds to the motion of the robot: a too fast  robot would reduce the perception of the robot being safe to play against, thus limiting the natural interaction.
+
+Experimentally, we have evaluated that a robot with a maximum linear speed of 1.4 m/sec would be too difficulty to play against. Moreover, for a mobile robot as ours, speed have some negative impact in the robot manoeuvrability due to mechanical phenomena such as wheel slippage. Speed also impacts robot localization and obstacle avoidance as explained in section~\ref{sec:roboplat}.
+
+In summary, we designed our game such that we could have an environment rich enough to physically engage human players while allowing for the study of player modeling towards enabling adaption to support entertainment. RoboTower 2.0 stimulates player to perform strong cognitive tasks, like: trajectory planning, attention and spatial reasoning and places itself as an interesting environment from which one could test~\gls{ml} approaches. Next we briefly detail the Towers used in the game in term of their properties and operating system.
+
+%TODO ********************************************
+%Here is one of the places were the smartness of game design has to be put in evidence. The Game rules should be described before this chapter or at its beginning, otherwise it would be difficult to understand what are the design choices. All the design choices should be functional to the game. Maybe we should call this section (and the figure) not as "hardware" but as "game design", including Rules, HW and Environment.
+% EWERTON: ????? but the games rules are already at the beginning of the chapter. ANDY which chapter? I cannot see a section about rules of the game, nor a definition of what are the goals for robot and player.
+
+%**************************************************
+
+\subsection{Towers}\label{sec:towers}
+Each tower was powered individually and was capable of transmitting its status to the robot at a constant rate. The circuit used the~\href{https://einstronic.com/wp-content/uploads/2017/06/NodeMCU-ESP8266-ESP-12E-Catalogue.pdf}{NodeMCU V3 ESP8266 ESP-12E} WiFi module\footnote{\url{https://goo.gl/TzAjwi} accessed on December 17th, 2018.} (see figure~\ref{fig:tower_electronics}) whose connection to the robotic playing platform was done via a private network. The communication between towers and the robot was supported through~\gls{tcp} using the \verb|rosserial_server|\footnote{\url{http://wiki.ros.org/rosserial_server} accessed on December 17th, 2018.} \gls{ros} package. A tilt sensor allows for the detection of fallen towers. Appendix~\ref{app:hard_appendix} provides additional hardware details for the towers. 
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[b]{0.3\textwidth}
+  	\centering
+    \framebox{\parbox{3cm}{\includegraphics[width=3cm, height=4cm]{images/03-foundation/cap1}}}
+	\caption{}
+	\label{fig:tower_cap_top}
+  \end{subfigure}
+  ~ 
+  \begin{subfigure}[b]{0.3\textwidth}
+  	\centering
+    \framebox{\parbox{3cm}{\includegraphics[width=3cm, height=4cm]{images/03-foundation/cap2}}}
+	\caption{}
+	\label{fig:tower_electronics}
+  \end{subfigure}
+  ~
+   \begin{subfigure}[b]{0.3\textwidth}
+	  \centering
+      \framebox{\parbox{3cm}{\includegraphics[width=3cm,  height=4cm]{images/04-activity/tubes.jpg}}}
+      \caption{}
+    \end{subfigure}
+  \caption{a) Tower cap containing the button (red square) and~\glspl{led}; b) Tower cap electronics; c) The four towers used in the game (height 110cm).}
+  \label{fig:towers}
+\end{figure}
+
+\section{The robotic platform}\label{sec:roboplat} 
+As depicted in figure~\ref{graph:PIRG_design_structure}, hardware is the core concern for a mobile robot in~\gls{pirg}. In the graph in figure~\ref{graph:HARDWARE_structure} we have detailed some relevant aspects that we considered during our design. The graph is not supposed to give an extensive map of the necessary hardware aspects and their inter relationship, but to instruct the reader on the necessary aspect in this first phase of design taking our development as example. Of course, not all mobile robots involved in~\glspl{pirg} will take into account all such concerns.
+
+Our wheeled robot, called Triskar, had holonomic kinematics,~\ie it was free to move in any direction at a speed comparable to that of people in indoor environments (up to 1.4~m/sec). The base consisted of a metallic, triangular-shaped structure where motors, batteries, computer and necessary electronics are embedded. In total, the robot weights 22.3kg. Triskar has simultaneously and independently controlled rotational and translational motion capabilities thanks to three omnidirectional wheels actuated by a motor each. The robot's movement on flat floor is as free as the human one, which made it a good base for adversarial~\glspl{pirg} and, in particular, the one that we had designed. 
+
+\input{chart/hardware_map.tex}
+%TODO A similar chart could be done for "Game setting" which includes the game rules, the playground, which in turn includes the towers.
+% EWERTON: mmm.. I don't see why would we do that. It would be specific to our game and not a general design aspect, no?.
+%ANDY Any game would have a setting: rules and environment.
+
+During the research progress, we have designed several versions of our robot, where the first two had an overall height of 85~cm, so comparable to that of a child players, but also acceptable for adult players. The first three versions adopted a Kinect\textsuperscript{\textregistered} sensor on top aimed at player tracking. Given the need to improve robustness, we have redefined the base by making structural changes to limit vibrations and improve stability of the sensors, which increased the overall height to 1 meter (2nd version). We also added new sensors such as planar laser scans needed to obtain reliable obstacle avoidance and localization (3rd and 4th version). Figure~\ref{fig:evolution} depicts the evolution of our prototype. Finally, on the fourth version we dropped the 3-D camera, deemed to be too much unreliable for player detection, and implemented algorithms based on laser scans instead. We kept the height in the same range as before although it was no longer needed to hold Kinect\textsuperscript{\textregistered}. To justify the height and give a character to the robot, we added eyes and hair on top, which were appreciated by players. On the next section we expose some consideration regarding sensing.
+
+\begin{figure}[ht]
+      \centering
+      \begin{subfigure}[b]{0.22\textwidth}
+      	\centering
+	    \framebox{\parbox{2.5cm}{\includegraphics[height=4cm,width=2.5cm]{images/03-foundation/triskar1}}}
+	  	\caption{}
+	  	\label{fig:evolution_a}
+      \end{subfigure}
+	 ~
+	  \begin{subfigure}[b]{0.22\textwidth}
+		\centering
+	  	\framebox{\parbox{2.5cm}{\includegraphics[height=4cm,width=2.5cm]{images/03-foundation/triskar2}}}
+	  	\caption{}\label{robot}
+      \end{subfigure}
+      ~
+      \begin{subfigure}[b]{0.22\textwidth}
+      	\centering
+      	\framebox{\parbox{2.5cm}{\includegraphics[height=4cm,width=2.5cm]{images/03-foundation/triskar3}}}
+      	\caption{}
+      \end{subfigure}
+      ~
+      \begin{subfigure}[b]{0.22\textwidth}
+	      \centering
+	      \framebox{\parbox{2.5cm}{\includegraphics[height=4cm,width=2.5cm]{images/03-foundation/base4.png}}}
+	      \caption{}
+      \end{subfigure}
+      \caption{Prototype evolution. a) First version having the Microsoft Kinect\textsuperscript{\textregistered} camera sensor on top of a plate secured by steel cables in order to reduce vibration due to motion. b) Second version had improved stability by replacing the steel cables by rigid modular aluminum profiles. c) Third version had a completely redefined base including new electronics, thicker aluminum chassis, redesigned power distribution system and 2D lasers. This version also had a larger base compared to previous prototypes; d) Current version during demonstration at the Maker Faire 2018 in Rome (the European edition) from October 12th to 14th of 2018. A better placement of lasers had made the use of Kinect\textsuperscript{\textregistered} unnecessary since it allowed for full 360\textsuperscript{$\circ$} laser sensing coverage as opposed to the limited ~\gls{fov} of the camera.}
+      \label{fig:evolution}
+\end{figure}
+
+\subsection{Sensing}
+\subsubsection{Microsoft Kinect\textsuperscript{\textregistered}\label{sec:kinectsec}}
+In some phases of our development we have used the Microsoft Kinect\textsuperscript{\textregistered} sensor. It is a 3-D camera: in addition to providing an RGB image with its 1080p color camera, it also provides a depth map, meaning that for every pixel of the depth image provided by the sensor there is also the distance from the sensor (see appendix~\ref{app:hard_appendix} for sensor specifications). 
+
+\subsubsection{Laser scanners}\label{sec:lasers_hokuyo}
+We have equipped our robot with two Hokuyo laser scanners model URG-04LX\footnote{\url{https://www.hokuyo-aut.jp/search/single.php?serial=165} accessed on \today.}. The sensors perceive the range of obstacles on a plane with a field of view of 240$^\circ$ and a resolution of 0.36$^\circ$. The maximum detectable distance is 5.6 m and they can be connected to the computer by means of a USB interface, being operated with a nominal voltage of 5V.
+
+A full scan is performed every 100 ms. We mounted a laser scanner on each side of the lower chassis allowing for a 360$^\circ$ coverage around the robot at a height of 30 cm from the floor.
+
+\subsection{Structure \& Materials}
+\subsubsection{Chassis}
+The chassis of our robot was made entirely from modular aluminum profiles put together as to define the shape in figure~\ref{fig:aluminum_structure} (3rd prototype). The arrangement of the wheels, as to allow for the holonomic behavior, also allowed us to place batteries conveniently~(see figure~\ref{fig:batteries}) as well as the onboard computer and electronics~(see figure~\ref{fig:computer}). The careful placement of heavyweight elements, such as the lead-acid batteries, turned out to be important in our design since it impacted manoeuvrability. For instance, during test it occurred that, due to inertia, the robot would become vertically unstable when making quick turns or rapidly reacting to the human player's presence. 
+
+The constraint of having the Microsoft Kinect\textsuperscript{\textregistered} sitting on top of an aluminum profile, as to allow maximum visibility from the sensor, moved the center of mass upwards making vertical balance worse. The void created between the wheels, in prototype versions three and four, elegantly provided a way to balance weights and make the robot's center of mass close enough to its base center. Figure~\ref{fig:evolution_a} documents the inefficient weight distribution in the first prototype. In the figure it is possible to see the placement of one of the lead-acid batteries in the right side of the base, thus, making the weight distribution asymmetric.
+
+Due to forces acting upon the robot during motion we have used software solutions for velocity smoothing that would increasingly bound speed when accelerating and decelerating. This, together with a proper weight distribution, rendered the robot's motion smooth, improving control, at the benefit of reducing the chances of mechanical breakdown caused by material stress.
+
+As an additional way to increase safety, we have considered placing plastic bumpers (seen in figure~\ref{fig:evolution}) around the robot so as to reduce potential harms from eventual collision. Despite collisions being rare and negligible in terms of physical harm, the bumpers offered good protection to the electronics.
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[b]{0.22\textwidth}
+      	\centering
+        \framebox{\parbox{2.5cm}{\includegraphics[height=4cm,width=2.5cm]{images/03-foundation/structure}}}
+        \caption{}
+        \label{fig:aluminum_structure}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.22\textwidth}
+      	\centering
+        \framebox{\parbox{2.5cm}{\includegraphics[height=4cm,width=2.5cm]{images/03-foundation/structureII}}}
+        \caption{}
+        \label{fig:batteries}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.22\textwidth}
+      	\centering
+        \framebox{\parbox{2.5cm}{\includegraphics[height=4cm,width=2.5cm]{images/03-foundation/structureIII}}}
+        \caption{}
+        \label{fig:computer}
+    \end{subfigure}
+    \caption{Structural details of our robot. The chassis is made of modular aluminum profiles from which rapid and easy prototyping is possible while retaining a good level of robustness. a) The full scale view of the robot (3rd version). b) a close-up view of one of the 2-D lasers and batteries (gray boxes). c) a close-up view of the vertical placement of onboard computer (black box) and control board (red board).}
+    \label{fig:structure_details}
+\end{figure}
+
+\subsection{Computing}
+Our robot was equipped with a powerful pc computer in order to process the data from the sensors. Although the \textit{Reduce, Reuse and Recycle} design guideline from~\cite{martinoia_physically_2013} for~\gls{pirg} suggests the minimization of the monetary cost of the game, we intended to use our environment as a research test-bed for algorithms thus demanding a good computing capacity. Details about the computer used is given in the appendix~\ref{app:hard_appendix}.
+
+\subsection{Kinematics}
+As said before, our robot had holonomic kinematics, i.e. it was capable of moving in any direction in any of the three physical dimensions available to it (i.e., on the floor plan). Our robot matches the kinematics of a human player well, since it is possible to refer to humans as holonomic on the two-dimensional space such as a floor. Mathematical details regarding the kinematics of our 3-wheeled omnidirectional robot is given in appendix~\ref{app:hard_appendix}.
+
+\subsection{Navigation}\label{sec:navigation}
+\subsubsection{\glsdesc{slam}}\label{gmapping}
+To create a map of the environment, our system used~\verb|gmapping|\footnote{http://wiki.ros.org/gmapping accessed on \today}, a~\gls{ros} package used for~\gls{slam} that estimates the map of the environment and the trajectory of the robot using a technique known as~\gls{rbpf}~\citep{grisettiyz_improving_2005} and the provided odometry and laser measurements. The procedure in~\verb|gmapping| can be decomposed in two phases: \begin{inparaenum}[\itshape a\upshape)]\item update the robot's state using all available positioning related data. In our case, odometry and laser measurements were used; \item update the map of the environment using~\gls{rbpf}.\end{inparaenum}
+
+The obtained map is an occupancy grid and it is represented as an image showing the blueprint of the environment. Once created, the integrated localization in~\gls{ros} will be able to generate reference frame transforms from the map-frame to the robot odometry frame, correcting for estimated position in the environment. In Figure~\ref{fig:playground_map} an example of map is shown, with tower positions being clearly visible.
+
+Considering only the playground (area of the rectangle delimited by four towers), however, introduce several problems to the localization algorithm. For instance, when the playground is put in a rectangular room with only the towers as ``furniture'' the symmetry of the environment does not possess enough descriptive features to infer the position unequivocally and localization is worsened. For this reason it was needed to include enough descriptive features around the playground borders to enhance the robot localization during the game. The map in figure~\ref{fig:playground_map} is a good example of a map with good features since the walls around the playground are ``jagged enough'' to distinguish the walls among themselves. 
+
+\begin{figure}[h]
+	\centering
+	\framebox{\parbox{5cm}{\includegraphics[width=5cm]{images/03-foundation/playgroundmap}}}
+	\caption{Map of the room with playground obtained with gmapping package.} 
+	\label{fig:playground_map}
+\end{figure}
+
+In particular, aiming at standardizing the map across different environments, and at reducing the number of times it had to be remade and filtered out for noise, we have decided to enclose the playground in ``walls'' made from fabric and supported by lightweight aluminum profiles joined together. A custom entrance made in one of the sides made up for the element breaking the symmetry and allowing for effective localization. This arrangement could easily be reused without having to regenerate the map. Enclosing the area was particularly useful when collecting data since very often~\glspl{pirg} tend to gather a number of people around the playground which can compromise the environmental perception by the robot. Furthermore, it allowed us to reduce the complexity of tracking the player, as it is going to be explained in section~\ref{sec:player_tracking}.
+
+\subsection{Basic navigation and control}
+In this section we describe the algorithm that enables the robot to navigate from its current position to a target tower and its implementation. For this purpose, a point-to-point trajectory following approach has been considered. The proposed strategy is composed of three main parts: sensor data analysis, obstacle detection and goal seeking. In general, with our navigation we wanted to provide a given level of challenge to the human player while also trying to minimize behaviors that could lead to odometry errors and loss of localization in the map. The selection of the target tower takes into account the proximity relationship between the current position of the robot and that of the human player. The particular algorithm for this is going to be presented later, in section~\ref{sec:competitive_adv_robotower2}.
+
+Generally, the selection of a target tower by the robot is performed so that the direct path leading to it is as free as possible considering the current player position. 
+During navigation, in case the human player is detected closer than a certain safety distance from the moving robot, the algorithm switches to the obstacle avoidance procedure described later in this section. As inputs to the navigation algorithm, we consider: the robot's estimated $x$ and $y$ position ($\hat{x}_R$, $\hat{y}_R$); target tower xy-coordinate ($x_G$, $y_G$) -- in the map frame, and a flag variable that assumes the value false if the robot is approaching an obstacle (\verb|is_safe|). The raw outputs are: the unsmoothed xy-linear velocity in the world frame ($\dot{\bar{x}}_R$, $\dot{\bar{y}}_R$) and a flag variable that is true when the robot is close to a targeted tower (\verb|near_goal|). The procedure for generating velocity commands to the platform is detailed in algorithm~\ref{alg:pointopoint}. At each control loop call, the algorithm publishes a new velocity command.
+
+\begin{algorithm}[ht]
+	\# define initial e final points when the robot receives the id of the targeted tower \;
+	$x_d$ = ($\hat{x}_R$, $x_G$)\;
+	$y_d$ = ($\hat{y}_R$, $y_G$)\;
+	\# define the robot deviation from the required trajectory\;
+	$\Delta x = x_d[1] - x_d[0]$\;
+	$\Delta y = y_d[1] - y_d[0]$\;
+	\# generates the direction of the motion based on the euclidian distance from goal\;
+	goal\_distance$ = \sqrt{({\Delta x}^2 + {\Delta y}^2)}$\;
+	$\alpha = $\textbf{atan2}$(\Delta x, \Delta y)$\;
+	\# check if the robot is near its goal (this will trigger the obstacle avoidance behavior)\;
+	\If{(goal\_distance < NEAR\_GOAL\_Treeshold)}{
+		near\_goal = true\;
+	}
+	\# SAFETY CHECK: the controller will generate velocity commands only if the safety condition is satisfied. if safety condition is satisfied then: enable == 1 (player not too close to the robot);\;
+	\If{(is\_safe = true)}{
+		$\dot{\bar{x}}_R=V_\text{max}\cdot\cos(\alpha)$\;
+		$\dot{\bar{y}}_R=V_\text{max}\cdot\sin(\alpha)$\;
+	}
+	
+	\Return $\dot{\bar{x}}_R$, $\dot{\bar{y}}_R$, is\_safe 
+	\caption{Point-to-Point navigation algorithm.}
+	\label{alg:pointopoint}
+\end{algorithm}
+
+Before being executed by the low-level sub-systems that control the motors, the velocity vector $<\dot{\bar{x}}_R,\dot{\bar{y}}_R>$ produced by algorithm~\ref{alg:pointopoint} need further processing. In particular, it needs to be transformed from the world reference frame (the frame in which towers are located in) to the robot reference frame (see transformation details in appendix~\ref{app:hard_appendix}).
+
+\subsubsection{Slippage control} \label{sec:slippage}
+Another aspect to be addressed was about guaranteeing the decoupling between robot rotations and translations. 
+This was necessary when using the Kinect\textsuperscript{\textregistered}, since the robot in our scenario had to be able to track the movement of the human player while navigating towards the target towers. Mathematical detail of this process is available in appendix~\ref{app:hard_appendix}. 
+
+Despite all, the transformed velocity set-points $\dot{\bar{x}}_R^m$ and $\dot{\bar{y}}_R^m$, dynamically change during the game and often the variation has a step-function form that causes the low-level actuation to react violently when making the robot reach the desired velocity at once -- especially when starting from the initial position with 0-velocity (see figures~\ref{vel14} and~\ref{wheel14}). This will result in the robot wheels undergoing in slippage due to the sharp acceleration required to reach the velocity set-point. This is an undesired effect that is source of non-systematic odometry errors that often lead to instability and loss of localization. 
+
+A number of tests have been performed to quantify the effect of wheel slippage during the initial robot acceleration phase. In these tests the robot linearly translates along $x$ and $y$ axis and receives the initial velocity set-point at 1m/s or 1.4m/s. In figures~\ref{opti14},~\ref{amcl14},~\ref{poserror14},~\ref{opti14y},~\ref{amcl14y}, and~\ref{poserror14y} we can see the localization error introduced during such test.
+
+To avoid this effect, a velocity smoother has been used in order to obtain a smooth velocity set-point control signal to be sent to the robot low-level actuation. The inputs of the velocity smoother are the un-smoothed velocity set-points [$\dot{\bar{x}}_R^m$, $\dot{\bar{y}}_R^m$], some of the internal parameters such as maximum allowed velocity and maximum allowed acceleration can be changed online to modify the final response of the robot. The output are the final xy-velocity control signals [$\dot{x}_R^m$, $\dot{y}_R^m$] in robot reference frame that will be sent to the low-level actuation.
+
+The velocity smoother runs together with algorithm~\ref{alg:pointopoint}, receiving the output of this later as input. It basically pre-filters any incoming command input to match some acceleration constraints. Smoothing velocities are not just important for the reduction of localization errors, but is also an important factor in the reduction of material stress on the wheels, which can lead to mechanical breakdowns. In fact, during our research we have had a couple of mechanical breakdown due exactly to excessive acceleration. Such issues make up for important example of typical hardware concerns and problems one must deal with in the design of mobile agents for~\gls{pirg}.
+
+\subsubsection{\glsdesc{oa}}\label{sec:obt_avoidance}
+For in-game obstacle avoidance, a fuzzy-logic based reactive control has been designed to respond appropriately to sensory input. This was used principally because the human player could move completely unconstrained in the playground,~\ie proximity between human and robot could be sensed from any direction and in any moment during the game. 
+
+As first step, considering the laser sensing capabilities of our robot (see section~\ref{sec:lasers_hokuyo}), we have divided the rays cast from the laser into different discrete sensing areas around the platform. The information  contained in each laser \verb|\scan| message received from the~\gls{ros} Hokuyo node is composed of 1000 rays, each one of which carrying information about the distance and bearing angle of the sensed object w.r.t the sensor origin. 
+
+Having fuzzy-logic rules for the decision making provided soft navigation and stable control since a fuzzy approach can handle well the uncertainty when the sensed obstacle is at the boundary of the sensing areas. 
+
+For each area, the minimum distance to objects are calculated and a flag variable monitors whether an obstacle is within a given threshold distance (in our case 0.75 meters). When this condition is verified, the fuzzy obstacle avoider takes the control from the trajectory navigation in order to handle the obstacle at hand. When the robot is close within a specified distance threshold from a target tower the obstacle avoider is disabled, thus enabling the robot to tear down the towers instead of considering them as obstacles. The output of the avoider is the velocity pair$(V_{x\_\text{avoider}}, V_{y\_ \text{avoider}})$ used to control the xy-translations.
+
+The defined membership functions are shown in figure~\ref{fig:indexesmmf}. On the x-axis are reported the index values in a range from 1 to 1000, each one representing one of the 1000 laser's ray distance measurement that the system receives from each~\gls{ros} \verb|/scan| message.
+
+To interpret the minimum detected distance in each sector, the membership functions shown in figure~\ref{fig:minmmf} have been defined. The x-axis ranges from 0 to 0.75 meters (as said, the obstacle avoidance takes control of the robot's navigation when obstacles are detected below this threshold) the three labels ``Close'', ``Far'', and ``Dontcare'' were used to define the intensity of the control action during the obstacle avoidance maneuver.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/03-foundation/indexesmmf}
+	\caption{\glspl{mmf} for the direction of obstacles.} 
+	\label{fig:indexesmmf} 
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/03-foundation/minmmf}
+	\caption{\glspl{mmf} for classifying the distance of objects.}
+	\label{fig:minmmf} 
+\end{figure}
+
+The system uses a Mamdani-type inference that requires the output membership functions to be fuzzy sets. After the aggregation process, \ie after evaluating the result of each rule, these results are combined to obtain a final fuzzy set for each output variable that needs defuzzification.
+
+The selected defuzzification method was the ``Centroid'' method, which returns the center of mass of the area under the resulting fuzzy set membership function, it can also be seen as a Center of Gravity and can be obtained with equation~\ref{centroid}:
+\begin{equation}
+U=\dfrac{\int_{\text{min}}^{\text{max}} u\cdot\mu(u) du}{\int_{\text{min}}^{\text{max}}\mu(u) du}
+\label{centroid}
+\end{equation}
+where U is the center of gravity, $u$ is the output variable and $\mu(u)$ is the membership function after the accumulation, implemented as the maximum. Letting $\mu_A(u)$ and $\mu_B(u)$ be the membership functions for fuzzy sets A and B and for OR and AND operators are max and min, respectively.
+\begin{align}
+	\textbf{Accumulation method}\qquad max\lbrace\mu_A(u),\mu_B(u)\rbrace\\
+	\textbf{OR (union)}\qquad max\lbrace\mu_A(u),\mu_B(u)\rbrace\\
+	\textbf{AND (intersection)}\qquad min\lbrace\mu_A(u),\mu_B(u)\rbrace
+\end{align}
+As output membership functions, singletons have been selected. This enhances the efficiency of the defuzzification process because it greatly simplifies the computation required by the more general Mamdani method, since, instead of finding the centroid of a 2-D function by integrating across the two-dimensional function to find the centroid, the weighted average of a few data points is used as shown in equation~\ref{singletoncentroid}, where $p$ is the number of singletons.
+
+\begin{equation}
+U =	\dfrac{\sum_{i=1}^{p}\left[u_i,\mu_i\right]}{\sum_{i=1}^{p}\mu_i}
+\label{singletoncentroid}
+\end{equation} 
+
+The singletons membership functions for $V_{x\_ \text{avoider}}$ and $V_{y\_ \text{avoider}}$ are reported in figure \ref{outmmf}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{images/03-foundation/outputmmf}
+	\caption{MMfs for $V_{x\_ \text{avoider}}$ and $V_{y\_ \text{avoider}}$, the output velocities along xy-axis range from -0.5 m/s to 0.5 m/s}
+	\label{outmmf} 
+\end{figure}
+
+A set of fuzzy rules (reported in appendix~\ref{app:hard_appendix})	has been implemented to obtain an overall obstacle avoidance behavior that takes inspiration from artificial potential fields. The rules have been designed to mimic a repulsive field that will drive the robot away from obstacles when these are encountered during navigation (figure~\ref{fig:avoid1}). In particular, when the robot reaches the condition of proximity with the human player during the game, the set of fuzzy rules will cause the robot to drift away from him until the proximity condition is no more verified (\verb|is_safe| equals true. Refer to algorithm~\ref{alg:pointopoint}). At this point, the robot will go back to the normal point-to-point navigation to reach the selected target tower.
+
+For the towers, the algorithm defines an attractive effect (figure~\ref{fig:avoid2}) for obstacle estimated to be at the tower positions, which, thus, make it possible to tear down the towers. This is triggered when the robot comes close to the tower positions (\verb|near_goal == true|, again refer to algorithm~\ref{alg:pointopoint}). 
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.4\textwidth}
+		\includegraphics[width=5cm]{images/03-foundation/avoid1}
+		\caption{}
+		\label{fig:avoid1} 
+	\end{subfigure}
+    ~
+	\begin{subfigure}[b]{0.4\textwidth}
+		\includegraphics[width=5cm]{images/03-foundation/avoid2}
+		\caption{}
+		\label{fig:avoid2}
+	\end{subfigure}
+	\caption{a) Representation of the repulsive effect implemented by the fuzzy rules. b) Representation of the attractive effect implemented by the fuzzy rules. }
+	\label{rulesbehavior}
+\end{figure}
+
+\subsection{Player perception \& tracking}\label{sec:player_tracking}
+In our research we have implement some strategies for player tracking. For the first prototypes, as said before, we have worked with the Kinect\textsuperscript{\textregistered}. %For opening the device, we have used libfreenect2\footnote{~\url{https://github.com/OpenKinect/libfreenect2} accessed on \today.} on Linux.
+We have then created a custom tracking node capable of estimating the player's position in two phases: First, by running color blob detection on the RGB image frame. Secondly, by segmenting the player in the depth frame using \textit{region growing} algorithm. The seed for this algorithm is is the position of the blob detected in the first phase.
+
+Two features could be extracted from the procedure: distance (relative to the robot) and~\gls{ci}. The first is calculated taking the mean value of the depth pixels around the center of the detected color blob. The latter is computed based on the subtraction of the occupied area with respect to the dimension of the bounding box that encompasses the segmented silhouette (see figure~\ref{fig:segmenta}). The~\gls{ci} was intended as a cue about the fact that the player was opening arms, so, possibly, actively participating in the game.
+
+\begin{figure}[h]
+  \centering 
+  \begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=3cm]{images/03-foundation/point_cloud}}}
+		\caption{}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=3cm]{images/03-foundation/depth}}}
+		\caption{}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\framebox{\parbox{3cm}{\includegraphics[width=3cm, height=3cm]{images/03-foundation/segmentation}}}
+		\caption{}
+  \end{subfigure}
+  \caption{Example of frames processed by our camera-based tracking algorithm. a) Point cloud showing the center of the detected (light-purple) color blob. b) Depth frame. The number showed above the user correspond to his estimated distance relative to the robot (in meters). c) Segmentation results. The number above is the contraction index defined in the interval [0,1] and can be used as a measure of body contraction.}\label{fig:segmenta}
+   \label{segmentacao}
+\end{figure}
+
+Despite being an useful sensor, its usage in our platform had some issues. One of such was the indirect negative impact in the robot localization caused by having the sensor in a fixed position (see figure~\ref{fig:evolution}). It occurred in our game that the player would run from any side, thus, forcing the tracking algorithms to issue in-place rotation commands to the platform in order to reacquire the player position when he goes out of the~\gls{fov}. Repeatedly rotating the platform in our environment was likely to introduce higher amount of odometry error which contributed to the lack of precision in localization, affecting the accuracy of the platform in navigating toward target towers. Figure~\ref{fig:maps} give an idea of the problem. It is possible to see a higher mismatch between the laser scan and the map of the environment in the subfigure~\ref{fig:laser_map_mismatch} which, in our context, was a consequence of repeatedly rotating the robot in order to keep the player in the~\gls{fov}. 
+
+\begin{figure}
+    \centering 
+    \begin{subfigure}[h]{0.49\columnwidth}
+        \centering 
+        \framebox{\includegraphics[width=0.95\linewidth]{images/03-foundation/map}}
+        \caption{}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[h]{0.49\columnwidth}
+        \centering 
+        \framebox{\includegraphics[width=0.95\linewidth]{images/03-foundation/map2}}
+        \caption{}
+        \label{fig:laser_map_mismatch}
+    \end{subfigure}
+    \caption{a) Example of good localization. b) Example of low-quality localization where the laser scan (yellow traces) mismatch with the map of the room.}
+    \label{fig:maps}
+\end{figure}
+
+Other than the localization issues which made the navigation inaccurate (sometimes missing the towers), the need to rotate the player so to keep it in the camera's~\gls{fov} made the interaction slow and, in some cases, clumsy. As a solution to the problem we have later replaced the Kinect\textsuperscript{\textregistered} sensor by a pair of lasers sensors such that a~\gls{fov} of 360$^\circ$ could be granted.
+
+With full view granted by the laser, there were no need to rotate the robot in order to keep track of the player, which, thus, helped to reduce the negative impact in the localization. Moreover, with the laser, it was possible to better track the player using filtering algorithms. The algorithm of choice for us was~\gls{pf}, a popular algorithm for solving filtering problems arising in signal processing and Bayesian statistical inference. This algorithm uses a set of particles (also called samples) to represent the posterior distribution of some stochastic process given noisy and/or partial observations. In our case, the process being object of~\gls{pf} is the player position in space.~\gls{pf} does not requires particular assumptions about the state distribution of the process and, in our circumstances given that it can model multi-modal distributions, the algorithm performs robust tracking.
+
+As evidences to such system, we have used a supervised learning approach for detecting clusters in the laser data that could be the player's legs. Upon looking into the data for clusters, we have used Random Forest to classify features (descriptive statistics as well as geometrical properties) from the clusters and decide whether or not they represent legs. 
+
+For training the Random Forest, we have collected a dataset of leg clusters by asking people to walk and run several times around the robot. Each cluster detected inside a bounding box centered on the robot position was considered as a positive leg example. During this data collection the robot did not move. All the negative examples (non legs) where collected by moving the robot around in a place without legs, thus, making any cluster found an example of non-leg clusters. 
+
+Each particle in the model was designed to be a Kalman Filter with linear constant model envisioning better characterize the evidences in the gating zone (area where new evidences are likely to appear). Each particle maintains an estimation in terms of player's position and velocity. In the \textit{particle propagate} phase, the algorithm updates the position of particles based on how close their predicted future position is to the current evidence. In general,~\gls{pf} weights particles based on their proximity to evidences. Those weights are them used in the \textit{re-sampling} phase in order to allow the best particles to be reused in the next time frame. In the limit, particles tend to converge to the true position of the player. The mean of the best particles (in terms of weights) is used to describe the player position in a given time.
+
+Laser clusters were further processed before being fed into the leg classifier and into the~\gls{pf} system, which was done in order to reduce noise. The process consisted in observing, for each new scan data, the relationship of clusters to fixed elements in the playground, as for example: the walls and towers. All clusters identified as being part of such elements were excluded. Figure~\ref{fig:laser_tracking} shows the environment containing an estimated player position by our~\gls{pf} algorithm. The circle around the player position in the figure represents the variance in the position.
+
+\begin{figure}[h]
+    \centering 
+    \framebox{\includegraphics[width=0.95\textwidth]{images/03-foundation/laser_tracking}}
+    \caption{Visualization of the playground map. The walls which isolate the game area and the absolute towers positions are denoted in black. Those are the fixed elements in the map. The player's legs are marked in magenta. Blue circles denote the detection of cylindrical clusters estimated to be a single human leg. On our scenario, towers appear cylindrical to the laser which makes up for false positives for legs and further complicates tracking. The green rectangle, which has towers in the corners, denotes the playground. Player velocity (dark magenta arrow) is estimated by the difference of position in the center of player's leg across time.}
+    \label{fig:laser_tracking}
+\end{figure}
+
+\section{Considerations}
+This chapter presented the hardware consideration for our agent as well as the game rules and playing environment. We provided a comprehensive description of our platform, basically demonstrating the fundamental concepts and challengers related to its functionality in the designed~\gls{pirg}.
+
+Envisioning satisfying the game rules we have exposed the main characteristics from which the exposition in the upcoming chapters is going to be based on. Further technical details about the platform and game elements in described in the appendix~\ref{app:hard_appendix}.

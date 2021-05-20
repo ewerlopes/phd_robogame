@@ -1,0 +1,111 @@
+\chapter{A theoretical model for adjusting robot playing behavior}\label{ch:adaptation}
+\epigraph{In theory, there is no difference between theory and practice. But in practice, there is. 
+}{--- Benjamin Brewster}
+
+The ultimate goal in a~\gls{pirg} application is to be able to present some degree of behavior personalization as a mean to increase entertainment. Before achieving this goal, as previous chapters demonstrate, one must provide the basis of game capabilities. Considering that other phases of design are completed and the game is able to provide a basic experience, it is then possible to study how to effectively tailor the behavior of the robot to the individual human player so as to present an engaging interaction in terms of an appropriate game difficulty. This can be achieved by the modulation of the robot's ability to play considering the existence of a set of discrete styles each one of which presenting its own difficulty. Those styles can be viewed as difficulty settings from which an appropriated one is selected to the player at hand. This is the main idea in strategies for~\glsdesc{dda}, where game designers define approaches to select which game difficulty (\eg, easy, medium, hard) are ideal. 
+
+In our game, the only way to control difficulty is to change properties in the robot behavior, such as speed, and, thus, the difficulty perception is impacted only by the modulation of its properties. It is possible that, in other~\gls{pirg}, other elements external to the robot impact the difficulty perception, making appropriate overall difficulty selection more complex. Such types of~\gls{pirg}s are outside of our research scope, but the insights we provide can be extended to such cases. 
+
+Specially, in our approach, the effective game difficulty encountered by players is estimated using latent skill representation through the definition of a similarity space. Encoding players and difficulty parameters into such space allows for adaptation, by turning the problem into a recommendation one. Driving the difficulty towards an appropriated level is extensively reported in the literature as responsible for impacting player satisfaction and fun. We also provide observations for robogame designers via the analysis of a theoretical ``risk-ability'' space. This chapter begins with the problem definition.
+
+\section{Problem definition}
+Our method relies on the exploitation of past interaction and the balance between \textit{progress}, i.e., how successful the player is while playing, and \textit{effort}, which characterizes the resource consumption when playing. 
+
+In such terms, we assume the game designer has defined a number $|\mathcal{S}|$ of distinct robot parameters from which our~\gls{dda} system can choose values for. These parameters are supposed to be related to the game of difficulty so as to allow some control over it. For instance, in our scenario a, parameter related to difficulty of the game is velocity of the robot, which can be used to control the amount of physical activity the human player will engage. 
+
+Taking advantage from recent parametric modeling ideas, we tackle the problem from the perspective of jointly modeling players and difficulty parameters into a latent space, henceforth called the \textit{difficulty space}, such that it makes it easy to search for balanced settings, thus, impacting entertainment. This characteristics make our methodology bear some similarity with recommender systems where the item being recommended, in this case, is a game level configuration such that the estimated fun is maximized. 
+
+This way of posing the problem had been proposed before in the work of~\cite{sejrsgaard-jacobsen_dynamic_2011}, and can be motivated by the fact that we can concentrate our efforts on modeling while leaving to the game designer the definition of behavior features. This can also favor other aspects like modularity and maintenance. Formally, for a player $p$ and the set of difficulty setting $\{\mathcal{S}\}^{s=|S|}_{s=1}$ we aim at choosing a setting $s^{\star}$ such that:
+
+\begin{equation}
+s^{\star} = \argmax_{s \in \mathcal{S}} \mathcal{G}(s,p, \varphi(p))
+\end{equation}
+, where $\mathcal{G}$ represents the game and $s^{\star}$ the best game difficulty setting $s$ according to a given measure function for estimating player satisfaction, $\varphi(p)$. In the next section we discuss our proposal to solve for $s^{\star}$.
+
+%\section{Proposed Model}\label{sec:model}
+%In this section, we present the general aspects of our model and, at the same time, we give details on its variable inference.%ANDY Variable inference?
+%We also compare our model to recent models proposed for similar tasks, showing the differences and the potential advantages. %ANDY All in the same section?
+
+\section{Quantifying difficulty}
+The notion of difficulty is related to several variables. To the extend of a game, it is mostly related to factors like: game controllability, motor coordination, cognitive load management, memory, reasoning, and several others. Although difficulty in itself accounts for all such aspects at once, one usually considers a particular subset of variables under his control and try to understand up to which point their correlation may alter the perceived entertainment.
+
+Following this, we investigate the relation between the dimensions of \textit{progress} and \textit{effort}. The former relates to the quantification of the amount of game progress a given player is likely to have when facing a given difficulty level. This is usually measured in relation with the game score, the state evaluation (as standard practice in games like chess), or even statistics from previous plays. Effort, in turn, relates to the amount of ``resource expenditure'' put by the player as, for example, the cognitive effort, the number of actions taken, the number of in-game resources wasted, etc. In other words, it is designed to quantify the amount of energy spent when playing.
+
+We consider the relationship between effort and progress as providing enough information to support the selection of an appropriate level of play. One obstacle, however, is in the fact that effort does not generally offers a linear relationship with perceived difficulty and it is not straightforward to assume that difficulty is inversely proportional to it, \ie, it is not always true that a higher resource investment means less ability to play. 
+Nonetheless, it is reasonable to assume that players do not conscientiously obtain more entertainment, or advantage, by allocating unnecessary efforts. Following such assumption, one may view a skilled player as one that is constantly trying to minimize energy expenditure while maximizing progress, which supports the hypothesis that players are reasonably classified by considering their progress and effort.
+
+Formally, we consider progress to be represented by a variable $\rho \in [0, 1]$ and effort by a variable $\xi \in (0, 1]$. We model the relationship by the difference between these variables, called $\varphi$, as in equation~\ref{eq:quant_diff}.
+
+\begin{equation}\label{eq:quant_diff}
+    \varphi = \rho - \xi
+\end{equation}\\
+
+Evidently, zero is not a valid value for $\xi$, since the notion of ``zero effort" does not make sense. %Furthermore, the difference makes the modeling convenient in case one prefers to use Observing the values that $\varphi$ may assume, we have the following cases:\\
+From the simple relation in equation~\ref{eq:quant_diff}, we see that the equilibrium point is at zero, meaning that the progress done matches the effort taken. When the quantities are unbalanced we have the following cases:~\begin{enumerate*}[label=\alph*)]\item $\varphi > 0$, representing more progress than effort; and \item $\varphi < 0$: more effort than progress\end{enumerate*}. Despite being able to give a general picture, the relationship between effort and progress is often more complex; There are intricacies that demand a more fine grained analysis in order to capture nuances like: 
+\begin{itemize}
+    \item the player is likely unmotivated, since it is observed to make a progress that is less than the average one while also doing less effort;
+    \item the player is likely to be a skilled one, but not as much as other players. %This situation has less information gain since making an above average progress came at a higher effort.
+    \item the player is likely poorly skilled, making less than average progress at higher resources expenses. %This may indicate that the player is largely unfit to the current opponent (difficulty setting) and system adaptation is justified.
+\end{itemize}
+
+In other words, it is necessary to account for a better separation of player by considering their relative partial order. The main problem with equation~\ref{eq:quant_diff}, is that the difference would be zero only in case the two number are equal, ignoring their magnitudes.
+
+In practice, both $\rho$ and $\xi$ are supposed to be taken in comparison to random variables estimated globally over all players and all game sessions. This has the advantage of taking into account playing experiences across time. Additionally, we can consider the progress and effort as Z-score values that tells us whether the estimated current values lies below or above the mean of their respective global densities. 
+
+In case one chooses to models the variable with infinity support distributions, such as a Gaussian, it may be useful to cap the z-scores below and above, such that it is constrained to a fixed interval. An example of this for the effort distribution is to consider the interval $[\mu_{P(\xi)}-3\sigma_{P(\xi)},\mu_{P(\xi)}+3\sigma_{P(\xi)}]$, where $P(\xi)$ is the global distribution of player efforts with mean ~$\mu_{P(\xi)}$ and standard deviation~$\sigma_{P(\xi)}$.
+
+Still when modeling effort, it may be necessary to consider additional attributes, such as the joint combination of frequency and diversity of the components that make up the evaluation of effort. For example, when considering ``actions taken'' as the components for the definition of effort, one may consider not just by the frequency but also the diversity of actions, allowing for an extra separation of the player.
+
+\subsection{Progress-effort difficulty model}
+
+We have tested two approaches. Both of them are based on a parametric generative model relating players to difficulty settings through the observed effort and progress. Effort, as said above, is defined as the frequency and diversity of game actions taken by the player. Progress, on the other hand, relates the player score to other players in the same difficult level.
+
+Formally, we define player and difficulty level by a vector $\boldsymbol{\pi}\in \mathbb{R}^d$ and $\boldsymbol{\theta}\in\mathbb{R}^d$, respectively. The aim then is to relate those variables with the observed ones via a generative process. For a corpus of $D$ of gameplays, this is achieved in the following way:\\
+\begin{enumerate}
+\item For each of the P players p draw player vector $\pi_{p} \sim Dirichlet(\lambda)$
+\item For each of the S difficult settings s draw difficult setting vector $\theta_{s} \sim Dirichlet(\alpha)$
+\item Draw the progress $\psi_d \sim Poisson( \theta_{s}^{T}\pi_{p_d})$
+\item Draw the action $\xi_{d,m} \sim Mult(\frac{\theta_{s}\pi_{p_d}}{|\theta_{s}\pi_{p_d}|})$, where $|\theta_{s}\pi_{p_d}|$ is the normalizing constant.\\
+\end{enumerate}
+
+%ANDY Let's justify the choiche of teh different dstributions
+
+The generative process is also depicted in the graphical model in figure~\ref{gph:pe_graph}. The joint distribution for a single game section is given by equation~\ref{eq:joint1}
+
+\begin{equation}
+p(\boldsymbol\theta, \boldsymbol\pi, \boldsymbol\xi, \psi \, | \, \alpha, \lambda) = P(\boldsymbol\theta|\alpha) P(\boldsymbol\pi|\lambda)P(\boldsymbol\xi|\boldsymbol\theta, \boldsymbol\pi)P(\psi|\boldsymbol\theta, \boldsymbol\pi)
+\label{eq:joint1}
+\end{equation}
+
+\input{chart/pe_graph.tex}
+
+\subsection{Approximate Posterior Inference}
+
+
+
+
+\subsection{~\glsdesc{pepga} Model}
+\input{chart/pga.tex}
+\input{chart/my_graph_continuous.tex}
+
+For simplification we collect all observed variables by $\Phi$.
+
+Taking the logarithm of this joint and expanding term we arrive at the 
+
+% prod over player --> \prod_{i=1}^{N}
+% prod over ds     --> \prod_{j=1}^{M}
+% Sum over player  --> \sum_{i=1}^{N}
+% prod over ds     --> \sum_{j=1}^{M}
+
+\begin{align*}
+\ln{p(U,V,\Theta|\Phi)} &= \Bigg[\prod_{i=1}^{N}\prod_{j=1}^{M}\mathcal{N}(S_{ij}|u_{i}^{t}v_{j}, \sigma^2)^{I_{ij}} \Bigg] \\
+&=\Bigg[\prod_{i=1}^{N} \mathcal{N}(u_{i}|0,\sigma^{2}_{U}I) \Bigg] \Bigg[\prod_{j=1}^{M} \mathcal{N}(v_{i}|0,\sigma^{2}_{V}I) \Bigg] \\
+&=\underbrace{\Bigg[\prod_{i=1}^{N} p(\theta|\alpha) \prod_{e=1}^{E}  p(z_{e}|\theta)p(\xi_{e}|Z_{n},B)\Bigg]}_{\gls{lda}}
+\end{align*}
+
+Separating the terms containing $\theta_{i}$
+
+\begin{align*}
+    \mathcal{L}(\theta) &= -\frac{\lambda v}{2} (v_{i} - \theta_{j})^{t}(v_{i} - \theta_{j}) + \sum_{j}\sum_{n}log(\sum_{k}\theta_{jk}\beta_{k},w_{jn}) \\
+    &= -\frac{\lambda v}{2} (v_{i} - \theta_{j})^{t}(v_{i} - \theta_{j}) + \sum_{j}\sum_{n}log(\sum_{k}\theta_{jk}\beta_{k},w_{jn})
+\end{align*}

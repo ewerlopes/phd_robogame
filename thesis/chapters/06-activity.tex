@@ -1,0 +1,264 @@
+\chapter{Activity Recognition in RoboTower 2.0}\label{ch:activity}
+When developing a~\gls{pirg}, designers are often interested in modeling the human player behavior and, from such modeling, program the system to respond properly. Our research towards this objective began by exploring activity recognition and how it could provide insights to characterize player behavior. 
+
+In literature, some approaches for activity recognition are based on the analysis of data coming from camera devices. Others, instead, focus on data coming from wearable devices, such as: cellphones, watches and~\gls{imu} -- a specific-purpose device for measuring accelerations and rotation angles. Across years, the type of analysis carried out has pretty much shifted from basic exploratory analysis,~\eg descriptive statistics, to complex data-based models, such as those from the~\gls{ml} community. The advantage of this is that~\gls{ml} models often grant better results due to the identification of hidden structures present in the data.
+
+Proper measurement and classification of an individual's physical activity is fundamental to model players in~\gls{pirg} and to adapt the robot strategy to support the player's entertainment during the game. Here, we propose a model which aims at classifying player's activity using a 3-axis custom accelerometer positioned on the player's chest. We define a set of high level activity classes that are meaningful to the game scenario and are automatically classified \textit{on-line} relying on a supervised machine learning framework. Our methodology consists of transforming the raw input space into one that is able to capture variance of the signal to emphasize the recognition of the target activities. 
+
+We show that we can obtain good results in accuracy by applying a transformation on the distribution of inputs, which helps to emphasize better the in-data events. Standard methods in the literature segment the data into contiguous (possibly overlapping) frames from which features are then computed. These segments are called \textit{windows} and features are calculated for each of them to summarize the data they contain. A major drawback in using sliding windows methods, is that they require many hyper-parameter selection (such as size of the windows, amount of overlap, and windowing functions). In our experiments, we have attenuated the need for hyper-parameter selection via the transformation of the input and the definition of the motion primitives. Despite the transformation being simple, it turns out to produce good classification results, in real-time, which makes our method feasible for real applications, but at lower data processing cost.
+
+The chapter is organized as follows: we first present some related works about activity recognition and classification; In section~\ref{sec:data_collection} we explain how we collected data, while in section~\ref{sec:activity_analysis} we provide the description of the activity model. The results are finally discussed in section~\ref{sec:activity_discussion}.
+
+\section{Related Works}\label{sec:act_related_works}
+
+%TODO I have put this here, since in the previous section it was not motivated. I do not know whether you like to consider this to frame the section or find a motivation for it.
+%One may spot at least two groups into which to classify works in the area: those performed \textit{off-line} and those performed \textit{on-line}. The first focus on the exploitation of methods for the case were data are first collected, tagged, and then processed. On-line methods process the data on the go, providing information about the estimated activity in real-time. In all of the vast literature in this field,~\gls{ml}-based approaches rely on some kind of transformation to the data in order to increase recognition results. %%%%%%%
+
+A number of studies have investigated activity recognition using one or more accelerometers placed in different parts of the body. In~\cite{ravi_activity_2005}, the authors have used a triaxial accelerometer worn near the pelvic region in order to classify eight different daily-life activities: \textit{standing}, \textit{walking}, \textit{running}, \textit{climbing up stairs}, \textit{climbing down stairs}, \textit{sit-ups}, \textit{vacuuming}, and \textit{brushing teeth}. The windows had 256 data points, from which 128 samples where overlapping with consecutive windows (a total of 50\% overlap). At a sampling frequency of 50Hz, each window represented 5.12 seconds of user activity. The same window characteristic was also used by~\cite{bao_activity_2004} when classifying 20 different activities with five small biaxial accelerometers worn simultaneously on different parts of the user body.
+
+Considering a game environment,~\cite{jablonsky_evaluating_2017} investigated sensor placement and modality for activity recognition within the context of children playground  activities. By mean of parallel sensing, performed using a set of smart-phones, activity dependent data have been generated. The obtained set of data was then used to train decision tree classifiers. This study showed that sensors placed closer to the center of the body generate better models than sensors placed on the extremities. 
+
+Similarly, in~\cite{alshurafa_designing_2014} a stochastic approximation framework for intensity independent activity recognition based on clustering techniques is proposed. They aimed at enhance and automate the calculation of~\gls{met} and also to improve an exergaming (videogames that are also a form of exercise) platform consisting of two main components: an accelerometer-embedded belt and a~\gls{rpg} videogame called \textit{FreedroidRPG} that was used as incentive for the participant to perform physical activity throughout the day. The study shows the ability of the used stochastic approximation framework to extrapolate unknown intensity levels from a few known ones that can be used to enhance activity recognition.
+
+Several studies in the literature also focused on the comparison between multi-sensor versus single-sensor activity detection and also on the optimal body placement of such sensors. The work of~\cite{gao_evaluation_2014} compared two distinct types of wearable systems: single-sensor wearable systems adopting complex algorithms and multi-sensor systems that employ lightweight algorithms. The impact of the sampling rate on the recognition accuracy was then investigated using four classifiers. The experimental results illustrated that the recognition accuracy was steady at 50-Hz and above, and the single sensor system was more sensitive to the sampling rate than the multi-sensor system.
+
+The work of~\cite{trost_machine_2014} was, in turn, focused on making a comparison between the activity recognition rates of an activity classifier trained on acceleration signal collected on the wrist and hip. During the experiments 52 children and adolescents completed 12 activity trials that were categorized into 7 activity classes: \textit{lying down}, \textit{sitting}, \textit{standing}, \textit{walking}, \textit{running}, \textit{basketball}, and \textit{dancing}. As result, the hip model exhibited great classification accuracy for \textit{sitting}, \textit{standing}, \textit{walking}, and \textit{running}; acceptable classification accuracy for \textit{lying down} and \textit{basketball}; and modest accuracy for \textit{dance}. The wrist model, in turn, exhibited excellent classification accuracy for \textit{sitting}, \textit{standing}, and \textit{walking}; acceptable classification accuracy for \textit{basketball}; and modest accuracy for \textit{running}, \textit{lying down} and \textit{dance}.
+
+We followed the popular approaches, such as~\cite{ravi_activity_2005} and~\cite{bao_activity_2004}, where the methodology relies on the use of supervised learning methods, powered by the extraction of informative features from a slice of the data. The use of such method in our application scenario, however, rises same special issues: since the annotated data come from real game interaction between a human and a mobile robot, the activities are sometimes not easily delimited. For instance, in our game it was possible to identify multiple types of jogging/run as well as different types of in-place quick movements that could be collected under the umbrella of ``dodging'',~\ie movements in order to provoke or trick the robotic opponent. 
+
+When using a traditional sliding window method, special attention has to be given to the choice of window size. This is because while a too narrow window will produce very accurate representations of the current state, the results will also be heavily affected by noise. On the other hand, a too wide window results in more stable, yet similarly inaccurate results due to the effects of change in the underlying data~\citep{bifet_learning_2007}. For our purposes, the game dynamics offers a natural way to capture events from accelerometer data since we can exploit the small period of time in which the player rest as boundaries for the activities. 
+
+For systems using a fixed-size window, the system is likely to ignore differences in the duration of activities. In our domain, activities are likely to occur in different time spans, since the game produces different situations in which the player can react to. For instance, the time the player spends running is a product of multiple factors, including personal motivations and robot state given in-game situation. This would demand adaptive strategies for using sliding windows, as those suggested by~\cite{noor_adaptive_2016}. However, in this work we follow a different route, by proposing to perform activity recognition by first transforming the data stream input space (acceleration raw data) into a different space that would capture the ``turbulence'' of the signal underlying each activity of interest. The motivation is that a ``running'' activity, for example, would be categorized by a different amount of turbulence compared to other activities.
+
+\section{Data Collection}\label{sec:data_collection}
+
+To detect player movement, we have used a custom accelerometer board attached to the player's chest in order to capture detailed player motion information. The device is based on the InvenSense MPU-6050 3-axis accelerometer board and an Arduino Uno micro-controller. The circuit also contains a Nrf24l01 radio-frequency module that allows the accelerometer data to be sent to the on-board computer. Figure~\ref{fig:the_accelerometer} shows our custom accelerometer device.
+
+\begin{figure}[H]
+      \centering
+      \begin{subfigure}[h]{0.48\textwidth}
+      	\centering
+	    \framebox{\includegraphics[width=5cm,height=3cm]{images/04-activity/sender.jpg}}
+	    \caption{}
+	  \end{subfigure}
+	  ~
+	  \begin{subfigure}[h]{0.48\textwidth}
+      	\centering
+	    \framebox{\includegraphics[width=5cm,height=3cm]{images/04-activity/receiver.jpg}}
+	    \caption{}
+	  \end{subfigure}
+      \caption{a) the accelerometer transmitter circuit and b) the receiver circuit used onboard. Both circuit are based on Arduino boards.}\label{fig:the_accelerometer}
+\end{figure}
+
+The choice of the accelerometer position was conditioned by the need to minimize the influence of noise due to irrelevant player motion. For example, hand-waving (or other small movement) when pressing buttons are not supposed to be meaningful to identify player activities nor such behavior has a structured repeating pattern from which to categorize important activities.
+
+\begin{figure}[thpb]
+      \centering
+      \framebox{\includegraphics[width=8cm]{images/04-activity/event.jpg}}
+      \caption{Human player (in magenta) during the game. The playground configuration in this trial consisted of 3 target towers.}
+      \label{game}
+\end{figure}
+
+Having the device placed on the wrist, or other highly movable body-part (as the feet or head) would capture useless acceleration information contributing to a worsening in classification accuracy. Therefore, we decided to place the accelerometer on the chest, in order to capture the essential player motion.
+
+In terms of collected data, for this work, we considered 29 matches involving 15 male participants of different ages. The age distribution consisted of children (7-10) and adults (26-40). Matches had a minimum time duration of about 40 seconds and a maximum of about 1 minute and 10 seconds. 
+
+The collected data correspond to acceleration values along x, y, and z axis with a sampling frequency of 50Hz, which is five times higher than the frequency considered to be sufficient for detecting daily activities from accelerometer data (10Hz)~\citep{atallah_sensor_2010, ravi_activity_2005, kikhia_analyzing_2014}.
+
+\begin{figure*}[!t]
+\normalsize
+      \centering
+      {\includegraphics[width=\textwidth, height=4cm]{images/04-activity/diagram.png}}
+      \caption{Overview of the activity recognition system.}
+      \label{approach}
+\end{figure*}
+  
+\subsection{Activity analysis}\label{sec:activity_analysis}
+
+In our game, by using an accelerometer attached to the player, we were mainly interested on identifying activities that would help to describe the player interaction level. For the scope of this work, we aimed at identifying recurrent physical activities that would be useful for achieving that goal. From the collected data, we were able to identify a few high-level activity types, listed below:
+
+\begin{itemize}
+\item  \textbf{running:} describes a running activity. For this experiment, multiple styles of running are not considered, thus, for instance, ``fast'' or ``slow'' running are considered as being the same.
+\item \textbf{walking/dodging:} represents the walking and dodging activity. The latter refers to a sudden quick movement to avoid the robot or to call its attention.
+\item  \textbf{locally\_moving:} a player generic motion that is too small to fall into other categories, but not so small to be characterized as inactivity. Motion to block to block the path of the robot also fall into this type of motion.
+\item  \textbf{inactive:} motion that are too low in intensity to be characterized as one of the above activities. A crisp threshold is used to delimit this category. 
+\end{itemize}
+
+By analyzing the data, we observed that player activities occur in ``bursts'' that are followed by a short period of inactivity (or rest), i.e., a short period where the player is not really moving, or the expressed acceleration is too small to be related to any activity of interest.
+
+Resting periods are a common characteristic present in any physical game and is related to the organic human need for resting after an intense physical activity or even during strategic moments of pause. Examples of this can be seen when the player is pushing a button on a tower, or is trying to block the robot's path or even when is waiting still for a specific robot position on the environment.
+
+On such moments of inactivity, the changes in acceleration are usually small, reflected in a relative flatness of the signal (e.g., secs 9-12 and 15-18 on Figure~\ref{acc_graph}) and this enables the delimitation of an activity begin/end moment.
+
+\begin{figure}[h]
+      \centering
+      \includegraphics[width=\linewidth]{images/04-activity/newGraph.eps}
+      \caption{Graph of acceleration in x, y and z axis for a game that lasted about 40 seconds.}
+      \label{acc_graph}
+\end{figure}
+
+One way to describe the activity information associated to the acceleration patterns is by considering the amount of signal ``turbulence''. As a measure of such turbulence, we rely on the information present on the signal variance. 
+
+For this, we processed the incoming data stream by computing the standard deviation of the signal inside a sliding window. This transforms the original input space in a new space where activity information is much more evident, resulting in the generation of a continuous graph, where pulses refer to a given player's physical activity (see Figure~\ref{fig:std_graph}).
+
+Working in this way turns out to be simpler than to perform data annotation by, for instance, using a predefined sliding windows size. In our case, activities, such as ``running'', do not have fixed time duration, which makes the applicability of fixed sliding windows methods not quite suitable~\citep{noor_adaptive_2016}.
+
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=\linewidth]{images/04-activity/newStdGraph.eps}
+      \caption{Standard deviation of the acceleration in Figure~\ref{acc_graph}, computed using a sliding window of half a second. The red line portions represent variance values inside the inactivity zone (below a threshold of 0.2). Green areas are referenced as ``motion primitives''.}\label{fig:std_graph}
+\end{figure}
+
+After performing the mentioned data transformation, we have empirically identified a crisp threshold that would catch irrelevant signal values, thus, we say that any value below that threshold is related to player's inactivity.
+
+The inactivity threshold is game-dependent and sensitive to the position of the accelerometer as well. On our experiments, the selection of the inactivity threshold is done manually, via inspection of video recorded during the game.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+     	\centering
+        \framebox{\includegraphics[width=3cm,height=3cm]{images/04-activity/enricorun.png}}
+        \caption{}
+	\end{subfigure}
+	~
+    \begin{subfigure}[b]{0.3\textwidth}
+     	\centering
+        \framebox{\includegraphics[width=3cm,height=3cm]{images/04-activity/run1.png}}
+        \caption{}
+	\end{subfigure}
+	\caption{a) Player performing a running activity;  b) Associated running motion primitive.}\label{fig:running}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[b]{0.3\textwidth}
+  	 \centering
+      \framebox{\includegraphics[width=3cm,height=3cm]{images/04-activity/enricostill.png}}
+      \caption{}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.3\textwidth}
+  	 \centering
+      \framebox{\includegraphics[width=3cm,height=3cm]{images/04-activity/still.png}}
+      \caption{}
+  \end{subfigure}
+  \caption{a) Player performing local movements; b) Associated motion primitive.}    
+  \label{fig:localmov}
+\end{figure}
+    
+Since any motion information below the threshold is used to determine the ``inactivity'' of the player, we use machine learning-based classification only on each data interval above the threshold. This interval is called a ``motion primitive'' (Figure~\ref{fig:std_graph}). The motion primitives are the data aggregations to which we associate a class label in the annotation procedure. 
+
+Following the classification need, we have extracted the following descriptors from the motion primitives (recall: they refer to standard deviation of the raw values): 
+
+\begin{itemize}
+\item \textbf{mean}:  the mean values.
+\item \textbf{activity\_time}: the time duration in seconds.
+\item \textbf{max\_peaks}:  the max peak.
+\item \textbf{number\_of\_peaks}:  the number of peaks.
+\item \textbf{mean\_of\_peaks}: the mean of all peaks.
+\item \textbf{max-min}: difference between max and min.
+\item \textbf{std}: standard deviation.
+\item \textbf{mad}: median absolute deviation.
+\item \textbf{sma}: signal magnitude area.
+\item \textbf{energy}: the signal energy.
+\item \textbf{iqr}: interquartile range.
+\item \textbf{mean\_over\_max}: mean of peaks divided by the max peak.
+\item \textbf{maxInd}: index of the frequency component with largest magnitude.
+\item \textbf{meanFreq}:  weighted average of the frequency components to obtain a mean frequency.
+\item \textbf{skewness}:  skewness of the motion primitive.
+\item \textbf{kurtosis}:  kurtosis of the motion primitive.
+\item \textbf{freq-skewness}: skewness of the frequency domain signal.
+\item \textbf{freq-kurtosis}: kurtosis of the frequency domain signal.
+\item \textbf{pse}: Power spectral entropy.
+\item \textbf{rms}: Return the root mean square.
+\end{itemize}
+
+\begin{figure}[htbp]
+     \centering
+     {\includegraphics[width=\textwidth]{images/04-activity/featureImportance}}
+     \caption{Feature importance computed by a forest of decision trees classifiers.}
+     \label{fig:feature_importance}
+\end{figure}
+
+Note that the motion primitives carry sufficient information to distinguish between target physical activities. For example, ``running'' is related to a motion primitive that has a longer duration and a higher amplitude value (see Figure~\ref{fig:running}) as opposed to the duration and amplitude values of a player local motion (figure~\ref{fig:localmov}). Following the same argument, a ``walking'' activity has higher amplitude values compared with a local movement. A holistic view of the classification approach is detailed in Figure~\ref{approach}. 
+
+\subsection{Classification setup}
+
+For the automatic classification, we first build the standard deviation graph from the raw accelerometer data, and then we manually label motion primitives. 
+
+On our experiments, the std graph was generated considering a sliding window 500msec long with no overlap, resulting on a dataset composed by $367$ motion primitives. Empirically, this time length turned out to be descriptive enough to produce variance intervals that made it possible to distinguish activities. Naturally, the windows size has an impact on the total number of motion primitives generated per game match, as well as on the inactive threshold value. With a windows size of half a second, however, it was possible to capture immediate transition between activities, given that such transition would manifest on higher spikes on variance at the beginning of an activity. For this reason, we kept the mentioned size. 
+
+The primitives were labeled as follows: $34\%$ as ``locally\_moving''; $25\%$ as ``walking/dodging'' and $41\%$ as ``running''. The remaining percentile was left out due to the incapacity in identifying a underlying activity (maybe because the player was moving too slow or aimlessly) or because the data explicitly did not corresponded to one perform when playing. As argued above, the ``inactive'' type had not to be labeled, since it is directly classified by the inactive threshold. From video log inspection, we observed that most of the useless motion would occur below a threshold of $0.2$.
+
+Before training classifiers, we performed feature selection by evaluating the importance of the extracted features (see section~\ref{sec:activity_analysis}) using random forest method, composed by 300 decision trees. (see Figure~\ref{fig:feature_importance}).
+
+\section{Results and discussion}\label{sec:activity_discussion}
+
+We tested different classifiers using 10-fold cross validation in order to have a more descriptive accuracy information. Following common practice, the train-test dataset ratio was defined as 80\% and 20\% respectively.
+
+\begin{table}[h]\footnotesize
+  \centering
+  \caption{Cross-validation accuracy results for several classification methods using the 5 most significant features shown in Figure~\ref{fig:feature_importance}.
+  }
+  \begin{tabular}{| c | c |}
+    \hline
+  	   \textbf{Method}          & \textbf{Accuracy}\\\hline
+       SVM (Linear Kernel)      & 0.80 (+/- 0.08)  \\\hline
+       Random Forest            & 0.81 (+/- 0.06)  \\\hline
+       Gaussian Naive Bayes     & 0.80 (+/- 0.11)  \\\hline
+       Ensemble (Hard voting)   & 0.82 (+/- 0.10)  \\\hline
+       AdaBoost                 & 0.65 (+/- 0.40)   \\\hline
+  \end{tabular}
+  \label{accuracy5best}
+\end{table}
+
+
+Table~\ref{accuracy5best} presents 10-fold cross validation results using different classifiers on the five most important features, that is: \textit{rms}, \textit{fft\_energy}, \textit{sma}, \textit{max\_peak} and \textit{mean}. 
+
+The ensemble reported in Table~\ref{accuracy5best} is defined as a majority (Hard) voting approach by the combination of the SVM, Gaussian Naive Bayes and Random Forest. The Adaboost method, in turn, takes a combination of 100 weak classifiers (Decision Trees). All methods were trained by using Python Scikit-learn machine learning library.
+
+Despite the effort, with a confidence interval of 95\% we see that SVM, Random Forest, Gaussian Naive Bayes as well as their ensemble have a similar accuracy result. By considering the variance in their result, we see that Random Forest gives the most stable result. 
+
+\begin{table}[h]\footnotesize
+  \centering
+  \caption{Classification report for the chosen ensemble method (Random Forest). F1-score is the classical metric for binary classification evaluation. LM, WD and R stands for \textit{Locally Moving}, \textit{Walking/Dodging} and \textit{Running}, respectively.
+  }
+  \begin{tabular}{| c | c | c | c | c |}
+    \hline
+  	   & precision   & recall & f1-score &  support \\\hline
+    LM &      0.88   &  0.91  &    0.89  &      23  \\\hline
+    WD &      0.79   &  0.60 &     0.68 &       25  \\\hline
+     R &      0.77   &  0.92 &     0.84 &       26  \\\hline
+avg/total &   0.81   &  0.81 &     0.80 &       74  \\\hline
+  \end{tabular}
+  \label{report}
+\end{table}
+
+Given the 10-fold cross validation results, we decided to use as final method the Random Forest ensemble classifier (10 decision trees). Detailed results for the method are shown in table~\ref{report} and the corresponding confusion matrix and~\gls{roc} in Figure~\ref{fig:mtx-roc}. The majority of mistakes in the classification correspond to the difficulty in separating ``walking/dodging'' from  a ``running'' activity. 
+
+The justification for this may be on the fact that occasionally the player walks in a fast way, which is similar to proper running. This is acceptable given that even for humans it is not straightforward to decide about the boundary conditions of two different, but related activities.
+
+Despite the fact that our method relies on the computation of a fixed sliding window when transforming the input data, we see that our method also allows for a small improvement in the annotation procedure. Consider, for example, that we do not have to worry about the effects of overlapping windows. Things like the choice of windowing functions, which are used to mitigate the effects of overlap, are not needed. Also, it allows for a more intuitive way of perceiving what underlying activity has occurred.
+
+We have conducted experiments on using our method online, and the results have been satisfactory. One drawback, however, is on the possibility of having two different activities associated to the same motion primitive. This is likely to occur when the player rapidly shifts between two activities without a clear resting period. For example, when the player stops running for a fraction of a second and then immediately starts walking. In that case we see a small decrease in the signal variance that may not be enough to characterize an inactivity period. Note that a value below the inactive threshold is the event that separates motion primitives.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[h]{7cm}
+       \centering
+       \includegraphics[width=7cm, height=5cm]{images/04-activity/conf_mtx.eps}
+       \caption{}
+	\end{subfigure}
+	~
+    \begin{subfigure}[h]{7cm}
+     	\centering
+        \includegraphics[width=7cm, height=6cm]{images/04-activity/roc.eps}
+        \caption{}
+	\end{subfigure}
+	\caption{a) Confusion matrix for the trained Random Forest ensemble method and the associated. b) \gls{roc} curve.}\label{fig:mtx-roc}
+\end{figure}
+
+\section{Considerations}
+
+In this activity recognition work, we have investigated the recognition of high-level human player activity in our~\gls{pirg} scenario. We have used the variance in player acceleration as data instances and primary source of information from where to extract features and then train a~\gls{ml} model. The devised system can be used as base to model the overall player behavior by differentiating activity frequencies among the different players. This model can than be used to guide the agent in the adaption of its strategies to support the player entertainment. Following this goal, in the next chapter we present some insights for player models, building up from the activity system presented in this chapter.
+
+In chapter~\ref{ch:modeling} we will present some new ideas on modeling player activity by accelerometer data. This model can be easily extended to accomodate features extracted from the spatial relationship with the robot as estimated from laser data. This type of data is more reliable compared to those from the accelerometer since the use of lasers removes the concerns related to the introduction of noise from eventual misplacement of the accelerometer on the player's chest. With the accelerometer had to be placed on each new player, eventual misplacements may modify the distribution of data used for training (input space) the algorithm, resulting in loss of accuracy. 
